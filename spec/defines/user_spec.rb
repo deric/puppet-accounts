@@ -12,35 +12,33 @@ describe 'accounts::user' do
     }}
 
     it { should contain_user('foobar').with(
-        'uid' => 1001,
-        'gid' => 1001,
-      )
-    }
+      'uid' => 1001,
+      'gid' => 1001
+    )}
 
     it { should contain_group('foobar').with(
-        'gid' => 1001,
-      )
-    }
+      'gid' => 1001
+    )}
 
     it { should contain_file('/home/foobar').with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700',
+      'mode'    => '0700'
     }) }
 
     it { should contain_file('/home/foobar/.ssh').with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700',
+      'mode'    => '0700'
     }) }
 
     it { should contain_file('/home/foobar/.ssh/authorized_keys').with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0600',
+      'mode'    => '0600'
     }) }
   end
 
@@ -53,21 +51,21 @@ describe 'accounts::user' do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700',
+      'mode'    => '0700'
     }) }
 
     it { should contain_file('/home/foobar/.ssh').with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700',
+      'mode'    => '0700'
     }) }
 
     it { should contain_file('/home/foobar/.ssh/authorized_keys').with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0600',
+      'mode'    => '0600'
     }) }
   end
 end

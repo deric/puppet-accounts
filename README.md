@@ -4,6 +4,12 @@
 
 This is puppet module for managing user accounts, groups and setting ssh keys.
 
+in node definition include:
+
+```puppet
+class {'accounts': }
+```
+
 
 ## Tests
 
