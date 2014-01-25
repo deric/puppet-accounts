@@ -1,8 +1,8 @@
 # Linux user account
 #
 define accounts::user(
-  $uid,
-  $gid,
+  $uid=undef,
+  $gid=$uid,
   $groups = [],
   $comment = $title,
   $ssh_key='',
@@ -26,6 +26,11 @@ define accounts::user(
     User <| title == $username |> { home => $home }
   }
 
+  $real_gid = $gid ? {
+    /[0-9]+/ => $gid,
+    default  => undef,
+  }
+
   case $ensure {
     absent: {
       if $managehome == true {
@@ -37,12 +42,12 @@ define accounts::user(
       user { $username:
         ensure      => absent,
         uid         => $uid,
-        gid         => $gid,
+        gid         => $real_gid,
         groups      => $groups,
       } ~>
       group { $username:
         ensure  => absent,
-        gid     => $gid,
+        gid     => $real_gid,
       }
     }
 
@@ -50,13 +55,13 @@ define accounts::user(
       # Create a usergroup
       group { $username:
         ensure  => present,
-        gid     => $gid,
+        gid     => $real_gid
       }
 
       user { $username:
         ensure  => present,
         uid     => $uid,
-        gid     => $gid,
+        gid     => $real_gid,
         groups  => $groups,
         shell   => $shell,
         comment => $comment,
