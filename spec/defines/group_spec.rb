@@ -9,8 +9,6 @@ describe 'accounts::group' do
       :gid   => 2001,
     }}
 
-    it { should contain_group('foogroup').with(
-      'gid' => 2001,
-    )}
+    it { should contain_group('foogroup').with('gid' => 2001)}
   end
 end
