@@ -10,8 +10,7 @@ describe 'accounts::group' do
     }}
 
     it { should contain_group('foogroup').with(
-        'gid' => 2001,
-      )
-    }
+      'gid' => 2001,
+    )}
   end
 end
