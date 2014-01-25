@@ -4,6 +4,7 @@ describe 'accounts::group' do
 
   describe 'create new group' do
     let(:title) { 'foogroup' }
+
     let(:params){{
       :gid   => 2001,
     }}
