@@ -3,8 +3,8 @@
 define accounts::user(
   $uid,
   $gid,
-  $comment,
-  $groups,
+  $groups = [],
+  $comment = $title,
   $ssh_key='',
   $ssh_keys={},
   $shell='bin/bash',
