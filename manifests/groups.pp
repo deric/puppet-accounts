@@ -1,8 +1,8 @@
 # Multiple groups management
 #
 class accounts::groups (
-  $manage,
-  $groups
+  $groups = {},
+  $manage = true,
   ) {
   validate_bool($manage)
   validate_hash($groups)

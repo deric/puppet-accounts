@@ -1,8 +1,8 @@
 # Manages users accounts if enabled
 #
 class accounts::users (
-  $manage,
-  $users
+  $users  = {},
+  $manage = true,
 ) {
   validate_bool($manage)
   validate_hash($users)
