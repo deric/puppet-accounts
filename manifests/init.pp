@@ -1,11 +1,10 @@
 # Puppet accounts management
 #
 class accounts(
-  $ensure             = hiera('accounts::ensure'),
-  $manage_users       = hiera('accounts::manage_users'),
-  $manage_groups      = hiera('accounts::manage_groups'),
-  $users              = hiera_hash('accounts::users'),
-  $groups             = hiera_hash('accounts::groups'),
+  $manage_users       = hiera('accounts::manage_users', true),
+  $manage_groups      = hiera('accounts::manage_groups', true),
+  $users              = hiera_hash('accounts::users', {}),
+  $groups             = hiera_hash('accounts::groups', {}),
 ) {
 
   class { 'accounts::groups':
