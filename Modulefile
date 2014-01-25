@@ -7,5 +7,4 @@ summary 'Module for managing user accounts and groups.'
 description 'Simple user management with hiera support.'
 project_page 'https://github.com/deric/puppet-accounts'
 
-## Add dependencies, if any:
-# dependency 'username/name', '>= 1.2.0'
+dependency 'puppetlabs/stdlib', '>= 0.1.6'
