@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-group :rake do
+group :development do
   gem 'puppet',  '>= 2.7.0'
   gem 'puppet-lint', '>=0.3.2'
   gem 'puppetlabs_spec_helper', '>=0.2.0'
