@@ -6,3 +6,5 @@ license 'Apache License, Version 2.0'
 summary 'Module for managing user accounts and groups.'
 description 'Simple user management with hiera support.'
 project_page 'https://github.com/deric/puppet-accounts'
+
+dependency 'puppetlabs/stdlib', '>= 0.1.7'
