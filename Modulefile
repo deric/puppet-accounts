@@ -1,4 +1,4 @@
-name    'puppet-accounts'
+name    'deric-accounts'
 version '0.1.0'
 source 'https://github.com/deric/puppet-accounts'
 author 'Tomas Barton'
