@@ -11,20 +11,17 @@ define accounts::user(
   $pwhash='',
   $username=$title,
   $managehome=true,
-  $home='',
+  $home=undef,
   $ensure=present,
 ) {
 
-  if ($managehome == true) and ($home == '') {
-    User <| title == $username |> { managehome => true }
-    User <| title == $username |> { home => "/home/${username}" }
+  $home_dir = $home ? {
+    undef   => "/home/${username}",
+    default => $home,
   }
 
-  # custom home location
-  if $home != '' {
-    User <| title == $username |> { managehome => true }
-    User <| title == $username |> { home => $home }
-  }
+  User <| title == $username |> { managehome => $managehome }
+  User <| title == $username |> { home => $home_dir }
 
   $real_gid = $gid ? {
     /[0-9]+/ => $gid,
@@ -34,8 +31,8 @@ define accounts::user(
   case $ensure {
     absent: {
       if $managehome == true {
-        exec { "rm -rf /home/${username}":
-          onlyif => "test -d /home/${username}",
+        exec { "rm -rf ${home_dir}":
+          onlyif => "test -d ${home_dir}",
         }
       }
 
@@ -76,7 +73,7 @@ define accounts::user(
         User <| title == $username |> { password => $pwhash }
       }
 
-      file { "/home/${username}":
+      file { $home_dir:
         ensure  => directory,
         owner   => $username,
         group   => $username,
@@ -84,24 +81,24 @@ define accounts::user(
         mode    => '0700',
       }
 
-      file { "/home/${username}/.ssh":
+      file { "${home_dir}/.ssh":
         ensure  => directory,
         owner   => $username,
         group   => $username,
         mode    => '0700',
-        require => File["/home/${username}"],
+        require => File[$home_dir],
       }
 
-      file { "/home/${username}/.ssh/authorized_keys":
+      file { "${home_dir}/.ssh/authorized_keys":
         ensure  => present,
         owner   => $username,
         group   => $username,
         mode    => '0600',
-        require => File["/home/${username}/.ssh"],
+        require => File["${home_dir}/.ssh"],
       }
 
       Ssh_authorized_key {
-          require =>  File["/home/${username}/.ssh/authorized_keys"]
+        require =>  File["${home_dir}/.ssh/authorized_keys"]
       }
 
       $ssh_key_defaults = {

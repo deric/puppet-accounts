@@ -68,4 +68,39 @@ describe 'accounts::user' do
       'mode'    => '0600'
     }) }
   end
+
+
+  describe 'custom home directory' do
+    let(:title) { 'foobar' }
+    let(:owner) { 'foobar' }
+    let(:group) { 'foobar' }
+    let(:home) { '/var/www' }
+
+    let(:params){{
+      :home => home,
+    }}
+
+
+    it { should contain_file(home).with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should contain_file("#{home}/.ssh").with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should contain_file("#{home}/.ssh/authorized_keys").with({
+      'ensure'  => 'present',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0600'
+    }) }
+
+  end
 end
