@@ -28,6 +28,32 @@ describe 'accounts::user' do
     }) }
   end
 
+  shared_examples 'having_home_dir' do |user, home_dir|
+    let(:owner) { user }
+    let(:group) { user }
+
+    it { should contain_file("#{home_dir}").with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should contain_file("#{home_dir}/.ssh").with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should contain_file("#{home_dir}/.ssh/authorized_keys").with({
+      'ensure'  => 'present',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0600'
+    }) }
+  end
+
   describe 'create new user' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
@@ -46,26 +72,7 @@ describe 'accounts::user' do
       'gid' => 1001
     )}
 
-    it { should contain_file('/home/foobar').with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file('/home/foobar/.ssh').with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file('/home/foobar/.ssh/authorized_keys').with({
-      'ensure'  => 'present',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0600'
-    }) }
+    it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
   end
 
   describe 'create new user without specified uid' do
@@ -73,26 +80,7 @@ describe 'accounts::user' do
     let(:owner) { 'foobar' }
     let(:group) { 'foobar' }
 
-    it { should contain_file('/home/foobar').with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file('/home/foobar/.ssh').with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file('/home/foobar/.ssh/authorized_keys').with({
-      'ensure'  => 'present',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0600'
-    }) }
+    it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
   end
 
   describe 'custom home directory' do
@@ -105,27 +93,7 @@ describe 'accounts::user' do
       :home => home,
     }}
 
-    it { should contain_file(home).with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file("#{home}/.ssh").with({
-      'ensure'  => 'directory',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0700'
-    }) }
-
-    it { should contain_file("#{home}/.ssh/authorized_keys").with({
-      'ensure'  => 'present',
-      'owner'   => owner,
-      'group'   => group,
-      'mode'    => '0600'
-    }) }
-
+    it_behaves_like 'having_home_dir', 'foobar', '/var/www'
   end
 
   describe 'not managing home' do
