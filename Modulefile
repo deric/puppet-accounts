@@ -1,5 +1,5 @@
 name    'deric-accounts'
-version '0.1.0'
+version '0.1.1'
 source 'https://github.com/deric/puppet-accounts'
 author 'Tomas Barton'
 license 'Apache License, Version 2.0'
