@@ -73,32 +73,34 @@ define accounts::user(
         User <| title == $username |> { password => $pwhash }
       }
 
-      file { $home_dir:
-        ensure  => directory,
-        owner   => $username,
-        group   => $username,
-        recurse => true,
-        mode    => '0700',
-      }
+      if $managehome == true {
+        file { $home_dir:
+          ensure  => directory,
+          owner   => $username,
+          group   => $username,
+          recurse => true,
+          mode    => '0700',
+        }
 
-      file { "${home_dir}/.ssh":
-        ensure  => directory,
-        owner   => $username,
-        group   => $username,
-        mode    => '0700',
-        require => File[$home_dir],
-      }
+        file { "${home_dir}/.ssh":
+          ensure  => directory,
+          owner   => $username,
+          group   => $username,
+          mode    => '0700',
+          require => File[$home_dir],
+        }
 
-      file { "${home_dir}/.ssh/authorized_keys":
-        ensure  => present,
-        owner   => $username,
-        group   => $username,
-        mode    => '0600',
-        require => File["${home_dir}/.ssh"],
-      }
+        file { "${home_dir}/.ssh/authorized_keys":
+          ensure  => present,
+          owner   => $username,
+          group   => $username,
+          mode    => '0600',
+          require => File["${home_dir}/.ssh"],
+        }
 
-      Ssh_authorized_key {
-        require =>  File["${home_dir}/.ssh/authorized_keys"]
+        Ssh_authorized_key {
+          require =>  File["${home_dir}/.ssh/authorized_keys"]
+        }
       }
 
       $ssh_key_defaults = {
@@ -109,10 +111,10 @@ define accounts::user(
 
       if $ssh_key {
         ssh_authorized_key { $ssh_key['comment']:
-            ensure  => present,
-            user    => $username,
-            type    => $ssh_key['type'],
-            key     => $ssh_key['key'],
+          ensure  => present,
+          user    => $username,
+          type    => $ssh_key['type'],
+          key     => $ssh_key['key'],
         }
       }
 

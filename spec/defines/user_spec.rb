@@ -2,6 +2,32 @@ require 'spec_helper'
 
 describe 'accounts::user' do
 
+  shared_examples 'not_having_home_dir' do |user, home_dir|
+    let(:owner) { user }
+    let(:group) { user }
+
+    it { should_not contain_file("#{home_dir}").with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should_not contain_file("#{home_dir}/.ssh").with({
+      'ensure'  => 'directory',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0700'
+    }) }
+
+    it { should_not contain_file("#{home_dir}/.ssh/authorized_keys").with({
+      'ensure'  => 'present',
+      'owner'   => owner,
+      'group'   => group,
+      'mode'    => '0600'
+    }) }
+  end
+
   describe 'create new user' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
@@ -69,7 +95,6 @@ describe 'accounts::user' do
     }) }
   end
 
-
   describe 'custom home directory' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
@@ -79,7 +104,6 @@ describe 'accounts::user' do
     let(:params){{
       :home => home,
     }}
-
 
     it { should contain_file(home).with({
       'ensure'  => 'directory',
@@ -102,5 +126,17 @@ describe 'accounts::user' do
       'mode'    => '0600'
     }) }
 
+  end
+
+  describe 'not managing home' do
+    let(:title) { 'foobar' }
+    let(:home) { '/var/www' }
+
+    let(:params){{
+      :home       => home,
+      :managehome => false
+    }}
+
+    it_behaves_like 'not_having_home_dir', 'foobar', '/var/www'
   end
 end
