@@ -10,7 +10,7 @@ describe 'accounts::user' do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700'
+      'mode'    => '0644'
     }) }
 
     it { should_not contain_file("#{home_dir}/.ssh").with({
@@ -36,7 +36,7 @@ describe 'accounts::user' do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0700'
+      'mode'    => '0644'
     }) }
 
     it { should contain_file("#{home_dir}/.ssh").with({

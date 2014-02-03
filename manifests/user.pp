@@ -79,7 +79,7 @@ define accounts::user(
           owner   => $username,
           group   => $username,
           recurse => true,
-          mode    => '0700',
+          mode    => '0644',
         }
 
         file { "${home_dir}/.ssh":
