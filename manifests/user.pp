@@ -1,18 +1,19 @@
 # Linux user account
 #
 define accounts::user(
-  $uid=undef,
-  $gid=$uid,
+  $uid = undef,
+  $gid = $uid,
   $groups = [],
   $comment = $title,
-  $ssh_key='',
-  $ssh_keys={},
-  $shell='bin/bash',
-  $pwhash='',
-  $username=$title,
-  $managehome=true,
-  $home=undef,
-  $ensure=present,
+  $ssh_key = '',
+  $ssh_keys = {},
+  $shell ='bin/bash',
+  $pwhash = '',
+  $username = $title,
+  $managehome = true,
+  $home = undef,
+  $ensure = present,
+  $recurse_permissions = false,
 ) {
 
   $home_dir = $home ? {
@@ -78,7 +79,7 @@ define accounts::user(
           ensure  => directory,
           owner   => $username,
           group   => $username,
-          recurse => true,
+          recurse => $recurse_permissions,
           mode    => '0644',
         }
 
