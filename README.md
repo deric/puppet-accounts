@@ -14,7 +14,7 @@ class {'accounts': }
 
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
-```puppet
+```YAML
 accounts::groups:
  www-data:
    gid: 33
@@ -22,6 +22,7 @@ accounts::groups:
 
 and user accounts:
 
+```YAML
 accounts::users:
  deric:
    comment: "John Doe"
@@ -32,6 +33,7 @@ accounts::users:
     type: "ssh-rsa"
     key: "a valid public ssh key string"
     comment: "john@doe"
+```
 
 Which accounts will be installed on specific machine can be checked from command line:
 
@@ -64,7 +66,7 @@ $ librarian-puppet install
 
 Run tests with:
 
-```
+```bash
 $ bundle install
 $ bundle exec rake spec
 ```
