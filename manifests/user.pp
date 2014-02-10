@@ -7,7 +7,7 @@ define accounts::user(
   $comment = $title,
   $ssh_key = '',
   $ssh_keys = {},
-  $shell ='bin/bash',
+  $shell ='/bin/bash',
   $pwhash = '',
   $username = $title,
   $managehome = true,
@@ -80,7 +80,7 @@ define accounts::user(
           owner   => $username,
           group   => $username,
           recurse => $recurse_permissions,
-          mode    => '0644',
+          mode    => '0755',
         }
 
         file { "${home_dir}/.ssh":
