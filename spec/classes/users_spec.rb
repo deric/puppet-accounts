@@ -12,7 +12,7 @@ describe 'accounts::users' do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0644'
+      'mode'    => '0755'
     }) }
 
     it { should contain_file("/home/#{user}/.ssh").with({
