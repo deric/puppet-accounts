@@ -12,6 +12,7 @@ define accounts::user(
   $username = $title,
   $managehome = true,
   $home = undef,
+  $home_permissions = '0755',
   $ensure = present,
   $recurse_permissions = false,
 ) {
@@ -80,7 +81,7 @@ define accounts::user(
           owner   => $username,
           group   => $username,
           recurse => $recurse_permissions,
-          mode    => '0755',
+          mode    => $home_permissions,
         }
 
         file { "${home_dir}/.ssh":
