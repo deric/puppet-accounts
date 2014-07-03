@@ -31,6 +31,7 @@ describe 'accounts::user' do
   shared_examples 'having_home_dir' do |user, home_dir|
     let(:owner) { user }
     let(:group) { user }
+    let(:facts) { {:osfamily => 'Debian'} }
 
     it { should contain_file("#{home_dir}").with({
       'ensure'  => 'directory',

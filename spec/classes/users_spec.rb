@@ -5,6 +5,7 @@ describe 'accounts::users' do
   shared_examples 'having_user_account' do |user|
     let(:owner) { user }
     let(:group) { user }
+    let(:facts) { {:osfamily => 'Debian'} }
     it { should contain_user(user) }
     it { should contain_group(user) }
 
