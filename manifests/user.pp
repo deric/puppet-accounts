@@ -12,7 +12,11 @@ define accounts::user(
   $username = $title,
   $managehome = true,
   $home = undef,
-  $home_permissions = '0755',
+  $home_permissions = $::osfamily ? {
+                        'Debian' => '0755',
+                        'RedHat' => '0700',
+                        default  => '0700',
+                      },
   $ensure = present,
   $recurse_permissions = false,
 ) {
