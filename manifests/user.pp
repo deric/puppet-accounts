@@ -23,6 +23,8 @@ define accounts::user(
 
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
+  validate_hash($ssh_keys)
+  validate_bool($managehome)
 
   $home_dir = $home ? {
     undef   => "/home/${username}",
