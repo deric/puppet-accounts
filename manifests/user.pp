@@ -21,6 +21,9 @@ define accounts::user(
   $recurse_permissions = false,
 ) {
 
+  validate_re($ensure, [ '^absent$', '^present$' ],
+    'The $ensure parameter must be \'absent\' or \'present\'')
+
   $home_dir = $home ? {
     undef   => "/home/${username}",
     default => $home,
@@ -129,8 +132,6 @@ define accounts::user(
         create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
       }
     }
-    default: {
-      error("${ensure} mode not supported")
-    }
+    # other ensure value is not possible
   }
 }

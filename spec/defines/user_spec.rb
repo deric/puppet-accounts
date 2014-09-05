@@ -108,4 +108,21 @@ describe 'accounts::user' do
 
     it_behaves_like 'not_having_home_dir', 'foobar', '/var/www'
   end
+
+  describe 'invalid ensure' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+
+    let(:params){{
+      :home       => home,
+      :managehome => false,
+      :ensure     => 'whatever'
+    }}
+
+    it do
+      expect {
+        should compile
+      }.to raise_error(Puppet::Error, /parameter must be 'absent' or 'present'/)
+    end
+  end
 end
