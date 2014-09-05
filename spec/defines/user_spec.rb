@@ -70,7 +70,8 @@ describe 'accounts::user' do
     )}
 
     it { should contain_group('foobar').with(
-      'gid' => 1001
+      'gid'    => 1001,
+      'ensure' => 'present'
     )}
 
     it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
