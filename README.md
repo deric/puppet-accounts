@@ -10,8 +10,6 @@ in node definition include:
 class {'accounts': }
 ```
 
-### Hiera
-
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
 ```YAML
@@ -24,16 +22,43 @@ and user accounts:
 
 ```YAML
 accounts::users:
- deric:
-   comment: "John Doe"
-   groups: ["sudo", "users"]
-   shell: "/bin/bash"
-   pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogWPVSRoCADGdwFe6H//gzj/VT4lcv55o3z.nrmNb3VbVvgcghz9Ae2Dw0"
-   ssh_key:
-    type: "ssh-rsa"
-    key: "a valid public ssh key string"
-    comment: "john@doe"
+  john:
+    comment: "John Doe"
+    groups: ["sudo", "users"]
+    shell: "/bin/bash"
+    pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogWPVSRoCADGdwFe6H//gzj/VT4lcv55o3z.nrmNb3VbVvgcghz9Ae2Dw0"
+    ssh_key:
+      type: "ssh-rsa"
+      key: "a valid public ssh key string"
+      comment: "john@doe"
+  alice:
+    comment: "Alice"
 ```
+
+### Custom home
+
+When no `home` is specified directory will be created in `/home/{username}`.
+
+```yaml
+  alice:
+    comment: 'Alice'
+    home: '/var/alice'
+```
+
+### Account removal
+
+Removing account could be done by setting `ensure` parameter to `absent`:
+
+```yaml
+accounts::users:
+ john:
+   ensure: 'absent'
+   managehome: true
+```
+
+If `managehome` is set to `true` (default), also home directory will be removed!
+
+### Testing
 
 Which accounts will be installed on specific machine can be checked from command line:
 
@@ -47,6 +72,16 @@ where `my_node.yml` is a file which you get from facter running at some node:
 $ facter -y > my_node.yml
 ```
 
+### Without Hiera
+
+Using Hiera is optional, you can configure accounts directly from Puppet code:
+
+
+```puppet
+class {'accounts':
+  users => { 'john' => { 'comment' => 'John Doe' }}
+}
+```
 
 ## Installation
 
