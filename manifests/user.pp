@@ -38,6 +38,7 @@ define accounts::user(
     absent: {
       if $managehome == true {
         exec { "rm -rf ${home_dir}":
+          path   => [ '/bin', '/usr/bin' ],
           onlyif => "test -d ${home_dir}",
         }
       }
