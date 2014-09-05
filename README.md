@@ -70,3 +70,7 @@ Run tests with:
 $ bundle install
 $ bundle exec rake spec
 ```
+
+## License
+
+Apache 2.0
