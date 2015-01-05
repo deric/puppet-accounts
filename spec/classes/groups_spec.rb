@@ -11,7 +11,7 @@ describe 'accounts::groups' do
     it do
       expect {
         should compile
-      }.to raise_error(Puppet::Error, /is not a Hash/)
+      }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /is not a Hash/)
     end
   end
 end

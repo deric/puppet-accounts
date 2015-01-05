@@ -123,7 +123,7 @@ describe 'accounts::user' do
     it do
       expect {
         should compile
-      }.to raise_error(Puppet::Error, /parameter must be 'absent' or 'present'/)
+      }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /parameter must be 'absent' or 'present'/)
     end
   end
 end
