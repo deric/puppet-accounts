@@ -19,7 +19,7 @@ describe 'accounts::group' do
     let(:title) { 'foo' }
 
     let(:params){{
-      :group_ensure     => 'whatever'
+      :ensure     => 'whatever'
     }}
 
     it do
@@ -33,7 +33,7 @@ describe 'accounts::group' do
     let(:title) { 'my_group' }
 
     let(:params){{
-      :group_ensure   => 'absent'
+      :ensure   => 'absent'
     }}
 
     it { should contain_group('my_group').with(

@@ -2,15 +2,15 @@
 #
 define accounts::group (
   $groupname    = $title,
-  $group_ensure = 'present',
+  $ensure = 'present',
   $gid          = undef,
 ) {
 
-  validate_re($group_ensure, [ '^absent$', '^present$' ],
-    'The $group_ensure parameter must be \'absent\' or \'present\'')
+  validate_re($ensure, [ '^absent$', '^present$' ],
+    'The $ensure parameter must be \'absent\' or \'present\'')
 
   group { $groupname:
-    ensure => $group_ensure,
+    ensure => $ensure,
     gid    => $gid,
   }
 }
