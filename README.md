@@ -1,6 +1,7 @@
 # Puppet Accounts Management
 
-[![Build Status](https://travis-ci.org/deric/puppet-accounts.png)](https://travis-ci.org/deric/puppet-accounts)
+[![Puppet
+Forge](http://img.shields.io/puppetforge/v/deric/accounts.svg)](https://forge.puppetlabs.com/deric/accounts) [![Build Status](https://travis-ci.org/deric/puppet-accounts.png)](https://travis-ci.org/deric/puppet-accounts)
 
 This is puppet module for managing user accounts, groups and setting ssh keys.
 
