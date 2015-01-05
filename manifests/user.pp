@@ -49,22 +49,22 @@ define accounts::user(
       }
 
       user { $username:
-        ensure      => absent,
-        uid         => $uid,
-        gid         => $real_gid,
-        groups      => $groups,
+        ensure => absent,
+        uid    => $uid,
+        gid    => $real_gid,
+        groups => $groups,
       } ~>
       group { $username:
-        ensure  => absent,
-        gid     => $real_gid,
+        ensure => absent,
+        gid    => $real_gid,
       }
     }
 
     present: {
       # Create a usergroup
       group { $username:
-        ensure  => present,
-        gid     => $real_gid
+        ensure => present,
+        gid    => $real_gid
       }
 
       user { $username:
@@ -116,17 +116,17 @@ define accounts::user(
       }
 
       $ssh_key_defaults = {
-        ensure  => present,
-        user    => $username,
-        type    => 'ssh-rsa'
+        ensure => present,
+        user   => $username,
+        type   => 'ssh-rsa'
       }
 
       if $ssh_key {
         ssh_authorized_key { $ssh_key['comment']:
-          ensure  => present,
-          user    => $username,
-          type    => $ssh_key['type'],
-          key     => $ssh_key['key'],
+          ensure => present,
+          user   => $username,
+          type   => $ssh_key['type'],
+          key    => $ssh_key['key'],
         }
       }
 
@@ -134,6 +134,7 @@ define accounts::user(
         create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
       }
     }
-    # other ensure value is not possible
+    # other ensure value is not possible (exception will be thrown earlier)
+    default: {}
   }
 }
