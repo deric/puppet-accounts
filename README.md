@@ -5,6 +5,8 @@ Forge](http://img.shields.io/puppetforge/v/deric/accounts.svg)](https://forge.pu
 
 This is puppet module for managing user accounts, groups and setting ssh keys.
 
+Origin: https://github.com/deric/puppet-accounts
+
 in node definition include:
 
 ```puppet
