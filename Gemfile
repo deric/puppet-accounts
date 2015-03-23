@@ -11,6 +11,7 @@ group :rake do
   gem 'librarian-puppet' , '< 2.0'
   # coverage reports will be in release 2.0
   gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem 'highline', '< 1.7.0' #to maintain ruby 1.8.7 compatibility
 end
 
 group :development do
