@@ -115,10 +115,11 @@ define accounts::user(
         }
       }
 
+      # Error: Use of reserved word: type, must be quoted if intended to be a String value at /etc/puppetlabs/agent/code/environments/production/modules/accounts/manifests/user.pp:121:9 on node
       $ssh_key_defaults = {
         ensure => present,
         user   => $username,
-        type   => 'ssh-rsa'
+        'type' => 'ssh-rsa'
       }
 
       if $ssh_key {
