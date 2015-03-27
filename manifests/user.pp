@@ -4,7 +4,7 @@ define accounts::user(
   $uid = undef,
   $gid = $uid,
   $groups = [],
-  $comment = $title,
+  $comment = "${title}",
   $ssh_key = '',
   $ssh_keys = {},
   $shell ='/bin/bash',
