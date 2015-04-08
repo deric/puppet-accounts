@@ -48,6 +48,20 @@ When no `home` is specified directory will be created in `/home/{username}`.
     home: '/var/alice'
 ```
 
+### Group management
+
+By default each user has a group with the same name. You can change this with `manage_group` parameter:
+
+```yaml
+accounts::users:
+ john:
+   manage_group: false
+   groups:
+     - 'users'
+     - 'www-data'
+```
+Optionally you can assign user to other groups by supplying a `groups` array.
+
 ### Account removal
 
 Removing account could be done by setting `ensure` parameter to `absent`:
