@@ -55,7 +55,7 @@ describe 'accounts::user' do
     }) }
   end
 
-  describe 'create new user' do
+  context 'create new user' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
     let(:group) { 'foobar' }
@@ -77,7 +77,7 @@ describe 'accounts::user' do
     it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
   end
 
-  describe 'create new user without specified uid' do
+  context 'create new user without specified uid' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
     let(:group) { 'foobar' }
@@ -85,7 +85,7 @@ describe 'accounts::user' do
     it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
   end
 
-  describe 'custom home directory' do
+  context 'custom home directory' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
     let(:group) { 'foobar' }
@@ -98,7 +98,7 @@ describe 'accounts::user' do
     it_behaves_like 'having_home_dir', 'foobar', '/var/www'
   end
 
-  describe 'not managing home' do
+  context 'not managing home' do
     let(:title) { 'foobar' }
     let(:home) { '/var/www' }
 
@@ -110,7 +110,7 @@ describe 'accounts::user' do
     it_behaves_like 'not_having_home_dir', 'foobar', '/var/www'
   end
 
-  describe 'invalid ensure' do
+  context 'invalid ensure' do
     let(:title) { 'foo' }
     let(:home) { '/home/foo' }
 
