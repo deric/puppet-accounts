@@ -67,6 +67,16 @@ define accounts::user(
         gid    => $real_gid
       }
 
+      anchor { 'accounts::user::groups': }
+
+      if(!empty($groups)){
+        # ensure groups exists before creating an account
+        ensure_resource('group', $groups, {
+          'ensure'  => 'present',
+          'before' => Anchor['accounts::user::groups']
+          })
+      }
+
       user { $username:
         ensure  => present,
         uid     => $uid,
@@ -75,6 +85,7 @@ define accounts::user(
         shell   => $shell,
         comment => $comment,
         require => [
+          Anchor['accounts::user::groups'],
           Group[$groups],
           Group[$username]
         ],

@@ -126,4 +126,18 @@ describe 'accounts::user' do
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /parameter must be 'absent' or 'present'/)
     end
   end
+
+  context 'assign groups' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+
+    let(:params){{
+      :home  => home,
+      :groups => ['users']
+    }}
+
+    it { should contain_group('users').with(
+      'ensure' => 'present'
+    )}
+  end
 end
