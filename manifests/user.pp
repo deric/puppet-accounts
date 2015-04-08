@@ -11,6 +11,7 @@ define accounts::user(
   $pwhash = '',
   $username = $title,
   $managehome = true,
+  $manage_group = true, # create a group with same name as user's name
   $home = undef,
   $home_permissions = $::osfamily ? {
                         'Debian' => '0755',
@@ -53,21 +54,28 @@ define accounts::user(
         uid    => $uid,
         gid    => $real_gid,
         groups => $groups,
-      } ~>
-      group { $username:
-        ensure => absent,
-        gid    => $real_gid,
+      }
+      if $manage_group == true {
+        group { $username:
+          ensure  => absent,
+          gid     => $real_gid,
+          require => User[$username]
+        }
       }
     }
 
     present: {
-      # Create a usergroup
-      group { $username:
-        ensure => present,
-        gid    => $real_gid
-      }
-
       anchor { 'accounts::user::groups': }
+
+      # manage group with same name as user's name
+      if $manage_group == true {
+        # create user's group
+        group { $username:
+          ensure => present,
+          gid    => $real_gid,
+          before => Anchor['accounts::user::groups']
+        }
+      }
 
       if(!empty($groups)){
         # ensure groups exists before creating an account
@@ -85,9 +93,7 @@ define accounts::user(
         shell   => $shell,
         comment => $comment,
         require => [
-          Anchor['accounts::user::groups'],
-          Group[$groups],
-          Group[$username]
+          Anchor['accounts::user::groups']
         ],
       }
 

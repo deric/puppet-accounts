@@ -139,5 +139,38 @@ describe 'accounts::user' do
     it { should contain_group('users').with(
       'ensure' => 'present'
     )}
+
+    it { should contain_group('foo').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'optional group management' do
+    let(:title) { 'mickey' }
+
+    let(:params){{
+      :manage_group => false
+    }}
+
+    it { should_not contain_group('mickey').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'remove group with user\'s account' do
+    let(:title) { 'mickey' }
+
+    let(:params){{
+      :manage_group => true,
+      :ensure       => 'absent',
+    }}
+
+    it { should contain_user('mickey').with(
+      'ensure' => 'absent'
+    )}
+
+    it { should contain_group('mickey').with(
+      'ensure' => 'absent'
+    )}
   end
 end
