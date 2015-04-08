@@ -1,3 +1,3 @@
-forge 'https://forgeapi.puppetlabs.com'
+forge 'http://forge.puppetlabs.com'
 
-mod 'puppetlabs/stdlib', '>=0.1.7'
+mod 'puppetlabs/stdlib', '>=2.3.3'
