@@ -35,11 +35,6 @@ define accounts::user(
   User <| title == $username |> { managehome => $managehome }
   User <| title == $username |> { home => $home_dir }
 
-  $real_gid = $gid ? {
-    /[0-9]+/ => $gid,
-    default  => undef,
-  }
-
   case $ensure {
     absent: {
       if $managehome == true {
@@ -52,13 +47,13 @@ define accounts::user(
       user { $username:
         ensure => absent,
         uid    => $uid,
-        gid    => $real_gid,
+        gid    => $gid,
         groups => $groups,
       }
       if $manage_group == true {
         group { $username:
           ensure  => absent,
-          gid     => $real_gid,
+          gid     => $gid,
           require => User[$username]
         }
       }
@@ -72,7 +67,7 @@ define accounts::user(
         # create user's group
         group { $username:
           ensure => present,
-          gid    => $real_gid,
+          gid    => $gid,
           before => Anchor['accounts::user::groups']
         }
       }
@@ -88,7 +83,7 @@ define accounts::user(
       user { $username:
         ensure  => present,
         uid     => $uid,
-        gid     => $real_gid,
+        gid     => $gid,
         groups  => $groups,
         shell   => $shell,
         comment => $comment,
