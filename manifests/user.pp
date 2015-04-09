@@ -73,14 +73,6 @@ define accounts::user(
         })
       }
 
-      if(!empty($groups)){
-        # ensure groups exists before creating an account
-        ensure_resource('group', $groups, {
-          'ensure'  => 'present',
-          'before' => Anchor['accounts::user::groups']
-        })
-      }
-
       user { $username:
         ensure  => present,
         uid     => $uid,

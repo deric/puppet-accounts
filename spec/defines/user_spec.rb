@@ -136,10 +136,6 @@ describe 'accounts::user' do
       :groups => ['users']
     }}
 
-    it { should contain_group('users').with(
-      'ensure' => 'present'
-    )}
-
     it { should contain_group('foo').with(
       'ensure' => 'present'
     )}
