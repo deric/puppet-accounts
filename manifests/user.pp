@@ -60,7 +60,7 @@ define accounts::user(
     }
 
     present: {
-      anchor { 'accounts::user::groups': }
+      anchor { "accounts::user::groups::${username}": }
 
       # manage group with same name as user's name
       if $manage_group == true {
@@ -69,7 +69,7 @@ define accounts::user(
         ensure_resource('group', $username, {
           'ensure' => 'present',
           'gid'    => $gid,
-          'before' => 'Anchor["accounts::user::groups"]'
+          'before' => Anchor["accounts::user::groups::${username}"]
         })
       }
 
@@ -81,7 +81,7 @@ define accounts::user(
         shell   => $shell,
         comment => $comment,
         require => [
-          Anchor['accounts::user::groups']
+          Anchor["accounts::user::groups::${username}"]
         ],
       }
 

@@ -136,6 +136,12 @@ describe 'accounts::user' do
       :groups => ['users']
     }}
 
+    it { should contain_anchor('accounts::user::groups::foo') }
+
+    it { should contain_user('foo').with(
+      'ensure' => 'present'
+    ).that_requires('Anchor[accounts::user::groups::foo]') }
+
     it { should contain_group('foo').with(
       'ensure' => 'present'
     )}
@@ -147,6 +153,8 @@ describe 'accounts::user' do
     let(:params){{
       :manage_group => false
     }}
+
+    it { should contain_anchor('accounts::user::groups::mickey') }
 
     it { should_not contain_group('mickey').with(
       'ensure' => 'present'
