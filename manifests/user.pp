@@ -65,11 +65,12 @@ define accounts::user(
       # manage group with same name as user's name
       if $manage_group == true {
         # create user's group
-        group { $username:
-          ensure => present,
-          gid    => $gid,
-          before => Anchor['accounts::user::groups']
-        }
+        # avoid problems when group declared elsewhere
+        ensure_resource('group', $username, {
+          'ensure' => 'present',
+          'gid'    => $gid,
+          'before' => Anchor['accounts::user::groups']
+        })
       }
 
       if(!empty($groups)){
@@ -77,7 +78,7 @@ define accounts::user(
         ensure_resource('group', $groups, {
           'ensure'  => 'present',
           'before' => Anchor['accounts::user::groups']
-          })
+        })
       }
 
       user { $username:
