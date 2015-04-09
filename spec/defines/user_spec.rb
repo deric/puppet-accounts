@@ -162,7 +162,7 @@ describe 'accounts::user' do
 
     let(:params){{
       :manage_group => true,
-      :ensure       => 'absent',
+      :ensure       => 'absent'
     }}
 
     it { should contain_user('mickey').with(
