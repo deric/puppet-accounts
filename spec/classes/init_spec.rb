@@ -26,6 +26,24 @@ describe 'accounts' do
       'gid'    => 2001,
       'ensure' => 'present'
     )}
+  end
+
+  context 'no group management' do
+    let(:params){{
+      :users => { 'john' => { 'comment' => 'John Doe', 'gid' => 'john' }},
+      :groups => { 'developers' => { 'gid' => 2001 }},
+      :manage_groups => false,
+    }}
+
+    it { should contain_user('john').with(
+      'comment' => 'John Doe',
+      'gid' => 'john'
+    )}
+
+    it { should_not contain_group('developers').with(
+      'gid'    => 2001,
+      'ensure' => 'present'
+    )}
 
   end
 end
