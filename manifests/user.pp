@@ -69,7 +69,7 @@ define accounts::user(
         ensure_resource('group', $username, {
           'ensure' => 'present',
           'gid'    => $gid,
-          'before' => Anchor['accounts::user::groups']
+          'before' => 'Anchor["accounts::user::groups"]'
         })
       }
 
