@@ -1,8 +1,8 @@
 # Puppet accounts management
 #
 class accounts(
-  $manage_users  = hiera('accounts::manage_users', true),
-  $manage_groups = hiera('accounts::manage_groups', true),
+  $manage_users  = true,
+  $manage_groups = true,
   $users         = {},
   $groups        = {},
 ) {
@@ -11,20 +11,14 @@ class accounts(
   validate_hash($users)
   validate_hash($groups)
 
-  $users_h  = hiera_hash('accounts::users', {})
-  $groups_h = hiera_hash('accounts::groups', {})
-
-  $merged_users = merge($users, $users_h)
-  $merged_groups = merge($groups, $groups_h)
-
   class { 'accounts::groups':
     manage => $manage_groups,
-    groups => $merged_groups,
+    groups => $groups,
   }
 
   class { 'accounts::users':
     manage  => $manage_users,
-    users   => $merged_users,
+    users   => $users,
     require => Class['accounts::groups']
   }
 }
