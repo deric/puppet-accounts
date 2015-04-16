@@ -3,6 +3,7 @@
 define accounts::user(
   $uid = undef,
   $gid = $uid,
+  $primary_group = $title,
   $groups = [],
   $comment = "${title}",
   $ssh_key = '',
@@ -60,16 +61,16 @@ define accounts::user(
     }
 
     present: {
-      anchor { "accounts::user::groups::${username}": }
+      anchor { "accounts::user::groups::${primary_group}": }
 
       # manage group with same name as user's name
       if $manage_group == true {
         # create user's group
         # avoid problems when group declared elsewhere
-        ensure_resource('group', $username, {
+        ensure_resource('group', $primary_group, {
           'ensure' => 'present',
           'gid'    => $gid,
-          'before' => Anchor["accounts::user::groups::${username}"]
+          'before' => Anchor["accounts::user::groups::${primary_group}"]
         })
       }
 
@@ -81,7 +82,7 @@ define accounts::user(
         shell   => $shell,
         comment => $comment,
         require => [
-          Anchor["accounts::user::groups::${username}"]
+          Anchor["accounts::user::groups::${primary_group}"]
         ],
       }
 
@@ -94,7 +95,7 @@ define accounts::user(
         file { $home_dir:
           ensure  => directory,
           owner   => $username,
-          group   => $username,
+          group   => $primary_group,
           recurse => $recurse_permissions,
           mode    => $home_permissions,
         }
@@ -102,7 +103,7 @@ define accounts::user(
         file { "${home_dir}/.ssh":
           ensure  => directory,
           owner   => $username,
-          group   => $username,
+          group   => $primary_group,
           mode    => '0700',
           require => File[$home_dir],
         }
@@ -110,7 +111,7 @@ define accounts::user(
         file { "${home_dir}/.ssh/authorized_keys":
           ensure  => present,
           owner   => $username,
-          group   => $username,
+          group   => $primary_group,
           mode    => '0600',
           require => File["${home_dir}/.ssh"],
         }
