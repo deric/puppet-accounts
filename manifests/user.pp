@@ -27,9 +27,11 @@ define accounts::user(
   validate_hash($ssh_keys)
   validate_bool($managehome)
 
-  $home_dir = $home ? {
-    undef   => "/home/${username}",
-    default => $home,
+  if ! $home {
+    $home_dir = $username ? {
+      root    => '/root',
+      default => "/home/${username}",
+    }
   }
 
   User <| title == $username |> { managehome => $managehome }
