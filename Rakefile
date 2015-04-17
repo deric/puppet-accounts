@@ -1,8 +1,8 @@
+require 'rubygems'
 require 'bundler'
 Bundler.require(:rake)
 require 'rake/clean'
 
-require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'rspec-system/rake_task'
 require 'puppetlabs_spec_helper/rake_tasks'
@@ -13,8 +13,6 @@ desc "Lint metadata.json file"
 task :meta do
   sh "metadata-json-lint metadata.json"
 end
-
-puts "Puppet version: #{Puppet.version}"
 
 PuppetLint.configuration.ignore_paths = ["spec/fixtures/modules/apt/manifests/*.pp"]
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
