@@ -14,6 +14,8 @@ task :meta do
   sh "metadata-json-lint metadata.json"
 end
 
+puts "Puppet version: #{Puppet.version}"
+
 PuppetLint.configuration.ignore_paths = ["spec/fixtures/modules/apt/manifests/*.pp"]
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
 PuppetLint.configuration.send("disable_80chars")
