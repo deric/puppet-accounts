@@ -27,7 +27,9 @@ define accounts::user(
   validate_hash($ssh_keys)
   validate_bool($managehome)
 
-  if ! $home {
+  if $home {
+    $home_dir = $home
+  } else {
     $home_dir = $username ? {
       root    => '/root',
       default => "/home/${username}",

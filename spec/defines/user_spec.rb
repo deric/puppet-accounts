@@ -110,6 +110,14 @@ describe 'accounts::user' do
     it_behaves_like 'not_having_home_dir', 'foobar', '/var/www'
   end
 
+
+  context 'root home' do
+    let(:title) { 'root' }
+
+    # root has automatically special home folder
+    it_behaves_like 'having_home_dir', 'root', '/root'
+  end
+
   context 'invalid ensure' do
     let(:title) { 'foo' }
     let(:home) { '/home/foo' }
