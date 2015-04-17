@@ -14,12 +14,11 @@ task :meta do
   sh "metadata-json-lint metadata.json"
 end
 
-PuppetLint.configuration.ignore_paths = ["spec/fixtures/modules/apt/manifests/*.pp"]
+PuppetLint.configuration.ignore_paths = ["spec/fixtures/modules/*/**.pp"]
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
-PuppetLint.configuration.send("disable_80chars")
 
 task :librarian_spec_prep do
   sh 'librarian-puppet install --path=spec/fixtures/modules/'
 end
 task :spec_prep => :librarian_spec_prep
-task :default => [:validate, :lint, :spec]
+task :default => [:validate, :spec, :lint]
