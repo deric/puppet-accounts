@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'accounts' do
-
+  let(:facts) { {:osfamily => 'Debian'} }
   let(:params){{
     :manage_users  => true,
     :manage_groups => true,
