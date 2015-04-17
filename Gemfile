@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 group :rake do
-  gem 'puppet', '>= 2.7.0'
   gem 'puppet-lint', '>=0.3.2'
   # fix for puppet 4 breaks travis tests
   gem 'puppetlabs_spec_helper', '>=0.2.0', '< 0.10.2'
@@ -17,4 +16,10 @@ end
 group :development do
   gem 'puppet-blacksmith',  '~> 3.0'
   gem 'metadata-json-lint',      :require => false
+end
+
+if puppetversion = ENV['PUPPET_GEM_VERSION']
+  gem 'puppet', puppetversion, :require => false
+else
+  gem 'puppet', '>= 2.7.0', :require => false
 end
