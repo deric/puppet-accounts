@@ -88,4 +88,17 @@ describe 'accounts::users' do
     }}
     it_behaves_like 'not_having_user_account', 'foo'
   end
+
+  describe 'multiple users same key comment' do
+    let(:params){{
+      :users => {
+        'tom' => { 'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' =>  'xxxxxxx'}},
+        'jerry' => { 'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' =>  'xxxxxxx'}},
+      },
+    }}
+    it_behaves_like 'having_user_account', 'tom'
+    it_behaves_like 'having_user_account', 'jerry'
+  end
+
+
 end

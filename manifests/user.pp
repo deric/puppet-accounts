@@ -132,7 +132,7 @@ define accounts::user(
       }
 
       if $ssh_key {
-        ssh_authorized_key { $ssh_key['comment']:
+        ssh_authorized_key { "${username}_${ssh_key['comment']}":
           ensure => present,
           user   => $username,
           type   => $ssh_key['type'],
