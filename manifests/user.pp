@@ -132,7 +132,12 @@ define accounts::user(
       }
 
       if $ssh_key {
-        ssh_authorized_key { "${username}_${ssh_key['comment']}":
+        # for unique resource naming
+        $suffix = empty($ssh_key['comment']) ? {
+          undef   => $ssh_key['type'],
+          default => $ssh_key['comment']
+        }
+        ssh_authorized_key { "${username}_${suffix}":
           ensure => present,
           user   => $username,
           type   => $ssh_key['type'],
