@@ -3,14 +3,14 @@
 define accounts::user(
   $uid = undef,
   $gid = $uid,
-  $primary_group = $title,
+  $primary_group = "${title}", # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
+  $comment = "${title}", # see https://github.com/deric/puppet-accounts/pull/11
+  $username = "${title}",# for more details
   $groups = [],
-  $comment = "${title}",
   $ssh_key = '',
   $ssh_keys = {},
   $shell ='/bin/bash',
   $pwhash = '',
-  $username = $title,
   $managehome = true,
   $manage_group = true, # create a group with '$primary_group' name
   $home = undef,
