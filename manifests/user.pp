@@ -12,7 +12,7 @@ define accounts::user(
   $pwhash = '',
   $username = $title,
   $managehome = true,
-  $manage_group = true, # create a group with same name as user's name
+  $manage_group = true, # create a group with '$primary_group' name
   $home = undef,
   $home_permissions = $::osfamily ? {
                         'Debian' => '0755',
@@ -56,7 +56,7 @@ define accounts::user(
         groups => $groups,
       }
       if $manage_group == true {
-        group { $username:
+        group { $primary_group:
           ensure  => absent,
           gid     => $gid,
           require => User[$username]
