@@ -185,4 +185,24 @@ describe 'accounts::user' do
       'ensure' => 'absent'
     )}
   end
+
+  context 'allow changing primary group\'s name' do
+    let(:title) { 'john' }
+
+    let(:params){{
+      :primary_group => 'users',
+    }}
+
+    it { should contain_user('john').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('users').with(
+      'ensure' => 'present'
+    )}
+
+    it { should_not contain_group('john').with(
+      'ensure' => 'present'
+    )}
+  end
 end

@@ -111,5 +111,4 @@ describe 'accounts::users' do
     it_behaves_like 'having_user_account', 'jerry'
   end
 
-
 end
