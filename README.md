@@ -100,6 +100,26 @@ class {'accounts':
 }
 ```
 
+When defining adding a user to multiple groups, we have to ensure, that all the groups exists first:
+
+```puppet
+  class {'accounts':
+    groups => {
+      'users' => {
+        'gid' => 100,
+      },
+      'puppet' => {
+        'gid' => 111,
+      }
+    },
+    users => { 'john' => {
+      'shell'   => '/bin/bash',
+      'groups'  => ['users', 'puppet'],
+      'ssh_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }
+    }}
+  }
+```
+
 ## Installation
 
 With [Puppet librarian](https://github.com/rodjek/librarian-puppet) add one line to `Puppetfile`:
