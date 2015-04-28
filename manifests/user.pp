@@ -6,6 +6,7 @@ define accounts::user(
   $primary_group = "${title}", # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   $comment = "${title}", # see https://github.com/deric/puppet-accounts/pull/11
   $username = "${title}",# for more details
+  $group_members = undef,
   $groups = [],
   $ssh_key = '',
   $ssh_keys = {},
@@ -74,6 +75,7 @@ define accounts::user(
         ensure_resource('group', $primary_group, {
           'ensure' => 'present',
           'gid'    => $gid,
+          'members' => $group_members,
           'before' => Anchor["accounts::user::groups::${primary_group}"]
         })
       }

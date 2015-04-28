@@ -12,6 +12,10 @@
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.2.0"
+    },
+    {
+      "name": "onyxpoint/gpasswd",
+      "version_requirement": ">= 0.1.2"
     }
   ],
   "operatingsystem_support": [
