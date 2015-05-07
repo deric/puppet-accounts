@@ -146,7 +146,7 @@ define accounts::user(
         }
       }
 
-      if !empty($ssh_key) {
+      if !empty($ssh_keys) {
         create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
       }
     }
