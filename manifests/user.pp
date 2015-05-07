@@ -132,7 +132,7 @@ define accounts::user(
         'type' => 'ssh-rsa'
       }
 
-      if $ssh_key {
+      if !empty($ssh_key) {
         # for unique resource naming
         $suffix = empty($ssh_key['comment']) ? {
           undef   => $ssh_key['type'],
@@ -146,7 +146,7 @@ define accounts::user(
         }
       }
 
-      if $ssh_keys {
+      if !empty($ssh_key) {
         create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
       }
     }
