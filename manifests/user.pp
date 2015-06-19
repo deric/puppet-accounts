@@ -9,6 +9,7 @@ define accounts::user(
   $groups = [],
   $ssh_key = '',
   $ssh_keys = {},
+  $purge_ssh_keys = false,
   $shell ='/bin/bash',
   $pwhash = '',
   $managehome = true,
@@ -27,6 +28,9 @@ define accounts::user(
     'The $ensure parameter must be \'absent\' or \'present\'')
   validate_hash($ssh_keys)
   validate_bool($managehome)
+  if ! is_array($purge_ssh_keys) {
+    validate_bool($purge_ssh_keys)
+  }
 
   if $home {
     $home_dir = $home
@@ -79,13 +83,14 @@ define accounts::user(
       }
 
       user { $username:
-        ensure  => present,
-        uid     => $uid,
-        gid     => $gid,
-        groups  => $groups,
-        shell   => $shell,
-        comment => $comment,
-        require => [
+        ensure         => present,
+        uid            => $uid,
+        gid            => $gid,
+        groups         => $groups,
+        shell          => $shell,
+        comment        => $comment,
+        purge_ssh_keys => $purge_ssh_keys,
+        require        => [
           Anchor["accounts::user::groups::${primary_group}"]
         ],
       }
