@@ -82,17 +82,36 @@ define accounts::user(
         })
       }
 
-      user { $username:
-        ensure         => present,
-        uid            => $uid,
-        gid            => $gid,
-        groups         => $groups,
-        shell          => $shell,
-        comment        => $comment,
-        purge_ssh_keys => $purge_ssh_keys,
-        require        => [
-          Anchor["accounts::user::groups::${primary_group}"]
-        ],
+      # prior to Puppet 3.6 `purge_ssh_keys` is not supported
+      if versioncmp($::puppetversion, '3.6.0') < 0 {
+        user { $username:
+          ensure  => present,
+          uid     => $uid,
+          gid     => $gid,
+          groups  => $groups,
+          shell   => $shell,
+          comment => $comment,
+          require => [
+            Anchor["accounts::user::groups::${primary_group}"]
+          ],
+        }
+        # TODO: implement purge_ssh_keys manually?
+        if $purge_ssh_keys {
+          notice('$purge_ssh_keys not supported prior to puppet 3.6.0')
+        }
+      } else {
+        user { $username:
+          ensure         => present,
+          uid            => $uid,
+          gid            => $gid,
+          groups         => $groups,
+          shell          => $shell,
+          comment        => $comment,
+          purge_ssh_keys => $purge_ssh_keys,
+          require        => [
+            Anchor["accounts::user::groups::${primary_group}"]
+          ],
+        }
       }
 
       # Set password if available

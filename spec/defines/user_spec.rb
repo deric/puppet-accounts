@@ -205,4 +205,39 @@ describe 'accounts::user' do
       'ensure' => 'present'
     )}
   end
+
+
+  context 'purge ssh keys' do
+    let(:title) { 'john' }
+
+    let(:facts) {{
+      :puppetversion => '3.6.0',
+    }}
+
+    let(:params){{
+      :purge_ssh_keys => true,
+    }}
+
+    it { should contain_user('john').with(
+      'ensure'         => 'present',
+      'purge_ssh_keys' => true,
+    )}
+  end
+
+  context 'purge ssh keys ' do
+    let(:title) { 'john' }
+
+    let(:facts) {{
+      :puppetversion => '3.4.0',
+    }}
+
+    let(:params){{
+      :purge_ssh_keys => true,
+    }}
+
+    it { should_not contain_user('john').with(
+      'purge_ssh_keys' => false,
+    )}
+  end
+
 end
