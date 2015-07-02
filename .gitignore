@@ -4,3 +4,4 @@ spec/fixtures/*
 .librarian
 pkg/*
 Gemfile.lock
+Puppetfile.lock

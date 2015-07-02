@@ -229,4 +229,18 @@ describe 'accounts::user' do
       )}
     end
   end
+
+  context 'empty comment' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+
+    let(:params){{
+      :home    => home,
+      :comment => nil,
+    }}
+
+    it { should contain_user('foo').with(
+      'ensure' => 'present'
+    )}
+  end
 end

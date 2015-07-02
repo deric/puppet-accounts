@@ -10,7 +10,7 @@
   "description": "Simple user management with hiera support.",
   "dependencies": [
     {
-      "name": "puppetlabs/stdlib",
+      "name": "puppetlabs-stdlib",
       "version_requirement": ">= 4.2.0"
     }
   ],
