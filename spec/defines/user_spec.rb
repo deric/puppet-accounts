@@ -220,12 +220,12 @@ describe 'accounts::user' do
     }}
     if Gem::Version.new(puppet) < Gem::Version.new('3.6.0')
       it { should contain_user('john').with(
-        'ensure'         => 'present',
-        'purge_ssh_keys' => true
+        'ensure' => 'present'
       )}
     else
       it { should contain_user('john').with(
-        'ensure' => 'present'
+        'ensure'         => 'present',
+        'purge_ssh_keys' => true
       )}
     end
   end
