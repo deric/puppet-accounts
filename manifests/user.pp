@@ -7,6 +7,7 @@ define accounts::user(
   $comment = "${title}", # see https://github.com/deric/puppet-accounts/pull/11
   $username = "${title}",# for more details
   $groups = [],
+  $ssh_key_source = undef,
   $ssh_key = '',
   $ssh_keys = {},
   $purge_ssh_keys = false,
@@ -141,6 +142,7 @@ define accounts::user(
           owner   => $username,
           group   => $primary_group,
           mode    => '0600',
+          source  => $ssh_key_source,
           require => File["${home_dir}/.ssh"],
         }
 
