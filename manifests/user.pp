@@ -22,7 +22,7 @@ define accounts::user(
                       },
   $ensure = present,
   $recurse_permissions = false,
-  $authorized_keys_file = "${home_dir}/.ssh/authorized_keys",
+  $authorized_keys_file = undef,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -40,6 +40,10 @@ define accounts::user(
       root    => '/root',
       default => "/home/${username}",
     }
+  }
+
+  if ! $authorized_keys_file {
+    $authorized_keys_file = "${home_dir}/.ssh/authorized_keys"
   }
 
   User <| title == $username |> { managehome => $managehome }
