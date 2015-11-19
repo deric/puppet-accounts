@@ -3,13 +3,9 @@
 class accounts(
   $manage_users  = true,
   $manage_groups = true,
-#  $users         = {},
-#  $groups        = {},
-) {
-
   $users = hiera_hash('accounts::users', {})
   $groups = hiera_hash('accounts::groups', {})
-
+) {
 
   validate_bool($manage_users)
   validate_bool($manage_groups)
