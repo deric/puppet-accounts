@@ -127,7 +127,7 @@ define accounts::user(
           group   => $primary_group,
           recurse => $recurse_permissions,
           mode    => $home_permissions,
-          source  => $home_directory_content,
+          source  => "${home_directory_content}/${username}",
         }
 
         file { "${home_dir}/.ssh":
