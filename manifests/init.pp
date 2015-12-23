@@ -5,11 +5,13 @@ class accounts(
   $manage_groups = true,
   $users         = {},
   $groups        = {},
+  $user_defaults = {},
 ) {
   validate_bool($manage_users)
   validate_bool($manage_groups)
   validate_hash($users)
   validate_hash($groups)
+  validate_hash($user_defaults)
 
   class { 'accounts::groups':
     manage => $manage_groups,
@@ -17,8 +19,9 @@ class accounts(
   }
 
   class { 'accounts::users':
-    manage  => $manage_users,
-    users   => $users,
-    require => Class['accounts::groups']
+    manage   => $manage_users,
+    users    => $users,
+    defaults => $user_defaults,
+    require  => Class['accounts::groups']
   }
 }
