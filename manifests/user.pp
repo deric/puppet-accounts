@@ -22,6 +22,7 @@ define accounts::user(
                       },
   $ensure = present,
   $recurse_permissions = false,
+  $home_directory_contents = 'puppet:///accounts',
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -126,6 +127,7 @@ define accounts::user(
           group   => $primary_group,
           recurse => $recurse_permissions,
           mode    => $home_permissions,
+          source  => $home_directory_content,
         }
 
         file { "${home_dir}/.ssh":
