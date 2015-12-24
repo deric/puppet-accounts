@@ -22,6 +22,7 @@ define accounts::user(
                       },
   $ensure = present,
   $recurse_permissions = false,
+  $populate_home = false,
   $home_directory_contents = 'puppet:///accounts',
 ) {
 
@@ -121,13 +122,24 @@ define accounts::user(
       }
 
       if $managehome == true {
-        file { $home_dir:
-          ensure  => directory,
-          owner   => $username,
-          group   => $primary_group,
-          recurse => $recurse_permissions,
-          mode    => $home_permissions,
-          source  => "${home_directory_content}/${username}",
+        if $populate_home == true {
+          file { $home_dir:
+            ensure  => directory,
+            owner   => $username,
+            group   => $primary_group,
+            recurse => 'remote',
+            mode    => $home_permissions,
+            source  => "${home_directory_content}/${username}",
+          }
+        }
+        else {
+          file { $home_dir:
+            ensure  => directory,
+            owner   => $username,
+            group   => $primary_group,
+            recurse => $recurse_permissions,
+            mode    => $home_permissions,
+          }
         }
 
         file { "${home_dir}/.ssh":
