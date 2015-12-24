@@ -129,7 +129,7 @@ define accounts::user(
             group   => $primary_group,
             recurse => 'remote',
             mode    => $home_permissions,
-            source  => "${home_directory_content}/${username}",
+            source  => "${home_directory_contents}/${username}",
           }
         }
         else {
