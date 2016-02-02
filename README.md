@@ -120,10 +120,23 @@ When defining adding a user to multiple groups, we have to ensure, that all the 
   }
 ```
 
+## Puppet compatibility
+
+  * `2.7.x` gem `puppet-hiera` is required on all machines
+  * `3.x` should work out-of-the-box
+  * `4.x` possibly working, although we're not testing on Puppet 4 yet
+
 ## Installation
 
 With [Puppet librarian](https://github.com/rodjek/librarian-puppet) add one line to `Puppetfile`:
 
+stable release:
+
+```ruby
+mod 'accounts'
+```
+
+development version (master branch from github):
 ```ruby
 mod 'accounts', :git => 'https://github.com/deric/puppet-accounts.git'
 ```
