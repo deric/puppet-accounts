@@ -94,6 +94,16 @@ accounts::users:
    pwhash: ''
 ```
 
+## Global settings
+
+You can provide global defaults for all users:
+
+```yaml
+accounts:
+ user_defaults:
+   shell: '/bin/dash'
+```
+
 ### Testing
 
 Which accounts will be installed on specific machine can be checked from command line:
