@@ -25,6 +25,8 @@ define accounts::user(
   $recurse_permissions = false,
   $authorized_keys_file = undef,
   $force_removal = true,
+  $populate_home = false,
+  $home_directory_contents = 'puppet:///accounts',
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],

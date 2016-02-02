@@ -5,11 +5,13 @@ class accounts(
   $manage_groups = hiera('accounts::manage_groups', true),
   $users         = {},
   $groups        = {},
+  $user_defaults = {},
 ) {
   validate_bool($manage_users)
   validate_bool($manage_groups)
   validate_hash($users)
   validate_hash($groups)
+  validate_hash($user_defaults)
 
   $users_h  = hiera_hash('accounts::users', {})
   $groups_h = hiera_hash('accounts::groups', {})
@@ -25,6 +27,7 @@ class accounts(
   class { 'accounts::users':
     manage  => $manage_users,
     users   => $merged_users,
+    defaults => $user_defaults,
     require => Class['accounts::groups']
   }
 }
