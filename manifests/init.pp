@@ -25,9 +25,9 @@ class accounts(
   }
 
   class { 'accounts::users':
-    manage  => $manage_users,
-    users   => $merged_users,
+    manage   => $manage_users,
+    users    => $merged_users,
     defaults => $user_defaults,
-    require => Class['accounts::groups']
+    require  => Class['accounts::groups']
   }
 }

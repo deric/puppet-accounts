@@ -26,7 +26,7 @@ define accounts::user(
   $authorized_keys_file = undef,
   $force_removal = true,
   $populate_home = false,
-  $home_directory_contents = 'puppet:///accounts',
+  $home_directory_contents = 'puppet:///modules/accounts',
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -68,22 +68,23 @@ define accounts::user(
 
       # when user is logged in we couldn't remove the account, issue #23
       if $force_removal {
-        exec { "killproc $name":
-          command     => "pkill -TERM -u $name; sleep 1; skill -KILL -u $name",
-          path        => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
-          onlyif      => "id $name",
+        exec { "killproc ${name}":
+          command     => "pkill -TERM -u ${name}; sleep 1; skill -KILL -u ${name}",
+          path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
+          onlyif      => "id ${name}",
           refreshonly => true,
           before      => Anchor["accounts::user::remove_${name}"],
         }
       }
 
       user { $username:
-        ensure => absent,
-        uid    => $uid,
-        gid    => $gid,
-        groups => $groups,
+        ensure  => absent,
+        uid     => $uid,
+        gid     => $gid,
+        groups  => $groups,
         require => Anchor["accounts::user::remove_${name}"],
       }
+
       if $manage_group == true {
         group { $primary_group:
           ensure  => absent,
@@ -165,7 +166,7 @@ define accounts::user(
           ensure => present,
           owner  => $username,
           group  => $primary_group,
-          source  => $ssh_key_source,
+          source => $ssh_key_source,
           mode   => '0600',
         }
 
