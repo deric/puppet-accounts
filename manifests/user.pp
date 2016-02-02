@@ -143,15 +143,15 @@ define accounts::user(
           require => File[$home_dir],
         } ->
 
-        file { "${authorized_keys}":
-          ensure  => present,
-          owner   => $username,
-          group   => $primary_group,
-          mode    => '0600',
+        file { $authorized_keys:
+          ensure => present,
+          owner  => $username,
+          group  => $primary_group,
+          mode   => '0600',
         }
 
         Ssh_authorized_key {
-          require =>  File["${authorized_keys}"]
+          require =>  File[$authorized_keys]
         }
       }
 
