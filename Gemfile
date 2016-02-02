@@ -4,7 +4,8 @@ group :rake do
   puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 3.0.0','< 4.0']
   gem 'puppet', puppetversion
   gem 'puppet-lint'
-  if ENV.key?('PUPPET_VERSION') && ENV['PUPPET_VERSION'] < '3.0'
+  # for travis tests
+  if ENV.key?('PUPPET_VERSION') && ENV['PUPPET_VERSION'] == '~> 2.7.0'
     gem 'hiera'
   end
   gem 'puppetlabs_spec_helper', '>=0.2.0'
