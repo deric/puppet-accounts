@@ -266,12 +266,33 @@ describe 'accounts::user' do
     let(:params){{
       :home                 => home,
       :authorized_keys_file => '/home/my_auth_keys',
-      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
+      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...', 'comment' => 'custom' },
     }}
 
     it { should contain_file('/home/my_auth_keys').with({
       'ensure'  => 'present',
     }) }
+
+    it { should contain_ssh_authorized_key('foo_custom') }
   end
+
+  context 'provide ssh key options' do
+    let(:title) { 'foo' }
+
+    let(:params){{
+      :ssh_key => {
+        'type'    => 'ssh-rsa',
+        'comment' => 'bar',
+        'key'     => 'AAAA',
+        'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
+      },
+    }}
+
+    it { should contain_ssh_authorized_key('foo_bar').with({
+      'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
+    })}
+
+  end
+
 
 end

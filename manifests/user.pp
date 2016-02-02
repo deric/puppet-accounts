@@ -159,7 +159,8 @@ define accounts::user(
       $ssh_key_defaults = {
         ensure => present,
         user   => $username,
-        'type' => 'ssh-rsa'
+        'type' => 'ssh-rsa',
+        options => '',
       }
 
       if !empty($ssh_key) {
@@ -173,7 +174,8 @@ define accounts::user(
           user    => $username,
           type    => $ssh_key['type'],
           key     => $ssh_key['key'],
-          require =>  File["${home_dir}/.ssh/authorized_keys"],
+          options => $ssh_key['options'],
+          require =>  File[$authorized_keys],
         }
       }
 
