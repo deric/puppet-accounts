@@ -163,10 +163,11 @@ define accounts::user(
           default => $ssh_key['comment']
         }
         ssh_authorized_key { "${username}_${suffix}":
-          ensure => present,
-          user   => $username,
-          type   => $ssh_key['type'],
-          key    => $ssh_key['key'],
+          ensure  => present,
+          user    => $username,
+          type    => $ssh_key['type'],
+          key     => $ssh_key['key'],
+          require =>  File["${home_dir}/.ssh/authorized_keys"],
         }
       }
 
