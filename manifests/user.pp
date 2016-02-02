@@ -42,8 +42,10 @@ define accounts::user(
     }
   }
 
-  if ! $authorized_keys_file {
-    $authorized_keys_file = "${home_dir}/.ssh/authorized_keys"
+  if $authorized_keys_file {
+    $authorized_keys = $authorized_keys_file
+  } else {
+    $authorized_keys = "${home_dir}/.ssh/authorized_keys"
   }
 
   User <| title == $username |> { managehome => $managehome }
@@ -141,7 +143,7 @@ define accounts::user(
           require => File[$home_dir],
         } ->
 
-        file { "${authorized_keys_file}":
+        file { "${authorized_keys}":
           ensure  => present,
           owner   => $username,
           group   => $primary_group,
@@ -149,7 +151,7 @@ define accounts::user(
         }
 
         Ssh_authorized_key {
-          require =>  File["${authorized_keys_file}"]
+          require =>  File["${authorized_keys}"]
         }
       }
 

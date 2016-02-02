@@ -243,4 +243,35 @@ describe 'accounts::user' do
       'ensure' => 'present'
     )}
   end
+
+  context 'supply custom path to authorized_keys file' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+
+    let(:params){{
+      :home                 => home,
+      :authorized_keys_file => '/home/foo/.ssh/auth_keys',
+      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
+    }}
+
+    it { should contain_file('/home/foo/.ssh/auth_keys').with({
+      'ensure'  => 'present',
+    }) }
+  end
+
+  context 'supply custom path to authorized_keys file outside of home dir' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+
+    let(:params){{
+      :home                 => home,
+      :authorized_keys_file => '/home/my_auth_keys',
+      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
+    }}
+
+    it { should contain_file('/home/my_auth_keys').with({
+      'ensure'  => 'present',
+    }) }
+  end
+
 end
