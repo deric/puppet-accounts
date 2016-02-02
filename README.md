@@ -75,6 +75,23 @@ accounts::users:
 
 If `managehome` is set to `true` (default), also home directory will be removed!
 
+## User
+
+* `authorized_keys_file` - allows proividing location of custom `authorized_keys`
+* `purge_ssh_keys` - delete all keys except those explicitly provided (default: `false`)
+* `pwhash` set password hash
+
+Example:
+
+```yaml
+accounts::users:
+ john:
+   authorized_keys_file: '/home/.ssh/auth_file'
+   managehome: true
+   purge_ssh_keys: false
+   pwhash: ''
+```
+
 ### Testing
 
 Which accounts will be installed on specific machine can be checked from command line:
