@@ -181,6 +181,30 @@ describe 'accounts::user' do
       'ensure' => 'absent'
     )}
 
+    it { should contain_exec('killproc mickey')}
+    it { should contain_anchor('accounts::user::remove_mickey')}
+
+    it { should contain_group('mickey').with(
+      'ensure' => 'absent'
+    )}
+  end
+
+  context 'remove group with user\'s account without killing his processes' do
+    let(:title) { 'mickey' }
+
+    let(:params){{
+      :manage_group  => true,
+      :ensure        => 'absent',
+      :force_removal => false,
+    }}
+
+    it { should contain_user('mickey').with(
+      'ensure' => 'absent'
+    )}
+    # don't kill user's process
+    it { should_not contain_exec('killproc mickey')}
+    it { should contain_anchor('accounts::user::remove_mickey')}
+
     it { should contain_group('mickey').with(
       'ensure' => 'absent'
     )}

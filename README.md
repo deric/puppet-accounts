@@ -79,7 +79,8 @@ If `managehome` is set to `true` (default), also home directory will be removed!
 
 * `authorized_keys_file` - allows proividing location of custom `authorized_keys`
 * `purge_ssh_keys` - delete all keys except those explicitly provided (default: `false`)
-* `pwhash` set password hash
+* `pwhash` - set password hash
+* `force_removal` - will kill user's process before removing account with `ensure => absent` (default: `true`)
 
 Example:
 

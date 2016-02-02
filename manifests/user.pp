@@ -23,6 +23,7 @@ define accounts::user(
   $ensure = present,
   $recurse_permissions = false,
   $authorized_keys_file = undef,
+  $force_removal = true,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -60,11 +61,25 @@ define accounts::user(
         }
       }
 
+      anchor { "accounts::user::remove_${name}": }
+
+      # when user is logged in we couldn't remove the account, issue #23
+      if $force_removal {
+        exec { "killproc $name":
+          command     => "pkill -TERM -u $name; sleep 1; skill -KILL -u $name",
+          path        => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
+          onlyif      => "id $name",
+          refreshonly => true,
+          before      => Anchor["accounts::user::remove_${name}"],
+        }
+      }
+
       user { $username:
         ensure => absent,
         uid    => $uid,
         gid    => $gid,
         groups => $groups,
+        require => Anchor["accounts::user::remove_${name}"],
       }
       if $manage_group == true {
         group { $primary_group:
