@@ -3,6 +3,7 @@
 define accounts::group (
   $groupname = $title,
   $ensure    = 'present',
+  $members   = undef,
   $gid       = undef,
 ) {
 
@@ -11,7 +12,8 @@ define accounts::group (
 
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {
-    'ensure' => $ensure,
-    'gid'    => $gid,
+    'ensure'  => $ensure,
+    'gid'     => $gid,
+    'members' => $members,
   })
 }
