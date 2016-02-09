@@ -27,6 +27,7 @@ define accounts::user(
   $force_removal = true,
   $populate_home = false,
   $home_directory_contents = 'puppet:///modules/accounts',
+  $password_max_age = undef,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -127,14 +128,15 @@ define accounts::user(
         }
       } else {
         user { $username:
-          ensure         => present,
-          uid            => $uid,
-          gid            => $gid,
-          groups         => $groups,
-          shell          => $shell,
-          comment        => $comment,
-          purge_ssh_keys => $purge_ssh_keys,
-          require        => [
+          ensure           => present,
+          uid              => $uid,
+          gid              => $gid,
+          groups           => $groups,
+          shell            => $shell,
+          comment          => $comment,
+          purge_ssh_keys   => $purge_ssh_keys,
+          password_max_age => $password_max_age,
+          require          => [
             Anchor["accounts::user::groups::${primary_group}"]
           ],
         }
