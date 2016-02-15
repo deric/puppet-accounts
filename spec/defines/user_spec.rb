@@ -1,6 +1,10 @@
 require 'spec_helper'
 
-describe 'accounts::user' do
+describe 'accounts::user', :type => :define do
+  let(:facts) {{
+    :osfamily => 'Debian',
+    :puppetversion => Puppet.version,
+  }}
 
   shared_examples 'not_having_home_dir' do |user, home_dir|
     let(:owner) { user }
@@ -31,7 +35,6 @@ describe 'accounts::user' do
   shared_examples 'having_home_dir' do |user, home_dir|
     let(:owner) { user }
     let(:group) { user }
-    let(:facts) { {:osfamily => 'Debian'} }
 
     it { should contain_file("#{home_dir}").with({
       'ensure'  => 'directory',
@@ -233,12 +236,7 @@ describe 'accounts::user' do
 
   context 'purge ssh keys' do
     let(:title) { 'john' }
-
-    puppet = `puppet --version`
-    let(:facts) {{
-      :puppetversion => puppet
-    }}
-
+    puppet = Puppet.version
     let(:params){{
       :purge_ssh_keys => true
     }}

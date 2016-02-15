@@ -1,11 +1,14 @@
 require 'spec_helper'
 
-describe 'accounts::users' do
+describe 'accounts::users', :type => :class do
 
   shared_examples 'having_user_account' do |user|
     let(:owner) { user }
     let(:group) { user }
-    let(:facts) { {:osfamily => 'Debian'} }
+    let(:facts) { {
+      :osfamily      => 'Debian',
+      :puppetversion => Puppet.version,
+    } }
     it { should contain_user(user) }
     it { should contain_group(user) }
 

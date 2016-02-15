@@ -2,7 +2,7 @@
 #
 define accounts::user(
   $uid = undef,
-  $gid = $uid,
+  $gid = undef,
   $primary_group = "${title}", # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   $comment = "${title}", # see https://github.com/deric/puppet-accounts/pull/11
   $username = "${title}",# for more details
@@ -29,6 +29,12 @@ define accounts::user(
   $home_directory_contents = 'puppet:///modules/accounts',
   $password_max_age = undef,
 ) {
+
+  if ($gid) {
+    $real_gid = $gid
+  } else {
+    $real_gid = $uid
+  }
 
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
@@ -81,7 +87,7 @@ define accounts::user(
       user { $username:
         ensure  => absent,
         uid     => $uid,
-        gid     => $gid,
+        gid     => $real_gid,
         groups  => $groups,
         require => Anchor["accounts::user::remove_${name}"],
       }
@@ -89,7 +95,7 @@ define accounts::user(
       if $manage_group == true {
         group { $primary_group:
           ensure  => absent,
-          gid     => $gid,
+          gid     => $real_gid,
           require => User[$username]
         }
       }
@@ -104,7 +110,7 @@ define accounts::user(
         # avoid problems when group declared elsewhere
         ensure_resource('group', $primary_group, {
           'ensure' => 'present',
-          'gid'    => $gid,
+          'gid'    => $real_gid,
           'before' => Anchor["accounts::user::groups::${primary_group}"]
         })
       }
@@ -114,7 +120,7 @@ define accounts::user(
         user { $username:
           ensure  => present,
           uid     => $uid,
-          gid     => $gid,
+          gid     => $real_gid,
           groups  => $groups,
           shell   => $shell,
           comment => $comment,
@@ -130,7 +136,7 @@ define accounts::user(
         user { $username:
           ensure           => present,
           uid              => $uid,
-          gid              => $gid,
+          gid              => $real_gid,
           groups           => $groups,
           shell            => $shell,
           comment          => $comment,

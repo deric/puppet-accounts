@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'accounts::groups' do
+describe 'accounts::groups', :type => :class do
 
   describe 'invalid parameters' do
     let(:params){{

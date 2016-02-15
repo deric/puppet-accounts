@@ -1,6 +1,11 @@
 require 'spec_helper'
 
-describe 'accounts::group' do
+describe 'accounts::group', :type => :define do
+
+  let(:facts) {{
+    :osfamily => 'Debian',
+    :puppetversion => Puppet.version,
+  }}
 
   describe 'create new group' do
     let(:title) { 'foogroup' }

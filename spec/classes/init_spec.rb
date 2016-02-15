@@ -1,7 +1,10 @@
 require 'spec_helper'
 
-describe 'accounts' do
-  let(:facts) { {:osfamily => 'Debian'} }
+describe 'accounts', :type => :class do
+  let(:facts) { {
+    :osfamily => 'Debian',
+    :puppetversion => Puppet.version,
+  } }
   let(:params){{
     :manage_users  => true,
     :manage_groups => true,
