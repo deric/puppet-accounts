@@ -313,10 +313,98 @@ describe 'accounts::user' do
     }}
 
     it { should contain_ssh_authorized_key('foo_bar').with({
+      'key'     => 'AAAA',
       'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
     })}
 
+    it { should contain_file("/home/foo/.ssh/authorized_keys").with({
+      'ensure'  => 'present',
+      'owner'   => 'foo',
+      'group'   => 'foo',
+      'mode'    => '0600'
+    }) }
   end
+
+  context 'ssh key with empty comment' do
+    let(:title) { 'jane' }
+
+    let(:params){{
+      :ssh_key => {
+        'type'    => 'ssh-rsa',
+        'comment' => '',
+        'key'     => 'AAA',
+      },
+    }}
+
+    it { should contain_ssh_authorized_key('jane_').with({
+      'type' => 'ssh-rsa',
+      'key'  => 'AAA',
+      'comment' => nil,
+    })}
+
+    it { should contain_user('jane').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('jane').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'ssh key with empty options' do
+    let(:title) { 'jake' }
+
+    let(:params){{
+      :ssh_key => {
+        'type'    => 'ssh-rsa',
+        'options' => '',
+        'key'     => 'AAA-jake',
+      },
+    }}
+
+    it { should contain_ssh_authorized_key('jake_').with({
+      'type' => 'ssh-rsa',
+      'key'  => 'AAA-jake',
+      'comment' => nil,
+      'options' => '',
+    })}
+
+    it { should contain_user('jake').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('jake').with(
+      'ensure' => 'present'
+    )}
+  end
+
+   context 'ssh key with options array' do
+    let(:title) { 'luke' }
+
+    let(:params){{
+      :ssh_key => {
+        'type'    => 'ssh-rsa',
+        'options' => ['darth=vader', 'foo=bar'],
+        'key'     => 'AAA-luke',
+      },
+    }}
+
+    it { should contain_ssh_authorized_key('luke_').with({
+      'type' => 'ssh-rsa',
+      'key'  => 'AAA-luke',
+      'comment' => nil,
+      'options' => ['darth=vader', 'foo=bar'],
+    })}
+
+    it { should contain_user('luke').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('luke').with(
+      'ensure' => 'present'
+    )}
+  end
+
 
 
 end
