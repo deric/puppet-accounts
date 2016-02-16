@@ -3,9 +3,9 @@
 define accounts::user(
   $uid = undef,
   $gid = undef,
-  $primary_group = "${title}", # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
-  $comment = "${title}", # see https://github.com/deric/puppet-accounts/pull/11
-  $username = "${title}",# for more details
+  $primary_group = "${title}", # lint:ignore:only_variable_string # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
+  $comment = "${title}",  # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
+  $username = "${title}", # lint:ignore:only_variable_string
   $groups = [],
   $ssh_key_source = undef,
   $ssh_key = '',
