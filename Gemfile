@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 group :rake do
-  puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 3.0.0','< 4.0']
+  puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 2.7.0','< 5.0']
   gem 'puppet', puppetversion
   gem 'puppet-lint'
   gem 'deep_merge'
