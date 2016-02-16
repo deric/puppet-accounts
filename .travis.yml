@@ -21,7 +21,9 @@ env:
   - PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
   - PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
+  - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES=yes
 matrix:
+  fast_finish: true
   exclude:
     - rvm: 2.0.0
       env: PUPPET_VERSION="~> 2.7.0"
