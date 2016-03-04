@@ -1,8 +1,8 @@
-require 'rubygems'
 require 'bundler'
 Bundler.require(:rake)
 require 'rake/clean'
 
+require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'rspec-system/rake_task'
 require 'puppetlabs_spec_helper/rake_tasks'
@@ -14,11 +14,17 @@ task :meta do
   sh "metadata-json-lint metadata.json"
 end
 
-PuppetLint.configuration.ignore_paths = ["spec/fixtures/modules/*/**.pp"]
-PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
+Rake::Task[:lint].clear
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp", "pkg/**/*.pp"]
+  config.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
+end
 
+# use librarian-puppet to manage fixtures instead of .fixtures.yml
+# offers more possibilities like explicit version management, forge downloads,...
 task :librarian_spec_prep do
   sh 'librarian-puppet install --path=spec/fixtures/modules/'
 end
 task :spec_prep => :librarian_spec_prep
-task :default => [:validate, :spec, :lint]
+
+task :default => [:spec, :lint]

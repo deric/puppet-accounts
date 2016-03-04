@@ -3,6 +3,7 @@ require 'rspec-system-puppet/helpers'
 require 'rspec-system-serverspec/helpers'
 include Serverspec::Helper::RSpecSystem
 include Serverspec::Helper::DetectOS
+include RSpecSystemPuppet::Helpers
 
 RSpec.configure do |c|
   # Project root
@@ -11,7 +12,7 @@ RSpec.configure do |c|
   # Enable colour
   c.tty = true
 
-  #c.include RSpecSystemPuppet::Helpers
+  c.include RSpecSystemPuppet::Helpers
 
   # This is where we 'setup' the nodes before running our tests
   c.before :suite do

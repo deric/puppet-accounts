@@ -1,0 +1,17 @@
+---
+accounts::users:
+  myuser:
+    uid: 1000
+    comment: 'My Awesome User'
+    shell: '/bin/bash'
+    pwhash: '$myawesomehash'
+    managehome: true
+    home_permissions: '0750'
+    purge_ssh_keys: true
+    ssh_keys:
+      'myawesomefirstkey':
+        type: 'ssh-rsa'
+        key: 'yay'
+      'myawesomesecondkey':
+        type: 'ssh-rsa'
+        key: 'yay'

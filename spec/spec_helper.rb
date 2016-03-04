@@ -1,21 +1,20 @@
-dir = File.expand_path(File.dirname(__FILE__))
-$LOAD_PATH.unshift File.join(dir, 'lib')
-require 'puppet'
-require 'rspec'
 require 'rspec-puppet'
+require 'hiera'
 require 'puppetlabs_spec_helper/module_spec_helper'
-require 'rspec-puppet/coverage'
 
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 
+Puppet::Util::Log.level = :debug
+Puppet::Util::Log.newdestination(:console)
+
 RSpec.configure do |c|
-  #c.module_path = File.join(fixture_path, 'modules')
-  c.manifest_dir = File.join(fixture_path, 'manifests')
-  # we don't want to run tests from submodules in fixtures/std/..
-  c.pattern = "spec/*/*_spec.rb"
+  #c.treat_symbols_as_metadata_keys_with_true_values = true
+  c.include PuppetlabsSpec::Files
+  #c.hiera_config = "#{fixture_path}/hiera/hiera.yaml"
+  c.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
+  puts "hiera path: #{c.hiera_config}"
 end
 
-Puppet::Util::Log.level = :warning
-Puppet::Util::Log.newdestination(:console)
+
 
 at_exit { RSpec::Puppet::Coverage.report! }

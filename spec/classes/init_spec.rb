@@ -49,4 +49,24 @@ describe 'accounts', :type => :class do
     )}
 
   end
+
+
+  context 'test hiera fixtures' do
+    let(:facts) {{
+      :operatingsystem => 'Debian',
+      :osfamily => 'Debian',
+      :lsbdistcodename => 'jessie',
+      :lsbdistid => 'jessie',
+      :puppetversion => Puppet.version,
+    }}
+
+
+  let(:hiera_data) { { :foo_message => "bar" } }
+
+  it { should contain_notify("foo").with_message("bar") }
+    # TODO: for some strange reason hiera doesn't work here
+    #it { should contain_user('myuser').with(
+    #  'uid' => 1000
+    #)}
+  end
 end
