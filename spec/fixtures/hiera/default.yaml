@@ -12,7 +12,6 @@ accounts::users:
       'myawesomefirstkey':
         type: 'ssh-rsa'
         key: 'yay'
-        comment: 'test'
       'myawesomesecondkey':
         type: 'ssh-rsa'
         key: 'hey'

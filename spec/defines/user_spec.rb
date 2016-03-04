@@ -288,14 +288,17 @@ describe 'accounts::user', :type => :define do
     let(:params){{
       :home                 => home,
       :authorized_keys_file => '/home/my_auth_keys',
-      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...', 'comment' => 'custom' },
+      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...'},
     }}
 
     it { should contain_file('/home/my_auth_keys').with({
       'ensure'  => 'present',
     }) }
 
-    it { should contain_ssh_authorized_key('foo_custom') }
+    it { should contain_ssh_authorized_key('foo_ssh-rsa').with(
+      'type' => 'ssh-rsa',
+      'key' => 'AAAA...',
+    ) }
   end
 
   context 'provide ssh key options' do
@@ -304,13 +307,12 @@ describe 'accounts::user', :type => :define do
     let(:params){{
       :ssh_key => {
         'type'    => 'ssh-rsa',
-        'comment' => 'bar',
         'key'     => 'AAAA',
         'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
       },
     }}
 
-    it { should contain_ssh_authorized_key('foo_bar').with({
+    it { should contain_ssh_authorized_key('foo_ssh-rsa').with({
       'key'     => 'AAAA',
       'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
     })}
@@ -329,15 +331,13 @@ describe 'accounts::user', :type => :define do
     let(:params){{
       :ssh_key => {
         'type'    => 'ssh-rsa',
-        'comment' => '',
         'key'     => 'AAA',
       },
     }}
 
-    it { should contain_ssh_authorized_key('jane_').with({
+    it { should contain_ssh_authorized_key('jane_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA',
-      'comment' => nil,
     })}
 
     it { should contain_user('jane').with(
