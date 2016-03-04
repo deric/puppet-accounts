@@ -50,11 +50,20 @@ describe 'accounts', :type => :class do
 
   end
 
-
   context 'test hiera fixtures' do
     it { should contain_user('myuser').with(
       'uid' => 1000,
       'comment' => 'My Awesome User',
+    )}
+
+    it { should contain_ssh_authorized_key('myawesomefirstkey').with(
+      'type' => 'ssh-rsa',
+      'key' => 'yay',
+    )}
+
+    it { should contain_ssh_authorized_key('myawesomesecondkey').with(
+      'type' => 'ssh-rsa',
+      'key' => 'hey',
     )}
   end
 end
