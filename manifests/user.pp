@@ -188,8 +188,6 @@ define accounts::user(
         ensure  => present,
         user    => $username,
         'type'  => 'ssh-rsa',
-        options => '',
-        comment => '',
       }
 
       if !empty($ssh_key) {
