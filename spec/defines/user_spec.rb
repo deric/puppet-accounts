@@ -360,10 +360,9 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('jake_').with({
+    it { should contain_ssh_authorized_key('jake_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-jake',
-      'comment' => nil,
       'options' => '',
     })}
 
@@ -387,10 +386,9 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('luke_').with({
+    it { should contain_ssh_authorized_key('luke_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-luke',
-      'comment' => nil,
       'options' => ['darth=vader', 'foo=bar'],
     })}
 
@@ -402,7 +400,5 @@ describe 'accounts::user', :type => :define do
       'ensure' => 'present'
     )}
   end
-
-
 
 end
