@@ -33,7 +33,6 @@ accounts::users:
     ssh_key:
       type: "ssh-rsa"
       key: "a valid public ssh key string"
-      comment: "john@doe"
   alice:
     comment: "Alice"
 ```
@@ -151,9 +150,10 @@ When defining adding a user to multiple groups, we have to ensure, that all the 
 
 ## Puppet compatibility
 
-  * `2.7.x` gem `puppet-hiera` is required on all machines
-  * `3.x` should work out-of-the-box
-  * `4.x` possibly working, although we're not testing on Puppet 4 yet
+This modules heavily relies on Hiera functionality, thus it's recommended to use at least Puppet 3. Puppet 2.7 might work with `hiera-puppet` gem, but we don't test this automatically, see [docs](https://docs.puppetlabs.com/hiera/1/installing.html#step-2-install-the-puppet-functions) for more details.
+
+  * `3.x` work out-of-the-box
+  * `4.x` other backends than Hiera might work
 
 ## Installation
 
@@ -175,6 +175,8 @@ and run
 ```bash
 $ librarian-puppet install
 ```
+
+## Supported versions
 
 ## Tests
 
