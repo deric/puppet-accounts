@@ -30,9 +30,10 @@ accounts::users:
     groups: ["sudo", "users"]
     shell: "/bin/bash"
     pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogWPVSRoCADGdwFe6H//gzj/VT4lcv55o3z.nrmNb3VbVvgcghz9Ae2Dw0"
-    ssh_key:
-      type: "ssh-rsa"
-      key: "a valid public ssh key string"
+    ssh_keys:
+      'john@doe':
+        type: "ssh-rsa"
+        key: "a valid public ssh key string"
   alice:
     comment: "Alice"
 ```
@@ -156,6 +157,24 @@ This modules heavily relies on Hiera functionality, thus it's recommended to use
   * `4.x` other backends than Hiera might work
 
 ## Installation
+
+For more complex hierarchies (defined in multiple files) `deep_merge` gem is needed, see [Hiera docs](https://docs.puppetlabs.com/hiera/3.0/lookup_types.html#deep-merging-in-hiera).
+
+```
+gem install deee_merge
+```
+
+and update `merge_behavior` in your `hiera.yaml`, e.g.:
+```
+---
+:backends:
+  - yaml
+:hierarchy:
+  - "%{hostname}"
+  - common
+# options are native, deep, deeper
+:merge_behavior: deeper
+```
 
 With [Puppet librarian](https://github.com/rodjek/librarian-puppet) add one line to `Puppetfile`:
 

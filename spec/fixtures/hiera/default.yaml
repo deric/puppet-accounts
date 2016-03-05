@@ -15,3 +15,10 @@ accounts::users:
       'myawesomesecondkey':
         type: 'ssh-rsa'
         key: 'hey'
+  root:
+    uid: 0
+    shell: '/bin/bash'
+    ssh_keys:
+      'root_key2':
+        type: 'ssh-rsa'
+        key: 'AAA_key2'

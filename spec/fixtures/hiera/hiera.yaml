@@ -7,3 +7,4 @@
   - default
 :yaml:
   :datadir: './spec/fixtures/hiera'
+:merge_behavior: deep

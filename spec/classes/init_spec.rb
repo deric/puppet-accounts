@@ -65,5 +65,34 @@ describe 'accounts', :type => :class do
       'type' => 'ssh-rsa',
       'key' => 'hey',
     )}
+
+    context 'root account' do
+      it { should contain_user('root').with(
+        'uid' => 0,
+        'shell' => '/bin/bash',
+      )}
+
+      it { should contain_group('root').with(
+        'gid'    => 0,
+        'ensure' => 'present'
+      )}
+
+      it { should contain_file("/root").with({
+        'ensure'  => 'directory',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755'
+      }) }
+
+      it { should contain_ssh_authorized_key('root_key1').with(
+        'type' => 'ssh-rsa',
+        'key' => 'AAA_key1',
+      )}
+
+      it { should contain_ssh_authorized_key('root_key2').with(
+        'type' => 'ssh-rsa',
+        'key' => 'AAA_key2',
+      )}
+    end
   end
 end
