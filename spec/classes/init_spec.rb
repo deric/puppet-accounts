@@ -139,5 +139,11 @@ describe 'accounts', :type => :class do
       }) }
     end
 
+    context 'deadpool account' do
+      it { should contain_user('deadpool').with(
+        'ensure' => 'absent',
+      )}
+    end
+
   end
 end

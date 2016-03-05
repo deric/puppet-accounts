@@ -1,6 +1,7 @@
 module Puppet::Parser::Functions
   newfunction(:extract_group_members, :type => :rvalue, :doc => <<-EOS
-From Hash of all users and their configuration extracts group membership
+From Hash of all users and their configuration assign users to group definitions
+given as second argument
 EOS
   ) do |args|
 
@@ -14,9 +15,11 @@ EOS
 
     res = args[1].clone
     args[0].each do |user, val|
+      # don't assign users marked for removal to groups
+      next if val.key? 'ensure' and val['ensure'] == 'absent'
       if val.key? 'groups'
         val['groups'].each do |g|
-          unless res.key?(g)
+          unless res.key?(g) # create group if not defined yet
             res[g] = {'members' => []}
           else
             res[g]['members'] = [] unless res[g].key?('members')

@@ -38,5 +38,21 @@ describe 'extract_group_members' do
         }
       )
     end
+
+    it 'skips absent users' do
+
+      users = {
+        alice: { 'groups' => ['users']},
+        bob: { 'groups' => ['sudo', 'users']},
+        tracy: { 'groups' => ['sudo', 'users'], 'ensure' => 'absent'},
+      }
+
+      subject.should run.with_params(users, {}).and_return(
+        {
+          'sudo' => {'members' => [:bob]},
+          'users' => {'members' => [:alice, :bob]},
+        }
+      )
+    end
   end
 end

@@ -38,3 +38,7 @@ accounts::users:
       'bat_key':
         type: 'ssh-dss'
         key: 'AAABBBatman'
+  deadpool:
+    comment: 'Deadpool'
+    ensure: 'absent'
+    groups: ['superheroes']
