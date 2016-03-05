@@ -338,6 +338,7 @@ describe 'accounts::user', :type => :define do
     it { should contain_ssh_authorized_key('jane_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA',
+      'user' => 'jane',
     })}
 
     it { should contain_user('jane').with(
@@ -363,6 +364,7 @@ describe 'accounts::user', :type => :define do
     it { should contain_ssh_authorized_key('jake_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-jake',
+      'user' => 'jake',
       'options' => '',
     })}
 
@@ -375,20 +377,23 @@ describe 'accounts::user', :type => :define do
     )}
   end
 
-   context 'ssh key with options array' do
+  context 'ssh key with options array' do
     let(:title) { 'luke' }
 
     let(:params){{
-      :ssh_key => {
-        'type'    => 'ssh-rsa',
-        'options' => ['darth=vader', 'foo=bar'],
-        'key'     => 'AAA-luke',
+      :ssh_keys => {
+        'luke_key' => {
+          'type'    => 'ssh-rsa',
+          'options' => ['darth=vader', 'foo=bar'],
+          'key'     => 'AAA-luke',
+        }
       },
     }}
 
-    it { should contain_ssh_authorized_key('luke_ssh-rsa').with({
+    it { should contain_ssh_authorized_key('luke_key').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-luke',
+      'user' => 'luke',
       'options' => ['darth=vader', 'foo=bar'],
     })}
 

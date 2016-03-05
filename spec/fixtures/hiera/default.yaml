@@ -22,3 +22,11 @@ accounts::users:
       'root_key2':
         type: 'ssh-rsa'
         key: 'AAA_key2'
+  superman:
+    comment: 'Clark Kent'
+    ssh_keys:
+      'super_key':
+        type: 'ssh-dss'
+        key: 'AAABBB'
+        options:
+            - 'permitopen="10.0.0.1:3306"'

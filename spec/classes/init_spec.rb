@@ -86,13 +86,33 @@ describe 'accounts', :type => :class do
 
       it { should contain_ssh_authorized_key('root_key1').with(
         'type' => 'ssh-rsa',
-        'key' => 'AAA_key1',
+        'key'  => 'AAA_key1',
+        'user' => 'root',
       )}
 
       it { should contain_ssh_authorized_key('root_key2').with(
         'type' => 'ssh-rsa',
-        'key' => 'AAA_key2',
+        'key'  => 'AAA_key2',
+        'user' => 'root',
       )}
     end
+
+    context 'root account' do
+      it { should contain_user('superman').with(
+        'shell' => '/bin/bash',
+      )}
+
+      it { should contain_group('superman').with(
+        'ensure' => 'present'
+      )}
+
+      it { should contain_ssh_authorized_key('super_key').with(
+        'type' => 'ssh-dss',
+        'key'  => 'AAABBB',
+        'user' => 'superman',
+        'options' => ['permitopen="10.0.0.1:3306"'],
+      )}
+    end
+
   end
 end
