@@ -5,7 +5,7 @@ class accounts(
   $manage_groups = hiera('accounts::manage_groups', true),
   $users         = {},
   $groups        = {},
-  $user_defaults = {},
+  $user_defaults = hiera_hash('accounts::user_defaults', {})
 ) {
   validate_bool($manage_users)
   validate_bool($manage_groups)
