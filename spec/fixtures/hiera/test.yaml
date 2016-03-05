@@ -2,6 +2,7 @@
 accounts::groups:
   superheroes:
     gid: 1007
+    members: ['superman']
   sudo:
     gid: 999
 accounts::users:
@@ -12,5 +13,3 @@ accounts::users:
       'root_key1':
         type: 'ssh-rsa'
         key: 'AAA_key1'
-  superman:
-    groups: ['superheroes']

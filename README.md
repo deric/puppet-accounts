@@ -19,6 +19,7 @@ Hiera allows flexible account management, if you want to have a group defined on
 accounts::groups:
  www-data:
    gid: 33
+   members: ['john']
 ```
 
 and user accounts:

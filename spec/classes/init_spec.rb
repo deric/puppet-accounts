@@ -106,7 +106,7 @@ describe 'accounts', :type => :class do
         'ensure' => 'present'
       )}
 
-      it { should contain_group('superman').with(
+      it { should contain_group('superheroes').with(
         'ensure' => 'present',
         'members' => ['superman']
       )}
