@@ -10,16 +10,23 @@ Origin: https://github.com/deric/puppet-accounts
 in node definition include:
 
 ```puppet
-class {'accounts': }
+class {'accounts':
+  user_defaults => {
+    purge_ssh_keys => true, # will delete all authorized keys that are not Puppet
+  }
+}
 ```
 
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
 ```YAML
+accounts::user_defaults:
+  purge_ssh_keys: true
 accounts::groups:
- www-data:
-   gid: 33
-   members: ['john']
+  www-data:
+    gid: 33
+    # not necessarily complete list of memebers, you assign users to same group on user's level
+    members: ['john']
 ```
 
 and user accounts:
@@ -38,6 +45,8 @@ accounts::users:
   alice:
     comment: "Alice"
 ```
+
+For more examples see [configuration used for tests](https://github.com/deric/puppet-accounts/blob/master/spec/fixtures/hiera/default.yaml).
 
 ### Custom home
 
