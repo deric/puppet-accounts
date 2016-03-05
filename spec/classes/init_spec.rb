@@ -51,11 +51,19 @@ describe 'accounts', :type => :class do
   end
 
   context 'test hiera fixtures' do
-    it { should contain_user('myuser').with(
-      'uid' => 1000,
-      'comment' => 'My Awesome User',
-      'purge_ssh_keys' => true,
-    )}
+    if Gem::Version.new(Puppet.version) >= Gem::Version.new('3.6.0')
+      it { should contain_user('myuser').with(
+        'uid' => 1000,
+        'comment' => 'My Awesome User',
+        'purge_ssh_keys' => true,
+      )}
+    else
+      it { should contain_user('myuser').with(
+        'uid' => 1000,
+        'comment' => 'My Awesome User',
+        # no purge_ssh_keys attribute
+      )}
+    end
 
     it { should contain_ssh_authorized_key('myawesomefirstkey').with(
       'type' => 'ssh-rsa',
