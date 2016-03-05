@@ -12,7 +12,7 @@ in node definition include:
 ```puppet
 class {'accounts':
   user_defaults => {
-    purge_ssh_keys => true, # will delete all authorized keys that are not Puppet
+    purge_ssh_keys => true, # will delete all authorized keys that are not in Puppet
   }
 }
 ```
