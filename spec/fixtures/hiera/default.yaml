@@ -24,6 +24,7 @@ accounts::users:
         key: 'AAA_key2'
   superman:
     comment: 'Clark Kent'
+    groups: ['superheroes']
     ssh_keys:
       'super_key':
         type: 'ssh-dss'

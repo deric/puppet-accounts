@@ -97,7 +97,7 @@ describe 'accounts', :type => :class do
       )}
     end
 
-    context 'root account' do
+    context 'superman account' do
       it { should contain_user('superman').with(
         'shell' => '/bin/bash',
       )}
@@ -106,12 +106,28 @@ describe 'accounts', :type => :class do
         'ensure' => 'present'
       )}
 
+      it { should contain_group('superman').with(
+        'ensure' => 'present',
+        'members' => ['superman']
+      )}
+
+      it { should contain_group('sudo').with(
+        'ensure' => 'present',
+      )}
+
       it { should contain_ssh_authorized_key('super_key').with(
         'type' => 'ssh-dss',
         'key'  => 'AAABBB',
         'user' => 'superman',
         'options' => ['permitopen="10.0.0.1:3306"'],
       )}
+
+      it { should contain_file("/home/superman").with({
+        'ensure'  => 'directory',
+        'owner'   => 'superman',
+        'group'   => 'superman',
+        'mode'    => '0755'
+      }) }
     end
 
   end

@@ -1,4 +1,9 @@
 ---
+accounts::groups:
+  superheroes:
+    gid: 1007
+  sudo:
+    gid: 999
 accounts::users:
   root:
     uid: 0
@@ -7,3 +12,5 @@ accounts::users:
       'root_key1':
         type: 'ssh-rsa'
         key: 'AAA_key1'
+  superman:
+    groups: ['superheroes']
