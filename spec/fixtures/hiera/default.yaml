@@ -31,3 +31,10 @@ accounts::users:
         key: 'AAABBB'
         options:
             - 'permitopen="10.0.0.1:3306"'
+  batman:
+    comment: 'Bruce Wayne'
+    groups: ['superheroes']
+    ssh_keys:
+      'bat_key':
+        type: 'ssh-dss'
+        key: 'AAABBBatman'

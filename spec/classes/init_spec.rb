@@ -54,6 +54,7 @@ describe 'accounts', :type => :class do
     it { should contain_user('myuser').with(
       'uid' => 1000,
       'comment' => 'My Awesome User',
+      'purge_ssh_keys' => true,
     )}
 
     it { should contain_ssh_authorized_key('myawesomefirstkey').with(
@@ -108,7 +109,7 @@ describe 'accounts', :type => :class do
 
       it { should contain_group('superheroes').with(
         'ensure' => 'present',
-        'members' => ['superman']
+        'members' => ['superman', 'batman']
       )}
 
       it { should contain_group('sudo').with(

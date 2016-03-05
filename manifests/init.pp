@@ -21,6 +21,7 @@ class accounts(
 
   class { 'accounts::groups':
     manage => $manage_groups,
+    users  => $merged_users,
     groups => $merged_groups,
   }
 
