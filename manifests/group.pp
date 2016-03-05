@@ -15,5 +15,6 @@ define accounts::group (
     'ensure'  => $ensure,
     'gid'     => $gid,
     'members' => $members,
+    'attribute_membership' => 'inclusive',
   })
 }
