@@ -88,7 +88,6 @@ define accounts::user(
         ensure  => absent,
         uid     => $uid,
         gid     => $real_gid,
-        groups  => $groups,
         require => Anchor["accounts::user::remove_${name}"],
       }
 
@@ -121,7 +120,7 @@ define accounts::user(
           ensure  => present,
           uid     => $uid,
           gid     => $real_gid,
-          groups  => $groups,
+          #groups  => $groups, # managed via groups class
           shell   => $shell,
           comment => $comment,
           require => [
@@ -137,7 +136,7 @@ define accounts::user(
           ensure           => present,
           uid              => $uid,
           gid              => $real_gid,
-          groups           => $groups,
+          #groups           => $groups, # managed via groups class
           shell            => $shell,
           comment          => $comment,
           purge_ssh_keys   => $purge_ssh_keys,
