@@ -191,12 +191,12 @@ With [Puppet librarian](https://github.com/rodjek/librarian-puppet) add one line
 stable release:
 
 ```ruby
-mod 'accounts'
+mod 'deric-accounts'
 ```
 
 development version (master branch from github):
 ```ruby
-mod 'accounts', :git => 'https://github.com/deric/puppet-accounts.git'
+mod 'deric-accounts', :git => 'https://github.com/deric/puppet-accounts.git'
 ```
 
 and run
