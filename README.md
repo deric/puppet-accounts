@@ -39,7 +39,7 @@ accounts::users:
     shell: "/bin/bash"
     pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogW"
     ssh_keys:
-      'john@doe': # an unique indetifier of a key
+      'john@doe': # an unique indentifier of a key
         type: "ssh-rsa"
         key: "a valid public ssh key string"
   alice:
