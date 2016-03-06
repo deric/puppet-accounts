@@ -25,7 +25,7 @@ accounts::user_defaults:
 accounts::groups:
   www-data:
     gid: 33
-    # not necessarily complete list of memebers, you assign users to same group on user's level
+    # not necessarily complete list of memebers, you can assign users to the same group on user's level using `groups: ['www-data']`
     members: ['john']
 ```
 
@@ -37,9 +37,9 @@ accounts::users:
     comment: "John Doe"
     groups: ["sudo", "users"]
     shell: "/bin/bash"
-    pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogWPVSRoCADGdwFe6H//gzj/VT4lcv55o3z.nrmNb3VbVvgcghz9Ae2Dw0"
+    pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogW"
     ssh_keys:
-      'john@doe':
+      'john@doe': # an unique indetifier of a key
         type: "ssh-rsa"
         key: "a valid public ssh key string"
   alice:
