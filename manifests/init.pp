@@ -19,16 +19,17 @@ class accounts(
   $merged_users = merge($users, $users_h)
   $merged_groups = merge($groups, $groups_h)
 
+  # first create users, then assign users to the groups
   class { 'accounts::groups':
     manage => $manage_groups,
     users  => $merged_users,
     groups => $merged_groups,
+    require  => Class['accounts::users']
   }
 
   class { 'accounts::users':
     manage   => $manage_users,
     users    => $merged_users,
     defaults => $user_defaults,
-    require  => Class['accounts::groups']
   }
 }
