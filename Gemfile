@@ -1,24 +1,39 @@
 source 'https://rubygems.org'
 
-group :rake do
+group :test do
+  gem "rake"
   puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 2.7.0','< 5.0']
   gem 'puppet', puppetversion
-  gem 'puppet-lint'
-  gem 'deep_merge'
-  gem 'puppetlabs_spec_helper', '>=0.2.0'
-  gem 'rake',         '>=0.9.2.2'
-  gem 'rspec-system-puppet',     :require => false
-  gem 'serverspec',              :require => false
-  gem 'rspec-system-serverspec', :require => false
-  gem 'librarian-puppet' , '>=2.0'
-  gem 'highline'
-  gem 'rspec-puppet', '~> 2.0'
-  # in order to support Ruby 1.9.3
-  gem 'fog-google', '< 0.1.1'
-  gem 'metadata-json-lint',      :require => false
+  gem "rspec", '< 3.2.0'
+  gem "rspec-puppet", :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem "puppetlabs_spec_helper"
+  gem "metadata-json-lint"
+  gem "rspec-puppet-facts"
+  gem 'rubocop', '0.33.0'
+  gem 'simplecov', '>= 0.11.0'
+  gem 'simplecov-console'
+
+  gem "puppet-lint-absolute_classname-check"
+  gem "puppet-lint-leading_zero-check"
+  gem "puppet-lint-trailing_comma-check"
+  gem "puppet-lint-version_comparison-check"
+  gem "puppet-lint-classes_and_types_beginning_with_digits-check"
+  gem "puppet-lint-unquoted_string-check"
+  gem 'puppet-lint-resource_reference_syntax'
   gem 'parallel_tests'
+  gem 'deep_merge'
+  gem 'librarian-puppet' , '>=2.0'
 end
 
 group :development do
-  gem 'puppet-blacksmith',  '> 3.0'
+  gem "travis"
+  gem "travis-lint"
+  gem "puppet-blacksmith"
+  gem "guard-rake"
+end
+
+group :system_tests do
+  gem "beaker"
+  gem "beaker-rspec"
+  gem "beaker-puppet_install_helper"
 end

@@ -1,11 +1,13 @@
-require 'bundler'
-Bundler.require(:rake)
-require 'rake/clean'
+require 'rubygems'
+require 'bundler/setup'
 
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet/version'
+require 'puppet/vendor/semantic/lib/semantic' unless Puppet.version.to_f < 3.6
 require 'puppet-lint/tasks/puppet-lint'
-require 'rspec-system/rake_task'
-require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet-syntax/tasks/puppet-syntax'
+require 'metadata-json-lint/rake_task'
+
 # blacksmith does not support ruby 1.8.7 anymore
 require 'puppet_blacksmith/rake_tasks' if ENV['RAKE_ENV'] != 'ci' && RUBY_VERSION.split('.')[0,3].join.to_i > 187
 
@@ -13,6 +15,13 @@ desc "Lint metadata.json file"
 task :meta do
   sh "metadata-json-lint metadata.json"
 end
+
+exclude_paths = [
+  "bundle/**/*",
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
 
 Rake::Task[:lint].clear
 PuppetLint::RakeTask.new :lint do |config|
@@ -38,3 +47,20 @@ task :parallel_spec do
 end
 
 task :default => [:parallel_spec, :lint]
+
+
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = exclude_paths
+end
+
+PuppetSyntax.exclude_paths = exclude_paths
+
+desc "Run acceptance tests"
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
+end
+
+desc "Populate CONTRIBUTORS file"
+task :contributors do
+  system("git log --format='%aN' | sort -u > CONTRIBUTORS")
+end
