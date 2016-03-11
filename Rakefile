@@ -46,7 +46,8 @@ PuppetSyntax.future_parser = true
 
 desc "Run acceptance tests"
 RSpec::Core::RakeTask.new(:acceptance) do |t|
-  t.pattern = 'spec/acceptance'
+  # just `spec/acceptance` caused runnin all specs
+  t.pattern = 'spec/acceptance/*_spec.rb'
 end
 
 desc "Populate CONTRIBUTORS file"

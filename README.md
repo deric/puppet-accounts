@@ -228,9 +228,18 @@ BEAKER_provision=no bundle exec rake beaker
 ```
 detailed Vagrant log:
 ```
-VAGRANT_LOG=debug BEAKER_provision=no bundle exec rake beaker
+VAGRANT_LOG=DEBUG BEAKER_provision=no bundle exec rake beaker
 ```
 
+Run on specific OS (see `spec/acceptance/nodesets`):
+```
+BEAKER_set=centos-7-x64 bundle exec rake beaker
+```
+
+Change Vagrant provider:
+```
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+```
 
 
 ## License

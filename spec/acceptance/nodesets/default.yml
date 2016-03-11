@@ -1,7 +1,6 @@
 HOSTS:
   debian-76-x64:
     roles:
-      - master
       - default
     platform: debian-7-amd64
     box: fgrehm/wheezy64-lxc

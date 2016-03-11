@@ -32,7 +32,9 @@ group :development do
 end
 
 group :system_tests do
-  gem "beaker"
-  gem "beaker-rspec"
-  gem "beaker-puppet_install_helper"
+  gem 'beaker'
+  gem 'beaker-rspec'
+  gem 'beaker-librarian'
+  gem 'beaker-hiera'
+  gem 'beaker-puppet_install_helper'
 end

@@ -1,6 +1,4 @@
-require 'rspec-puppet'
 require 'puppet'
-require 'hiera'
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 

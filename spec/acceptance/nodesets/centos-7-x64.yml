@@ -1,11 +1,12 @@
 HOSTS:
   centos-7-x64:
     roles:
-      - master
+      - agent
     platform: el-7-x86_64
-    box: puppetlabs/centos-7.0-64-nocm
-    box_url: https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    box: visibilityspots/centos-7.x-puppet-3.x
+    box_url: https://atlas.hashicorp.com/visibilityspots/boxes/centos-7.x-puppet-3.x
     hypervisor: vagrant
+    lxc__bridge_name: 'lxcbr0'
 CONFIG:
   log_level: verbose
   type: foss
