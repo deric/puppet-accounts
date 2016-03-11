@@ -216,6 +216,23 @@ $ bundle install
 $ bundle exec rake spec
 ```
 
+## Acceptance testing
+
+Just run:
+```
+bundle exec rake beaker
+```
+When host machine is provisioned (puppet installed, etc.):
+```
+BEAKER_provision=no bundle exec rake beaker
+```
+detailed Vagrant log:
+```
+VAGRANT_LOG=debug BEAKER_provision=no bundle exec rake beaker
+```
+
+
+
 ## License
 
 Apache 2.0

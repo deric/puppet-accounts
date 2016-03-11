@@ -1,17 +1,19 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 group :test do
   gem "rake"
-  puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 2.7.0','< 5.0']
-  gem 'puppet', puppetversion
+  gem "puppet", ENV['PUPPET_GEM_VERSION'] || ['>= 2.7.0','< 5.0']
   gem "rspec", '< 3.2.0'
-  gem "rspec-puppet", :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem 'rspec-puppet', '~> 2.3.0'
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
   gem 'rubocop', '0.33.0'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
+  gem 'deep_merge'
+  gem 'librarian-puppet' , '>=2.0'
+  gem 'hiera'
 
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
@@ -20,9 +22,6 @@ group :test do
   gem "puppet-lint-classes_and_types_beginning_with_digits-check"
   gem "puppet-lint-unquoted_string-check"
   gem 'puppet-lint-resource_reference_syntax'
-  gem 'parallel_tests'
-  gem 'deep_merge'
-  gem 'librarian-puppet' , '>=2.0'
 end
 
 group :development do

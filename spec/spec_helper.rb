@@ -14,6 +14,4 @@ RSpec.configure do |c|
   c.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
 end
 
-
-
 at_exit { RSpec::Puppet::Coverage.report! }

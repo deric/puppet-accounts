@@ -36,24 +36,13 @@ task :librarian_spec_prep do
 end
 task :spec_prep => :librarian_spec_prep
 
-require 'parallel_tests/cli'
-
-desc "Parallel spec tests"
-task :parallel_spec do
-  Rake::Task[:spec_prep].invoke
-  ParallelTests::CLI.new.run('--type test
-                    -t rspec spec/classes spec/defines spec/functions'.split)
-  Rake::Task[:spec_clean].invoke
-end
-
-task :default => [:parallel_spec, :lint]
-
 
 PuppetLint::RakeTask.new :lint do |config|
   config.ignore_paths = exclude_paths
 end
 
 PuppetSyntax.exclude_paths = exclude_paths
+PuppetSyntax.future_parser = true
 
 desc "Run acceptance tests"
 RSpec::Core::RakeTask.new(:acceptance) do |t|

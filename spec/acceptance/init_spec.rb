@@ -24,7 +24,11 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, {
+            :catch_failures => true,
+            :debug          => true,
+          }
+        )
       expect(apply_manifest(pp, :catch_failures => true).exit_code).to be_zero
    end
 
