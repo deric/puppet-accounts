@@ -9,5 +9,4 @@ HOSTS:
     lxc__bridge_name: 'lxcbr0'
 CONFIG:
   log_level: verbose
-  type: git
   masterless: true
