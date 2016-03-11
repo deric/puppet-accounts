@@ -21,10 +21,10 @@ class accounts(
 
   # first create users, then assign users to the groups
   class { 'accounts::groups':
-    manage => $manage_groups,
-    users  => $merged_users,
-    groups => $merged_groups,
-    require  => Class['accounts::users']
+    manage  => $manage_groups,
+    users   => $merged_users,
+    groups  => $merged_groups,
+    require => Class['accounts::users']
   }
 
   class { 'accounts::users':
