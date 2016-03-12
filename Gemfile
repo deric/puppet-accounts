@@ -13,7 +13,6 @@ group :test do
   gem 'simplecov-console'
   gem 'deep_merge'
   gem 'librarian-puppet' , '>=2.0'
-  gem 'hiera'
 
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"

@@ -5,7 +5,7 @@ cache:
   - directories:
     - $HOME/librarian-puppet
 script:
-  - RAKE_ENV=ci bundle exec rake validate
+#  - RAKE_ENV=ci bundle exec rake validate
   - RAKE_ENV=ci bundle exec rake spec
 #  - RAKE_ENV=ci bundle exec rake lint
 rvm:

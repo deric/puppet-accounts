@@ -220,25 +220,30 @@ $ bundle exec rake spec
 
 Just run:
 ```
-bundle exec rake beaker
+bundle exec rake acceptance
 ```
 When host machine is provisioned (puppet installed, etc.):
 ```
-BEAKER_provision=no bundle exec rake beaker
+BEAKER_provision=no bundle exec rake acceptance
 ```
 detailed Vagrant log:
 ```
-VAGRANT_LOG=DEBUG BEAKER_provision=no bundle exec rake beaker
+VAGRANT_LOG=DEBUG BEAKER_provision=no bundle exec rake acceptance
 ```
 
 Run on specific OS (see `spec/acceptance/nodesets`):
 ```
-BEAKER_set=centos-7-x64 bundle exec rake beaker
+BEAKER_set=centos-7-x64 bundle exec rake acceptance
 ```
 
 Change Vagrant provider:
 ```
-export VAGRANT_DEFAULT_PROVIDER=libvirt
+export VAGRANT_DEFAULT_PROVIDER=lxc
+```
+
+Don't destroy machine after running specs:
+```
+BEAKER_destroy=no bundle exec rake acceptance
 ```
 
 
