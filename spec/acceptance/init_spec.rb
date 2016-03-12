@@ -66,7 +66,14 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe command('groups john') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /john engineers$/ }
+      its(:stdout) { is_expected.to match /engineers/ }
+      its(:stdout) { is_expected.to match /users/ }
+    end
+
+    describe command('id john') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /158\(engineers\)/ }
+      its(:stdout) { is_expected.to match /100\(users\)/ }
     end
  end
 
