@@ -15,7 +15,7 @@
     },
     {
       "name": "deric-gpasswd",
-      "version_requirement": ">= 0.2.0"
+      "version_requirement": ">= 0.2.1"
     }
   ],
   "operatingsystem_support": [
