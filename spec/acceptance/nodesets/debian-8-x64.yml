@@ -1,0 +1,12 @@
+HOSTS:
+  debian-8-x64:
+    roles:
+      - agent
+    platform: debian-8-amd64
+    box: deric/jessie64-lxc
+    box_url: https://atlas.hashicorp.com/deric/boxes/jessie64-lxc
+    hypervisor: vagrant
+    lxc__bridge_name: 'lxcbr0'
+CONFIG:
+  log_level: verbose
+  type: foss

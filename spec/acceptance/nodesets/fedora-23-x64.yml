@@ -1,0 +1,12 @@
+HOSTS:
+  fedora-23-x64:
+    roles:
+      - agent
+    platform: fedora-23-amd64
+    box: deric/fedora-23-amd64-lxc
+    box_url: https://atlas.hashicorp.com/deric/boxes/fedora-23-amd64-lxc
+    hypervisor: vagrant
+    lxc__bridge_name: 'lxcbr0'
+CONFIG:
+  log_level: verbose
+  type: foss

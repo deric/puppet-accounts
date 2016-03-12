@@ -3,8 +3,8 @@ HOSTS:
     roles:
       - agent
     platform: el-6-x86_64
-    box: fgrehm/centos-6-64-lxc
-    box_url: https://vagrantcloud.com/fgrehm/boxes/centos-6-64-lxc
+    box: deric/centos-6-64-lxc
+    box_url: https://vagrantcloud.com/deric/boxes/centos-6-64-lxc
     hypervisor: vagrant
     lxc__bridge_name: 'lxcbr0'
 CONFIG:
