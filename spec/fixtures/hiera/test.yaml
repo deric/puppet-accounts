@@ -8,6 +8,7 @@ accounts::groups:
 accounts::users:
   root:
     uid: 0
+    gid: 0
     shell: '/bin/bash'
     ssh_keys:
       'root_key1':

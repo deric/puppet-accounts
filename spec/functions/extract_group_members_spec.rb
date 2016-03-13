@@ -35,22 +35,51 @@ describe 'extract_group_members' do
           'sudo' => {'members' => [:foo]},
           'bar' => {'members' => [:john]},
           'users' => {'members' => [:foo,:john]},
+          'foo' => {'members' => [:foo]},
+          'john' => {'members' => [:john]},
         }
       )
     end
 
     it 'skips absent users' do
-
       users = {
         alice: { 'groups' => ['users']},
         bob: { 'groups' => ['sudo', 'users']},
         tracy: { 'groups' => ['sudo', 'users'], 'ensure' => 'absent'},
       }
 
-      subject.should run.with_params(users, {}).and_return(
+      is_expected.to run.with_params(users, {}).and_return(
         {
           'sudo' => {'members' => [:bob]},
           'users' => {'members' => [:alice, :bob]},
+          'bob' => {'members' => [:bob]},
+          'alice' => {'members' => [:alice]},
+        }
+      )
+    end
+  end
+
+  describe 'extract also primary groups' do
+    it 'finds group specified by primary_group' do
+      users = {
+        foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
+      }
+
+      is_expected.to run.with_params(users, {}).and_return(
+        {
+          'testgroup' => {'members' => [:foo]},
+        }
+      )
+    end
+
+    it 'finds group with gid' do
+      users = {
+        foo: { 'primary_group' => 'testgroup', 'manage_group' => true, 'gid' => 123},
+      }
+
+      is_expected.to run.with_params(users, {}).and_return(
+        {
+          'testgroup' => {'members' => [:foo], 'gid' => 123},
         }
       )
     end

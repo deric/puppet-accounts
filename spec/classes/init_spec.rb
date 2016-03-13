@@ -144,6 +144,99 @@ describe 'accounts', :type => :class do
         'ensure' => 'absent',
       )}
     end
+  end
+
+  context 'manage GID of user\'s primary group' do
+    let(:params){{
+      :groups => { 'testgroup' => {
+        'members' => [ 'www-data', 'testuser' ]
+        }
+      },
+      :users => { 'testuser' => {
+        'shell'   => '/bin/bash',
+        'primary_group' => 'testgroup',
+        'gid' => 800,
+      }}
+    }}
+
+    it { should contain_user('testuser').with(
+      'shell' => '/bin/bash',
+    )}
+
+    it { should contain_group('testgroup').with(
+      'ensure' => 'present',
+      'gid'    => 800,
+    )}
 
   end
+
+  context 'assign groups' do
+    let(:params){{
+      :users => { 'foo' => {
+        'home' => '/home/foo',
+        'groups' => ['users'],
+      }}
+    }}
+
+    it { should contain_user('foo').with(
+      'ensure' => 'present',
+      'home' => '/home/foo'
+    )}
+
+    it { should contain_group('foo').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'allow changing primary group\'s name' do
+    let(:params){{
+      :users => { 'john' => {
+        'primary_group' => 'users',
+      }}
+    }}
+
+    it { should contain_user('john').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('users').with(
+      'ensure' => 'present'
+    )}
+
+    it { should_not contain_group('john').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'optional group management' do
+    let(:params){{
+      :users => { 'mickey' => {
+        'manage_group' => false,
+      }}
+    }}
+
+    it { should_not contain_group('mickey').with(
+      'ensure' => 'present'
+    )}
+  end
+
+  context 'create new user' do
+    let(:params){{
+      :users => { 'foobar' => {
+        'uid' => 1001,
+        'gid' => 1001,
+      }}
+    }}
+
+    it { should contain_user('foobar').with(
+      'uid' => 1001,
+      'gid' => 1001
+    )}
+
+    it { should contain_group('foobar').with(
+      'gid'    => 1001,
+      'ensure' => 'present'
+    )}
+  end
+
 end

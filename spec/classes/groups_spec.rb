@@ -24,6 +24,7 @@ describe 'accounts::groups', :type => :class do
       :manage => true,
     }}
 
+    it { should compile.with_all_deps }
     it { should contain_group('www-data').with(
       'gid'    => 33,
       'ensure' => 'present'

@@ -101,19 +101,6 @@ define accounts::user(
     }
 
     present: {
-      anchor { "accounts::user::groups::${primary_group}": }
-
-      # manage group with same name as user's name
-      if $manage_group == true {
-        # create user's group
-        # avoid problems when group declared elsewhere
-        ensure_resource('group', $primary_group, {
-          'ensure' => 'present',
-          'gid'    => $real_gid,
-          'before' => Anchor["accounts::user::groups::${primary_group}"]
-        })
-      }
-
       # prior to Puppet 3.6 `purge_ssh_keys` is not supported
       if versioncmp($::puppetversion, '3.6.0') < 0 {
         user { $username:
@@ -123,9 +110,6 @@ define accounts::user(
           #groups  => $groups, # managed via groups class
           shell   => $shell,
           comment => $comment,
-          require => [
-            Anchor["accounts::user::groups::${primary_group}"]
-          ],
         }
         # TODO: implement purge_ssh_keys manually?
         if $purge_ssh_keys {
@@ -141,9 +125,6 @@ define accounts::user(
           comment          => $comment,
           purge_ssh_keys   => $purge_ssh_keys,
           password_max_age => $password_max_age,
-          require          => [
-            Anchor["accounts::user::groups::${primary_group}"]
-          ],
         }
       }
 
