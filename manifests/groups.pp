@@ -10,7 +10,7 @@ class accounts::groups (
 
   if $manage {
     # Merge group definition with user's assignment to groups
-    $members = extract_group_members($users, $groups)
+    $members = accounts_group_members($users, $groups)
     create_resources(accounts::group, $members)
   }
 }
