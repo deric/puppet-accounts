@@ -24,12 +24,10 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         }
       EOS
 
-      apply_manifest(pp, {
-            :catch_failures => true,
-            :debug          => true,
-          }
-        )
-      expect(apply_manifest(pp, :catch_failures => true).exit_code).to be_zero
+      expect(apply_manifest(pp,
+        :catch_failures => true,
+        :debug => true,
+      ).exit_code).to be_zero
     end
 
     describe group('john') do
@@ -75,6 +73,49 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       its(:stdout) { is_expected.to match /158\(engineers\)/ }
       its(:stdout) { is_expected.to match /100\(users\)/ }
     end
- end
+  end
 
+
+  context 'modify user\'s primary_group' do
+    it 'install accounts' do
+      pp = <<-EOS
+        class {'accounts':
+            groups => {
+              'testgroup' => {
+                'gid' => 800,
+                'members' => ['www-data']
+              }
+            },
+            users => { 'testuser' => {
+              'shell'   => '/bin/bash',
+              'primary_group' => 'testgroup'
+            }}
+        }
+      EOS
+      expect(apply_manifest(pp,
+        :catch_failures => true,
+        :debug => true,
+      ).exit_code).to be_zero
+    end
+
+    describe group('testgroup') do
+      it { should exist }
+      it { should have_gid 800 }
+    end
+
+    describe file('/home/testuser') do
+      it { should be_directory }
+    end
+
+    describe command('awk -F\':\' \'/testgroup/{print $4}\' /etc/group') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /www-data/ }
+      its(:stdout) { is_expected.to match /testuser/ }
+    end
+
+    describe command('id testuser') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /800\(testgroup\)/ }
+    end
+ end
 end
