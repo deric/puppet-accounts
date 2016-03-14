@@ -24,10 +24,14 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         }
       EOS
 
-      expect(apply_manifest(pp,
+      apply_manifest(pp,
         :catch_failures => true,
         :debug => true,
-      ).exit_code).to be_zero
+      )
+      #expect(apply_manifest(pp,
+      #  :catch_failures => true,
+      #  :debug => true,
+      #).exit_code).to be_zero
     end
 
     describe group('john') do
@@ -86,16 +90,26 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
                 'members' => ['www-data']
               }
             },
-            users => { 'testuser' => {
-              'shell'   => '/bin/bash',
-              'primary_group' => 'testgroup'
-            }}
+            users => {
+              'testuser' => {
+                'shell'   => '/bin/bash',
+                'primary_group' => 'testgroup'
+              },
+              'www-data' => {
+                'manage_group' => false,
+                'home' => '/var/www'
+              }
+            }
         }
       EOS
-      expect(apply_manifest(pp,
+      apply_manifest(pp,
         :catch_failures => true,
         :debug => true,
-      ).exit_code).to be_zero
+      )
+      #expect(apply_manifest(pp,
+      #  :catch_failures => true,
+      #  :debug => true,
+      #).exit_code).to be_zero
     end
 
     describe group('testgroup') do

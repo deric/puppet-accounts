@@ -30,18 +30,26 @@ define accounts::user(
   $password_max_age = undef,
 ) {
 
-  if ($gid) {
-    $real_gid = $gid
-  } else {
-    $real_gid = $uid
-  }
-
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
   validate_hash($ssh_keys)
   validate_bool($managehome)
   if ! is_array($purge_ssh_keys) {
     validate_bool($purge_ssh_keys)
+  }
+
+  if ($gid) {
+    $real_gid = $gid
+  } else {
+    if $ensure == 'present' {
+      if $manage_group {
+        $real_gid = $primary_group
+      } else {
+        $real_gid = $uid
+      }
+    } else {
+      $real_gid = undef
+    }
   }
 
   if $home {
