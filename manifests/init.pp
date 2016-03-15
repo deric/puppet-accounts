@@ -21,7 +21,7 @@ class accounts(
 
   anchor { 'accounts::primary_groups_created': }
   # create primary groups first
-  $primary_groups = accounts_primary_groups($merged_users)
+  $primary_groups = accounts_primary_groups($merged_users, $merged_groups)
   notify{"primary_groups: ${primary_groups}": }
   create_resources(accounts::group, $primary_groups,
     {'before' => Anchor['accounts::primary_groups_created']}

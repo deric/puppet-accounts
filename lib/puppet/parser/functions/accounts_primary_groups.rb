@@ -4,12 +4,12 @@ Find primary groups and its members
 EOS
   ) do |args|
 
-    if args.size != 1
-      raise(Puppet::ParseError, "accounts_primary_groups(): Wrong number of args, given #{args.size}, accepts only 1")
+    if args.size != 2
+      raise(Puppet::ParseError, "accounts_primary_groups(): Wrong number of args, given #{args.size}, accepts exactly 2 Hashes")
     end
 
     if args[0].class != Hash
-      raise(Puppet::ParseError, "accounts_primary_groups(): argument must be a Hash, you passed a " + args[0].class.to_s)
+      raise(Puppet::ParseError, "accounts_primary_groups(): argument must be a Hash, you passed a " + args[0].class.to_s + " and "+ args[1].class.to_s)
     end
 
     # assign `user` to group `g`
@@ -23,6 +23,7 @@ EOS
     end
 
     res = {}
+    groups = args[1]
     args[0].each do |user, val|
       # don't assign users marked for removal to groups
       next if val.key? 'ensure' and val['ensure'] == 'absent'
@@ -30,6 +31,7 @@ EOS
       val['manage_group'] = true unless val.key? 'manage_group'
       if val['manage_group']
         g = val['primary_group']
+        res[g] = groups[g] if groups.key? g
         assign_helper.call(res, g, user)
         if val.key? 'gid'
           res[g]['gid'] = val['gid'] # manually override GID
