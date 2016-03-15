@@ -19,9 +19,8 @@ class accounts(
   $merged_users = merge($users, $users_h)
   $merged_groups = merge($groups, $groups_h)
 
-  $primary_groups = accounts_primary_groups($merged_users)
+  $primary_groups = accounts_primary_groups($merged_users, $merged_groups)
   notify{"primary_groups: ${primary_groups}": }
-  create_resources(accounts::group, $primary_groups)
 
   class { 'accounts::users':
     manage   => $manage_users,

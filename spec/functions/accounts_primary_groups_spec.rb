@@ -30,7 +30,7 @@ describe 'accounts_primary_groups' do
         john: { 'groups' => ['bar', 'users'], 'gid' => 500},
       }
 
-      is_expected.to run.with_params(users).and_return(
+      is_expected.to run.with_params(users, {}).and_return(
         {
           'foo' => {'members' => [:foo] },
           'john' => {'members' => [:john], 'gid' => 500},
@@ -45,7 +45,7 @@ describe 'accounts_primary_groups' do
         tracy: { 'groups' => ['sudo', 'users'], 'ensure' => 'absent'},
       }
 
-      is_expected.to run.with_params(users).and_return(
+      is_expected.to run.with_params(users, {}).and_return(
         {
           'bob' => {'members' => [:bob]},
           'alice' => {'members' => [:alice]},
@@ -57,13 +57,19 @@ describe 'accounts_primary_groups' do
   describe 'extract also primary groups' do
     it 'finds group specified by primary_group' do
       users = {
-        foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
-        bar: { 'primary_group' => 'testgroup', 'manage_group' => false},
+        'foo' => { 'primary_group' => 'testgroup', 'manage_group' => true},
+        'bar' => { 'primary_group' => 'testgroup', 'manage_group' => false},
+      }
+      groups = {
+        'testgroup' => {
+          'members' => [ 'www-data', 'testuser' ],
+          'gid'     => 500,
+        }
       }
 
-      is_expected.to run.with_params(users).and_return(
+      is_expected.to run.with_params(users, groups).and_return(
         {
-          'testgroup' => {'members' => [:foo]},
+          'testgroup' => {'members' => ['www-data', 'testuser', 'foo'], 'gid' => 500},
         }
       )
     end
