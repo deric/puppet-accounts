@@ -24,12 +24,10 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         }
       EOS
 
-      apply_manifest(pp, {
-            :catch_failures => true,
-            :debug          => true,
-          }
-        )
-      expect(apply_manifest(pp, :catch_failures => true).exit_code).to be_zero
+      expect(apply_manifest(pp, {
+        :catch_failures => false,
+        :debug          => true,
+        }).exit_code).to be_zero
     end
 
     describe group('john') do
