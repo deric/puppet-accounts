@@ -62,7 +62,7 @@ describe 'accounts_primary_groups' do
       }
       groups = {
         'testgroup' => {
-          'members' => [ 'www-data', 'testuser' ],
+          'members' => [ 'www-data', 'testuser', 'foo' ],
           'gid'     => 500,
         }
       }

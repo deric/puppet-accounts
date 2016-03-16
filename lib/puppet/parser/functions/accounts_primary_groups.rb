@@ -19,7 +19,8 @@ EOS
       else
         res[g]['members'] = [] unless res[g].key?('members')
       end
-      res[g]['members'] << user
+      # avoid duplication of users
+      res[g]['members'] << user unless res[g]['members'].include? user
     end
 
     res = {}
