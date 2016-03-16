@@ -2,7 +2,7 @@
 require 'spec_helper'
 require 'rspec-puppet'
 
-describe 'extract_group_members' do
+describe 'accounts_group_members' do
 
   describe 'basic usage ' do
     it 'should raise an error if run with extra arguments' do
@@ -40,19 +40,36 @@ describe 'extract_group_members' do
     end
 
     it 'skips absent users' do
-
       users = {
         alice: { 'groups' => ['users']},
         bob: { 'groups' => ['sudo', 'users']},
         tracy: { 'groups' => ['sudo', 'users'], 'ensure' => 'absent'},
       }
 
-      subject.should run.with_params(users, {}).and_return(
+      is_expected.to run.with_params(users, {}).and_return(
         {
           'sudo' => {'members' => [:bob]},
           'users' => {'members' => [:alice, :bob]},
         }
       )
+    end
+  end
+
+  describe 'extract also primary groups' do
+    it 'finds group specified by primary_group' do
+      users = {
+        foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
+      }
+
+      is_expected.to run.with_params(users, {}).and_return({})
+    end
+
+    it 'finds group with gid' do
+      users = {
+        foo: { 'primary_group' => 'testgroup', 'manage_group' => true, 'gid' => 123},
+      }
+
+      is_expected.to run.with_params(users, {}).and_return({})
     end
   end
 end

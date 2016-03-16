@@ -72,11 +72,6 @@ describe 'accounts::user', :type => :define do
       'gid' => 1001
     )}
 
-    it { should contain_group('foobar').with(
-      'gid'    => 1001,
-      'ensure' => 'present'
-    )}
-
     it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
   end
 
@@ -138,40 +133,6 @@ describe 'accounts::user', :type => :define do
     end
   end
 
-  context 'assign groups' do
-    let(:title) { 'foo' }
-    let(:home) { '/home/foo' }
-
-    let(:params){{
-      :home  => home,
-      :groups => ['users']
-    }}
-
-    it { should contain_anchor('accounts::user::groups::foo') }
-
-    it { should contain_user('foo').with(
-      'ensure' => 'present'
-    ).that_requires('Anchor[accounts::user::groups::foo]') }
-
-    it { should contain_group('foo').with(
-      'ensure' => 'present'
-    )}
-  end
-
-  context 'optional group management' do
-    let(:title) { 'mickey' }
-
-    let(:params){{
-      :manage_group => false
-    }}
-
-    it { should contain_anchor('accounts::user::groups::mickey') }
-
-    it { should_not contain_group('mickey').with(
-      'ensure' => 'present'
-    )}
-  end
-
   context 'remove group with user\'s account' do
     let(:title) { 'mickey' }
 
@@ -212,27 +173,6 @@ describe 'accounts::user', :type => :define do
       'ensure' => 'absent'
     )}
   end
-
-  context 'allow changing primary group\'s name' do
-    let(:title) { 'john' }
-
-    let(:params){{
-      :primary_group => 'users',
-    }}
-
-    it { should contain_user('john').with(
-      'ensure' => 'present'
-    )}
-
-    it { should contain_group('users').with(
-      'ensure' => 'present'
-    )}
-
-    it { should_not contain_group('john').with(
-      'ensure' => 'present'
-    )}
-  end
-
 
   context 'purge ssh keys' do
     let(:title) { 'john' }
@@ -345,9 +285,6 @@ describe 'accounts::user', :type => :define do
       'ensure' => 'present'
     )}
 
-    it { should contain_group('jane').with(
-      'ensure' => 'present'
-    )}
   end
 
   context 'ssh key with empty options' do
@@ -369,10 +306,6 @@ describe 'accounts::user', :type => :define do
     })}
 
     it { should contain_user('jake').with(
-      'ensure' => 'present'
-    )}
-
-    it { should contain_group('jake').with(
       'ensure' => 'present'
     )}
   end
@@ -398,10 +331,6 @@ describe 'accounts::user', :type => :define do
     })}
 
     it { should contain_user('luke').with(
-      'ensure' => 'present'
-    )}
-
-    it { should contain_group('luke').with(
       'ensure' => 'present'
     )}
   end

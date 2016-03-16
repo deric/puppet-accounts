@@ -10,7 +10,8 @@ describe 'accounts::users', :type => :class do
       :puppetversion => Puppet.version,
     } }
     it { should contain_user(user) }
-    it { should contain_group(user) }
+    # currently managed out of this class
+    #it { should contain_group(user) }
 
     it { should contain_file("/home/#{user}").with({
       'ensure'  => 'directory',
