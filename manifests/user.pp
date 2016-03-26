@@ -145,7 +145,7 @@ define accounts::user(
         file { $home_dir:
           ensure  => directory,
           owner   => $username,
-          group   => $primary_group,
+          group   => $real_gid,
           recurse => $recurse_permissions,
           mode    => $home_permissions,
         }
@@ -153,7 +153,7 @@ define accounts::user(
         file { "${home_dir}/.ssh":
           ensure  => directory,
           owner   => $username,
-          group   => $primary_group,
+          group   => $real_gid,
           mode    => '0700',
           require => File[$home_dir],
         } ->
@@ -161,7 +161,7 @@ define accounts::user(
         file { $authorized_keys:
           ensure => present,
           owner  => $username,
-          group  => $primary_group,
+          group  => $real_gid,
           source => $ssh_key_source,
           mode   => '0600',
         }
