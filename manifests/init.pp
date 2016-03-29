@@ -38,7 +38,4 @@ class accounts(
     groups  => $merged_groups,
     #require => Class['accounts::users']
   }
-  create_resources(accounts::update_group, $primary_groups,
-    {'require' => Anchor['accounts::primary_groups_created']}
-  )
 }
