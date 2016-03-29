@@ -89,7 +89,7 @@ describe 'accounts', :type => :class do
       it { should contain_file("/root").with({
         'ensure'  => 'directory',
         'owner'   => 'root',
-        'group'   => 'root',
+        'group'   => '0',
         'mode'    => '0755'
       }) }
 

@@ -32,9 +32,9 @@ describe 'accounts::user', :type => :define do
     }) }
   end
 
-  shared_examples 'having_home_dir' do |user, home_dir|
+  shared_examples 'having_home_dir' do |user, group, home_dir|
     let(:owner) { user }
-    let(:group) { user }
+    let(:group) { group }
 
     it { should contain_file("#{home_dir}").with({
       'ensure'  => 'directory',
@@ -61,7 +61,7 @@ describe 'accounts::user', :type => :define do
   context 'create new user' do
     let(:title) { 'foobar' }
     let(:owner) { 'foobar' }
-    let(:group) { 'foobar' }
+    let(:group) { 1001 }
     let(:params){{
       :uid => 1001,
       :gid => 1001,
@@ -72,7 +72,7 @@ describe 'accounts::user', :type => :define do
       'gid' => 1001
     )}
 
-    it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
+    it_behaves_like 'having_home_dir', 'foobar', '1001', '/home/foobar'
   end
 
   context 'create new user without specified uid' do
@@ -80,7 +80,7 @@ describe 'accounts::user', :type => :define do
     let(:owner) { 'foobar' }
     let(:group) { 'foobar' }
 
-    it_behaves_like 'having_home_dir', 'foobar', '/home/foobar'
+    it_behaves_like 'having_home_dir', 'foobar', 'foobar', '/home/foobar'
   end
 
   context 'custom home directory' do
@@ -93,7 +93,7 @@ describe 'accounts::user', :type => :define do
       :home => home,
     }}
 
-    it_behaves_like 'having_home_dir', 'foobar', '/var/www'
+    it_behaves_like 'having_home_dir', 'foobar', 'foobar', '/var/www'
   end
 
   context 'not managing home' do
@@ -113,7 +113,7 @@ describe 'accounts::user', :type => :define do
     let(:title) { 'root' }
 
     # root has automatically special home folder
-    it_behaves_like 'having_home_dir', 'root', '/root'
+    it_behaves_like 'having_home_dir', 'root', 'root', '/root'
   end
 
   context 'invalid ensure' do
