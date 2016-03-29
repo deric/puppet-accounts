@@ -16,11 +16,13 @@ EOS
     # assign `user` to group `g`
     assign_helper = lambda do |res, g, user|
       unless res.key?(g) # create group if not defined yet
-        res[g] = {'members' => []}
+        res[g] = {'members' => [], 'require' => []}
       else
         res[g]['members'] = [] unless res[g].key?('members')
+        res[g]['require'] = [] unless res[g].key?('require')
       end
       res[g]['members'] << user
+      res[g]['require'] << "User[#{user}]"
     end
 
     res = args[1].clone

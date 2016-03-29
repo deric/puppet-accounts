@@ -13,14 +13,16 @@ EOS
     end
 
     # assign `user` to group `g`
-    assign_helper = lambda do |res, g, user|
+    assign_helper = lambda do |res, g, user, primary|
       unless res.key?(g) # create group if not defined yet
-        res[g] = {'members' => []}
+        res[g] = {'members' => [], 'require' => []}
       else
         res[g]['members'] = [] unless res[g].key?('members')
+        res[g]['require'] = [] unless res[g].key?('require')
       end
       # avoid duplication of users
       res[g]['members'] << user unless res[g]['members'].include? user
+      res[g]['require'] << "User[#{user}]" unless primary
     end
 
     res = {}
@@ -33,7 +35,7 @@ EOS
       if val['manage_group']
         g = val['primary_group']
         res[g] = groups[g] if groups.key? g
-        assign_helper.call(res, g, user)
+        assign_helper.call(res, g, user, true)
         if val.key? 'gid'
           res[g]['gid'] = val['gid'] # manually override GID
         end
@@ -41,7 +43,7 @@ EOS
       if val.key? 'groups'
         val['groups'].each do |g|
           # update only existing (primary) groups
-          assign_helper.call(res, g, user) if res.key?(g)
+          assign_helper.call(res, g, user, false) if res.key?(g)
         end
       end
     end

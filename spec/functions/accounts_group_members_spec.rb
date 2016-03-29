@@ -32,9 +32,9 @@ describe 'accounts_group_members' do
 
       subject.should run.with_params(users, {}).and_return(
         {
-          'sudo' => {'members' => [:foo]},
-          'bar' => {'members' => [:john]},
-          'users' => {'members' => [:foo,:john]},
+          'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
+          'bar' => {'members' => [:john],'require'=> ['User[john]']},
+          'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
         }
       )
     end
@@ -48,8 +48,11 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'sudo' => {'members' => [:bob]},
-          'users' => {'members' => [:alice, :bob]},
+          'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
+          'users' => {
+            'members' => [:alice, :bob],
+            'require'=> ['User[alice]', 'User[bob]']
+          },
         }
       )
     end
@@ -66,7 +69,9 @@ describe 'accounts_group_members' do
 
     it 'finds group with gid' do
       users = {
-        foo: { 'primary_group' => 'testgroup', 'manage_group' => true, 'gid' => 123},
+        foo: { 'primary_group' => 'testgroup',
+          'manage_group' => true, 'gid' => 123,
+          'require' => []},
       }
 
       is_expected.to run.with_params(users, {}).and_return({})

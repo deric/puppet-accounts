@@ -32,8 +32,8 @@ describe 'accounts_primary_groups' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'foo' => {'members' => [:foo] },
-          'john' => {'members' => [:john], 'gid' => 500},
+          'foo' => {'members' => [:foo], 'require'=> [] },
+          'john' => {'members' => [:john], 'gid' => 500, 'require'=> []},
         }
       )
     end
@@ -47,8 +47,8 @@ describe 'accounts_primary_groups' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'bob' => {'members' => [:bob]},
-          'alice' => {'members' => [:alice]},
+          'bob' => {'members' => [:bob], 'require' => []},
+          'alice' => {'members' => [:alice], 'require' => []},
         }
       )
     end
@@ -69,7 +69,8 @@ describe 'accounts_primary_groups' do
 
       is_expected.to run.with_params(users, groups).and_return(
         {
-          'testgroup' => {'members' => ['www-data', 'testuser', 'foo'], 'gid' => 500},
+          'testgroup' => {'members' => ['www-data', 'testuser', 'foo'],
+          'gid' => 500, 'require' => []},
         }
       )
     end

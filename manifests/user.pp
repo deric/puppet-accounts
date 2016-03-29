@@ -134,6 +134,7 @@ define accounts::user(
           purge_ssh_keys   => $purge_ssh_keys,
           password_max_age => $password_max_age,
         }
+
       }
 
       # Set password if available

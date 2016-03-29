@@ -75,7 +75,6 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
   end
 
-
   context 'modify user\'s primary_group' do
     let(:pp) do
       <<-EOS
@@ -92,8 +91,8 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
                 'primary_group' => 'testgroup'
               },
               'www-data' => {
-                'manage_group' => false,
-                'home' => '/var/www'
+                'home' => '/var/www',
+                'shell'   => '/bin/sh',
               }
             }
         }
