@@ -56,7 +56,7 @@ define accounts::user(
     $home_dir = $home
   } else {
     $home_dir = $username ? {
-      root    => '/root',
+      'root'  => '/root',
       default => "/home/${username}",
     }
   }
@@ -71,7 +71,7 @@ define accounts::user(
   User <| title == $username |> { home => $home_dir }
 
   case $ensure {
-    absent: {
+    'absent': {
       if $managehome == true {
         exec { "rm -rf ${home_dir}":
           path   => [ '/bin', '/usr/bin' ],
@@ -103,12 +103,11 @@ define accounts::user(
         group { $primary_group:
           ensure  => absent,
           gid     => $real_gid,
-          require => User[$username]
+          require => User[$username],
         }
       }
     }
-
-    present: {
+    'present': {
       # prior to Puppet 3.6 `purge_ssh_keys` is not supported
       if versioncmp($::puppetversion, '3.6.0') < 0 {
         user { $username:
@@ -168,7 +167,7 @@ define accounts::user(
         }
 
         Ssh_authorized_key {
-          require =>  File[$authorized_keys]
+          require =>  File[$authorized_keys],
         }
       }
 
