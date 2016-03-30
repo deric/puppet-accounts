@@ -14,6 +14,55 @@ describe 'accounts', :type => :class do
   it { is_expected.to contain_class('accounts::users') }
   it { is_expected.to contain_class('accounts::groups') }
 
+  shared_examples 'having account' do |user, uid, group, gid|
+    it 'has home folder' do
+      is_expected.to contain_file("/home/#{user}").with(
+        'ensure' => 'directory',
+        'owner'  => user,
+      )
+    end
+    grp = gid.nil? ? group : gid
+
+    it { is_expected.to contain_file("/home/#{user}/.ssh").with(
+      'ensure' => 'directory',
+      'owner'   => user,
+      'group'   => grp,
+    )}
+
+    it { is_expected.to contain_file("/home/#{user}/.ssh/authorized_keys").with(
+      'ensure' => 'present',
+      'owner'  => user,
+      'group'  => grp,
+      'mode'   => '0600',
+    )}
+
+    it { is_expected.to contain_user(user).with(
+      'name'   => user,
+      'ensure' => 'present',
+      'uid'    => uid,
+      'gid'    => grp,
+    )}
+
+    it { is_expected.to contain_accounts__user(user).with(
+      'username' => user,
+      'uid' => uid,
+      'gid' => gid,
+    )}
+
+    # primary group
+    it { is_expected.to contain_accounts__group(group).with(
+      'groupname' => group,
+      'ensure' => 'present',
+      'gid' => gid,
+    )}
+
+    it { is_expected.to contain_group(group).with(
+      'name'    => group,
+      'ensure'  => 'present',
+      'gid'     => gid,
+    )}
+  end
+
   context 'allow passing users and groups directly to init class' do
     let(:params){{
       :users => { 'john' => { 'comment' => 'John Doe', 'gid' => 2001 }},
@@ -24,6 +73,7 @@ describe 'accounts', :type => :class do
       'comment' => 'John Doe',
       'gid' => 2001
     )}
+    it_behaves_like 'having account', 'john', nil, 'john', 2001
 
     it { is_expected.to contain_group('developers').with(
       'gid'    => 2001,
@@ -129,9 +179,7 @@ describe 'accounts', :type => :class do
         'shell' => '/bin/bash',
       )}
 
-      it { should contain_group('superman').with(
-        'ensure' => 'present'
-      )}
+      it_behaves_like 'having account', 'superman', nil, 'superman', nil
 
       it { should contain_group('superheroes').with(
         'ensure' => 'present',
@@ -177,15 +225,7 @@ describe 'accounts', :type => :class do
       }}
     }}
 
-    it { should contain_user('testuser').with(
-      'shell' => '/bin/bash',
-    )}
-
-    it { should contain_group('testgroup').with(
-      'ensure' => 'present',
-      'gid'    => 800,
-    )}
-
+    it_behaves_like 'having account', 'testuser', nil, 'testgroup', 800
   end
 
   context 'assign groups' do
@@ -204,6 +244,8 @@ describe 'accounts', :type => :class do
     it { should contain_group('foo').with(
       'ensure' => 'present'
     )}
+
+    it_behaves_like 'having account', 'foo', nil, 'foo', nil
   end
 
   context 'allow changing primary group\'s name' do
@@ -213,17 +255,7 @@ describe 'accounts', :type => :class do
       }}
     }}
 
-    it { should contain_user('john').with(
-      'ensure' => 'present'
-    )}
-
-    it { should contain_group('users').with(
-      'ensure' => 'present'
-    )}
-
-    it { should_not contain_group('john').with(
-      'ensure' => 'present'
-    )}
+    it_behaves_like 'having account', 'john', nil, 'users', nil
   end
 
   context 'optional group management' do
@@ -246,15 +278,7 @@ describe 'accounts', :type => :class do
       }}
     }}
 
-    it { should contain_user('foobar').with(
-      'uid' => 1001,
-      'gid' => 1001
-    )}
-
-    it { should contain_group('foobar').with(
-      'gid'    => 1001,
-      'ensure' => 'present'
-    )}
+    it_behaves_like 'having account', 'foobar', 1001, 'foobar', 1001
   end
 
 end
