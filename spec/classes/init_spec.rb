@@ -10,9 +10,9 @@ describe 'accounts', :type => :class do
     :manage_groups => true,
   }}
 
-  it { should compile.with_all_deps }
-  it { should contain_class('accounts::users') }
-  it { should contain_class('accounts::groups') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_class('accounts::users') }
+  it { is_expected.to contain_class('accounts::groups') }
 
   context 'allow passing users and groups directly to init class' do
     let(:params){{
@@ -20,12 +20,12 @@ describe 'accounts', :type => :class do
       :groups => { 'developers' => { 'gid' => 2001 }}
     }}
 
-    it { should contain_user('john').with(
+    it { is_expected.to contain_user('john').with(
       'comment' => 'John Doe',
       'gid' => 2001
     )}
 
-    it { should contain_group('developers').with(
+    it { is_expected.to contain_group('developers').with(
       'gid'    => 2001,
       'ensure' => 'present'
     )}
@@ -33,21 +33,39 @@ describe 'accounts', :type => :class do
 
   context 'no group management' do
     let(:params){{
-      :users => { 'john' => { 'comment' => 'John Doe', 'gid' => 'john' }},
+      :users => { 'john' => {
+          'comment'      => 'John Doe',
+          'gid'          => 'john',
+          'manage_group' => false,
+        }
+      },
       :groups => { 'developers' => { 'gid' => 2001 }},
       :manage_groups => false,
     }}
 
-    it { should contain_user('john').with(
-      'comment' => 'John Doe',
-      'gid' => 'john'
-    )}
+    it do
+      is_expected.to contain_user('john').with(
+        'comment' => 'John Doe',
+        'gid' => 'john'
+      )
+      is_expected.to contain_file('/home/john').with(
+        'ensure' => 'directory',
+        'owner'  => 'john',
+      )
+      is_expected.to contain_accounts__user('john').with(
+          'username' => 'john',
+          'gid' => 'john',
+      )
+    end
 
-    it { should_not contain_group('developers').with(
+    it { is_expected.not_to contain_group('developers').with(
       'gid'    => 2001,
       'ensure' => 'present'
     )}
 
+    it 'does not create primary group' do
+      is_expected.not_to contain_group('john').with('ensure' => 'present')
+    end
   end
 
   context 'test hiera fixtures' do
