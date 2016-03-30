@@ -135,7 +135,7 @@ describe 'accounts', :type => :class do
 
       it { should contain_group('superheroes').with(
         'ensure' => 'present',
-        'members' => ['superman', 'batman']
+        'members' => ['batman', 'superman']
       )}
 
       it { should contain_group('sudo').with(

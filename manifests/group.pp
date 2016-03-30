@@ -14,7 +14,7 @@ define accounts::group (
   ensure_resource('group', $groupname, {
     'ensure'  => $ensure,
     'gid'     => $gid,
-    'members' => $members,
+    'members' => sort($members),
     'attribute_membership' => 'inclusive',
   })
 }
