@@ -1,5 +1,10 @@
 bundler_args: --without development
 sudo: false
+addons:
+  apt:
+    packages:
+      # required for unf_ext gem
+      - build-essential
 cache:
   - bundler
   - directories:
@@ -8,9 +13,10 @@ script:
   - RAKE_ENV=ci bundle exec rake validate
   - RAKE_ENV=ci bundle exec rake spec
 #  - RAKE_ENV=ci bundle exec rake lint
-  - bundle exec rake acceptance
+  - RAKE_ENV=ci bundle exec rake acceptance
 rvm:
-  - 1.9.3
+# google-api-client doesn't support ruby < 2.0
+#  - 1.9.3
   - 2.0.0
   - 2.1.10
 env:
