@@ -1,0 +1,12 @@
+HOSTS:
+  debian-76-x64:
+    roles:
+      - agent
+    platform: debian-7-amd64
+    box: fgrehm/wheezy64-lxc
+    box_url: https://vagrantcloud.com/fgrehm/boxes/wheezy64-lxc
+    hypervisor: vagrant
+    lxc__bridge_name: 'lxcbr0'
+CONFIG:
+  log_level: verbose
+  type: foss
