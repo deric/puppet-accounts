@@ -67,8 +67,8 @@ define accounts::user(
     $authorized_keys = "${home_dir}/.ssh/authorized_keys"
   }
 
-  User <| title == $username |> { managehome => $managehome }
-  User <| title == $username |> { home => $home_dir }
+  User<| title == $username |> { managehome => $managehome }
+  User<| title == $username |> { home => $home_dir }
 
   case $ensure {
     'absent': {
@@ -138,7 +138,7 @@ define accounts::user(
 
       # Set password if available
       if $pwhash != '' {
-        User <| title == $username |> { password => $pwhash }
+        User<| title == $username |> { password => $pwhash }
       }
 
       if $managehome == true {
@@ -167,7 +167,7 @@ define accounts::user(
         }
 
         Ssh_authorized_key {
-          require =>  File[$authorized_keys],
+          require => File[$authorized_keys],
         }
       }
 
