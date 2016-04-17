@@ -19,8 +19,9 @@ script:
 rvm:
 # google-api-client doesn't support ruby < 2.0
 #  - 1.9.3
+# see http://rubies.travis-ci.org/
   - 2.0.0
-  - 2.1.10
+  - 2.1.8
 env:
   - BEAKER_set="ubuntu-1404-docker"
   - PUPPET_VERSION="~> 3.4.0"
