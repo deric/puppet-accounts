@@ -31,6 +31,7 @@ group :development do
 end
 
 group :system_tests do
+  gem 'pry'
   gem 'beaker'
   gem 'beaker-rspec'
   gem 'beaker-hiera'
