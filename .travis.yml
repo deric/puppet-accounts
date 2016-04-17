@@ -23,7 +23,7 @@ rvm:
   - 2.0.0
   - 2.1.8
 env:
-  - BEAKER_set="ubuntu-1404-docker"
+#  - BEAKER_set="debian-8-docker"
   - PUPPET_VERSION="~> 3.4.0"
   - PUPPET_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
