@@ -33,8 +33,9 @@ class accounts(
 
   # each user resource will have dependency on a group, if needed
   class { '::accounts::groups':
-    manage => $manage_groups,
-    users  => $merged_users,
-    groups => $merged_groups,
+    manage         => $manage_groups,
+    users          => $merged_users,
+    groups         => $merged_groups,
+    default_groups => $user_defaults['groups'],
   }
 }
