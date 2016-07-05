@@ -245,6 +245,11 @@ describe 'accounts', :type => :class do
       'ensure' => 'present'
     )}
 
+    it { should contain_group('users').with(
+      'ensure' => 'present',
+      'members' => ['foo'],
+    )}
+
     it_behaves_like 'having account', 'foo', nil, 'foo', nil
   end
 
