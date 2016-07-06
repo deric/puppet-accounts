@@ -335,4 +335,50 @@ describe 'accounts::user', :type => :define do
     )}
   end
 
+  context 'umask' do
+    let(:title) { 'johndoe' }
+    let(:owner) { 'johndoe' }
+    let(:group) { 'johndoe' }
+
+    context 'disabled by default' do
+      it { is_expected.not_to contain_file_line("umask_line_profile_johndoe").with({
+        'ensure' => 'present',
+        'path'   => "/home/johndoe/.bash_profile",
+        'line'   => "umask 077",
+        'match'  => '^umask \+[0-9][0-9][0-9]',
+      }) }
+
+      it { is_expected.not_to contain_file_line("umask_line_bashrc_johndoe").with({
+        'ensure' => 'present',
+        'path'   => "/home/johndoe/.bash_profile",
+        'line'   => "umask 077",
+        'match'  => '^umask \+[0-9][0-9][0-9]',
+      }) }
+    end
+
+    context 'modify bash settings when enabled' do
+      let(:params) do
+        {
+          :manageumask => true,
+          :umask => '077',
+        }
+      end
+
+      it { is_expected.to contain_file_line("umask_line_profile_johndoe").with({
+        'ensure' => 'present',
+        'path'   => "/home/johndoe/.bash_profile",
+        'line'   => "umask 077",
+        'match'  => '^umask \+[0-9][0-9][0-9]',
+      }) }
+
+      it { is_expected.to contain_file_line("umask_line_bashrc_johndoe").with({
+        'ensure' => 'present',
+        'path'   => "/home/johndoe/.bash_profile",
+        'line'   => "umask 077",
+        'match'  => '^umask \+[0-9][0-9][0-9]',
+      }) }
+    end
+
+  end
+
 end
