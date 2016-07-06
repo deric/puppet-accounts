@@ -259,7 +259,7 @@ describe 'accounts', :type => :class do
         'home' => '/home/foo',
       }},
       :user_defaults => {
-        'groups' => ['users'],
+        'groups' => ['users'], # default group for all users
       },
     }}
 
@@ -274,7 +274,7 @@ describe 'accounts', :type => :class do
 
     it { should contain_group('users').with(
       'ensure' => 'present',
-      'members' => ['foo'],
+      'members' => ['foo', 'myuser', 'root'], # acounts from hiera/default.yaml
     )}
 
     it_behaves_like 'having account', 'foo', nil, 'foo', nil
