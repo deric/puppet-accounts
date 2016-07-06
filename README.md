@@ -26,7 +26,8 @@ accounts::user_defaults:
 accounts::groups:
   www-data:
     gid: 33
-    # not necessarily complete list of memebers, you can assign users to the same group on user's level using `groups: ['www-data']`
+    # not necessarily complete list of memebers, you can assign users to the same group on
+    # user's level using `groups: ['www-data']`
     members: ['john']
 ```
 
