@@ -87,6 +87,21 @@ accounts::users:
 
 If `managehome` is set to `true` (default), also home directory will be removed!
 
+### Root account
+
+`root` home is set to `/root` unless defined otherwise (using `home` dir). You can supply multiple keys for one account.
+```yaml
+accounts::users:
+  root:
+    ssh_keys:
+      'mykey1':
+        type: 'ssh-rsa'
+        key: 'AAAA....'
+      'otherkey':
+        type: 'ssh-dsa'
+        key: 'AAAAB...'
+```
+
 ## User
 
 * `authorized_keys_file` - allows proividing location of custom `authorized_keys`
@@ -114,7 +129,11 @@ You can provide global defaults for all users:
 accounts:
  user_defaults:
    shell: '/bin/dash'
+   groups: ['users']
 ```
+ * `groups` common group(s) for all users
+
+ Note that configuration from Hiera gets merged to with Puppet code.
 
 ### Testing
 
@@ -177,7 +196,7 @@ gem install deee_merge
 ```
 
 and update `merge_behavior` in your `hiera.yaml`, e.g.:
-```
+```yaml
 ---
 :backends:
   - yaml
