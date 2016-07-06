@@ -2,15 +2,19 @@ module Puppet::Parser::Functions
   newfunction(:accounts_group_members, :type => :rvalue, :doc => <<-EOS
 From Hash of all users and their configuration assign users to group definitions
 given as second argument
+an optional 3rd argument are the default groups for all users
 EOS
   ) do |args|
 
-    if args.size != 2
-      raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts just 2")
+    if args.size != 2 and args.size != 3
+      raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts 2 or 3")
     end
 
     if args[0].class != Hash and args[1].class != Hash
       raise(Puppet::ParseError, "accounts_group_members(): both must be a Hash, you passed a " + args[0].class.to_s + " and "+ args[1].class.to_s)
+    end
+    if args.size == 3 and args[2].class != Array
+      raise(Puppet::ParseError, "accounts_group_members(): last argument must be an Array, you passed a " + args[2].class.to_s)
     end
 
     # assign `user` to group `g`
@@ -31,6 +35,10 @@ EOS
       next if val.key? 'ensure' and val['ensure'] == 'absent'
       if val.key? 'groups'
         val['groups'].each do |g|
+          assign_helper.call(res, g, user)
+        end
+      elsif args.size == 3
+        args[2].each do |g|
           assign_helper.call(res, g, user)
         end
       end
