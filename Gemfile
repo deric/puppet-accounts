@@ -13,7 +13,8 @@ group :test do
   gem 'simplecov-console'
   gem 'deep_merge'
   gem 'librarian-puppet' , '>=2.0'
-
+  # newer versions require ruby 2.2
+  gem 'listen', '< 3.1'
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
   gem "puppet-lint-trailing_comma-check"
