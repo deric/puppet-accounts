@@ -15,6 +15,8 @@ define accounts::user(
   $pwhash = '',
   $managehome = true,
   $manage_group = true, # create a group with '$primary_group' name
+  $manageumask = false,
+  $umask = '0022',
   $home = undef,
   $home_permissions = $::osfamily ? {
                         'Debian' => '0755',
@@ -148,6 +150,23 @@ define accounts::user(
           group   => $real_gid,
           recurse => $recurse_permissions,
           mode    => $home_permissions,
+        }
+
+        if $manageumask == true {
+          file_line { "umask_line_profile_${username}":
+            ensure => present,
+            path   => "${home_dir}/.bash_profile",
+            line   => "umask ${umask}",
+            match  => '^umask \+[0-9][0-9][0-9]',
+          require => File[$home_dir],
+         } ->
+          file_line { "umask_line_bashrc_${username}":
+            ensure => present,
+            path   => "${home_dir}/.bashrc",
+            line   => "umask ${umask}",
+            match  => '^umask \+[0-9][0-9][0-9]',
+         }
+
         }
 
         file { "${home_dir}/.ssh":
