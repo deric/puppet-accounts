@@ -2,10 +2,11 @@ HOSTS:
   debian-8-x64:
     platform: debian-8-amd64
     hypervisor : docker
-    image: debian:8
-    docker_preserve_image: true
-    docker_image_commands:
-      - 'apt-get install -y wget'
+    image: deric/jessie-puppet:3.6.2
+    docker_preserve_image: false
+    roles:
+      - agent
+    debug: true
 CONFIG:
   masterless: true
   log_level: verbose
