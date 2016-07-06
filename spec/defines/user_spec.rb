@@ -350,7 +350,7 @@ describe 'accounts::user', :type => :define do
 
       it { is_expected.not_to contain_file_line("umask_line_bashrc_johndoe").with({
         'ensure' => 'present',
-        'path'   => "/home/johndoe/.bash_profile",
+        'path'   => "/home/johndoe/.bashrc",
         'line'   => "umask 077",
         'match'  => '^umask \+[0-9][0-9][0-9]',
       }) }
@@ -373,7 +373,7 @@ describe 'accounts::user', :type => :define do
 
       it { is_expected.to contain_file_line("umask_line_bashrc_johndoe").with({
         'ensure' => 'present',
-        'path'   => "/home/johndoe/.bash_profile",
+        'path'   => "/home/johndoe/.bashrc",
         'line'   => "umask 077",
         'match'  => '^umask \+[0-9][0-9][0-9]',
       }) }

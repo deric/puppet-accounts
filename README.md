@@ -89,7 +89,7 @@ If `managehome` is set to `true` (default), also home directory will be removed!
 
 ### Root account
 
-`root` home is set to `/root` unless defined otherwise (using `home` dir). You can supply multiple keys for one account.
+`root` home is set to `/root` unless defined otherwise (using `home` parameter). You can supply multiple keys for one account.
 ```yaml
 accounts::users:
   root:
@@ -120,6 +120,19 @@ accounts::users:
    purge_ssh_keys: false
    pwhash: ''
 ```
+
+### `umask`
+
+Default permissions for creating new files are managed via `~/.bash_profile` and `~/.bashrc`.
+
+```yaml
+accounts::users:
+ john:
+   manageumask: true
+   umask: '022'
+```
+
+By default `umask` is not managed.
 
 ## Global settings
 
