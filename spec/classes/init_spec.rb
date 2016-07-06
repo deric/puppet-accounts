@@ -245,6 +245,38 @@ describe 'accounts', :type => :class do
       'ensure' => 'present'
     )}
 
+    it { should contain_group('users').with(
+      'ensure' => 'present',
+      'members' => ['foo'],
+    )}
+
+    it_behaves_like 'having account', 'foo', nil, 'foo', nil
+  end
+
+  context 'assign default groups' do
+    let(:params){{
+      :users => { 'foo' => {
+        'home' => '/home/foo',
+      }},
+      :user_defaults => {
+        'groups' => ['users'], # default group for all users
+      },
+    }}
+
+    it { should contain_user('foo').with(
+      'ensure' => 'present',
+      'home' => '/home/foo'
+    )}
+
+    it { should contain_group('foo').with(
+      'ensure' => 'present'
+    )}
+
+    it { should contain_group('users').with(
+      'ensure' => 'present',
+      'members' => ['foo', 'myuser', 'root'], # acounts from hiera/default.yaml
+    )}
+
     it_behaves_like 'having account', 'foo', nil, 'foo', nil
   end
 
