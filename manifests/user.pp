@@ -165,10 +165,6 @@ define accounts::user(
           source => $ssh_key_source,
           mode   => '0600',
         }
-
-        Ssh_authorized_key {
-          require => File[$authorized_keys],
-        }
       }
 
       # Error: Use of reserved word: type, must be quoted if intended to be a String value at /etc/puppetlabs/agent/code/environments/production/modules/accounts/manifests/user.pp:121:9 on node
