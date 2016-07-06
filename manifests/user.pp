@@ -152,21 +152,21 @@ define accounts::user(
           mode    => $home_permissions,
         }
 
+        # see https://github.com/deric/puppet-accounts/pull/44
         if $manageumask == true {
           file_line { "umask_line_profile_${username}":
-            ensure => present,
-            path   => "${home_dir}/.bash_profile",
-            line   => "umask ${umask}",
-            match  => '^umask \+[0-9][0-9][0-9]',
-          require => File[$home_dir],
-         } ->
+            ensure  => present,
+            path    => "${home_dir}/.bash_profile",
+            line    => "umask ${umask}",
+            match   => '^umask \+[0-9][0-9][0-9]',
+            require => File[$home_dir],
+          } ->
           file_line { "umask_line_bashrc_${username}":
             ensure => present,
             path   => "${home_dir}/.bashrc",
             line   => "umask ${umask}",
             match  => '^umask \+[0-9][0-9][0-9]',
-         }
-
+          }
         }
 
         file { "${home_dir}/.ssh":
