@@ -26,7 +26,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
       expect(apply_manifest(pp, {
         :catch_failures => false,
-        :debug          => true,
+        :debug          => false,
         }).exit_code).to be_zero
     end
 
@@ -102,10 +102,10 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     it 'install accounts' do
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => true,
+        :debug => false,
       ).exit_code).to be_zero
       # TODO: right now two runs are required
-      expect(apply_manifest(pp, :catch_failures => false, :debug => true).exit_code).to be_zero
+      expect(apply_manifest(pp, :catch_failures => false, :debug => false).exit_code).to be_zero
     end
 
     describe group('testgroup') do
