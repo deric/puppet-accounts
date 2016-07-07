@@ -63,12 +63,6 @@ define accounts::user(
     }
   }
 
-  if $authorized_keys_file {
-    $authorized_keys = $authorized_keys_file
-  } else {
-    $authorized_keys = "${home_dir}/.ssh/authorized_keys"
-  }
-
   User<| title == $username |> { managehome => $managehome }
   User<| title == $username |> { home => $home_dir }
 
@@ -120,10 +114,6 @@ define accounts::user(
           shell   => $shell,
           comment => $comment,
         }
-        # TODO: implement purge_ssh_keys manually?
-        if $purge_ssh_keys {
-          notice('$purge_ssh_keys not supported prior to puppet 3.6.0')
-        }
       } else {
         user { $username:
           ensure           => present,
@@ -135,7 +125,6 @@ define accounts::user(
           purge_ssh_keys   => $purge_ssh_keys,
           password_max_age => $password_max_age,
         }
-
       }
 
       # Set password if available
@@ -169,46 +158,20 @@ define accounts::user(
           }
         }
 
-        file { "${home_dir}/.ssh":
-          ensure  => directory,
-          owner   => $username,
-          group   => $real_gid,
-          mode    => '0700',
-          require => File[$home_dir],
-        } ->
-
-        file { $authorized_keys:
-          ensure => present,
-          owner  => $username,
-          group  => $real_gid,
-          source => $ssh_key_source,
-          mode   => '0600',
+        accounts::authorized_keys { $username:
+          real_gid             => $real_gid,
+          ssh_key              => $ssh_key,
+          ssh_keys             => $ssh_keys,
+          ssh_key_source       => $ssh_key_source,
+          authorized_keys_file => $authorized_keys_file,
+          home_dir             => $home_dir,
+          purge_ssh_keys       => $purge_ssh_keys,
+          require              => File[$home_dir],
         }
       }
 
-      # Error: Use of reserved word: type, must be quoted if intended to be a String value
-      $ssh_key_defaults = {
-        ensure  => present,
-        user    => $username,
-        'type'  => 'ssh-rsa',
-      }
-
-      if !empty($ssh_key) {
-        ssh_authorized_key { "${username}_${ssh_key['type']}":
-          ensure  => present,
-          user    => $username,
-          type    => $ssh_key['type'],
-          key     => $ssh_key['key'],
-          options => $ssh_key['options'],
-          require =>  File[$authorized_keys],
-        }
-      }
-
-      if !empty($ssh_keys) {
-        create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
-      }
     }
-    # other ensure value is not possible (exception will be thrown earlier)
+    # other ensure value is not possible (exception would be thrown earlier)
     default: {}
   }
 }

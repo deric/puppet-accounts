@@ -14,7 +14,7 @@ describe 'accounts::group', :type => :define do
       :gid   => 2001
     }}
 
-    it { should contain_group('foogroup').with(
+    it { is_expected.to contain_group('foogroup').with(
       'gid'    => 2001,
       'ensure' => 'present'
     )}
