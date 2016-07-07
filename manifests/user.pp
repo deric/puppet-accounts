@@ -105,26 +105,19 @@ define accounts::user(
     }
     'present': {
       # prior to Puppet 3.6 `purge_ssh_keys` is not supported
-      if versioncmp($::puppetversion, '3.6.0') < 0 {
-        user { $username:
-          ensure  => present,
-          uid     => $uid,
-          gid     => $real_gid,
-          #groups  => $groups, # managed via groups class
-          shell   => $shell,
-          comment => $comment,
-        }
-      } else {
-        user { $username:
-          ensure           => present,
-          uid              => $uid,
-          gid              => $real_gid,
-          #groups           => $groups, # managed via groups class
-          shell            => $shell,
-          comment          => $comment,
+      if versioncmp($::puppetversion, '3.6.0') >= 0 {
+        User<| title == $username |> {
           purge_ssh_keys   => $purge_ssh_keys,
           password_max_age => $password_max_age,
         }
+      }
+
+      user { $username:
+        ensure           => present,
+        uid              => $uid,
+        gid              => $real_gid,
+        shell            => $shell,
+        comment          => $comment,
       }
 
       # Set password if available
