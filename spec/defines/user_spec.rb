@@ -36,21 +36,21 @@ describe 'accounts::user', :type => :define do
     let(:owner) { user }
     let(:group) { group }
 
-    it { should contain_file("#{home_dir}").with({
+    it { is_expected.to contain_file("#{home_dir}").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0755'
     }) }
 
-    it { should contain_file("#{home_dir}/.ssh").with({
+    it { is_expected.to contain_file("#{home_dir}/.ssh").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0700'
     }) }
 
-    it { should contain_file("#{home_dir}/.ssh/authorized_keys").with({
+    it { is_expected.to contain_file("#{home_dir}/.ssh/authorized_keys").with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
@@ -67,7 +67,7 @@ describe 'accounts::user', :type => :define do
       :gid => 1001,
     }}
 
-    it { should contain_user('foobar').with(
+    it { is_expected.to contain_user('foobar').with(
       'uid' => 1001,
       'gid' => 1001
     )}
@@ -141,14 +141,14 @@ describe 'accounts::user', :type => :define do
       :ensure       => 'absent'
     }}
 
-    it { should contain_user('mickey').with(
+    it { is_expected.to contain_user('mickey').with(
       'ensure' => 'absent'
     )}
 
-    it { should contain_exec('killproc mickey')}
-    it { should contain_anchor('accounts::user::remove_mickey')}
+    it { is_expected.to contain_exec('killproc mickey')}
+    it { is_expected.to contain_anchor('accounts::user::remove_mickey')}
 
-    it { should contain_group('mickey').with(
+    it { is_expected.to contain_group('mickey').with(
       'ensure' => 'absent'
     )}
   end
@@ -162,14 +162,14 @@ describe 'accounts::user', :type => :define do
       :force_removal => false,
     }}
 
-    it { should contain_user('mickey').with(
+    it { is_expected.to contain_user('mickey').with(
       'ensure' => 'absent'
     )}
     # don't kill user's process
-    it { should_not contain_exec('killproc mickey')}
-    it { should contain_anchor('accounts::user::remove_mickey')}
+    it { is_expected.not_to contain_exec('killproc mickey')}
+    it { is_expected.to contain_anchor('accounts::user::remove_mickey')}
 
-    it { should contain_group('mickey').with(
+    it { is_expected.to contain_group('mickey').with(
       'ensure' => 'absent'
     )}
   end
@@ -181,11 +181,11 @@ describe 'accounts::user', :type => :define do
       :purge_ssh_keys => true
     }}
     if Gem::Version.new(puppet) < Gem::Version.new('3.6.0')
-      it { should contain_user('john').with(
+      it { is_expected.to contain_user('john').with(
         'ensure' => 'present'
       )}
     else
-      it { should contain_user('john').with(
+      it { is_expected.to contain_user('john').with(
         'ensure'         => 'present',
         'purge_ssh_keys' => true
       )}
@@ -201,7 +201,7 @@ describe 'accounts::user', :type => :define do
       :comment => nil,
     }}
 
-    it { should contain_user('foo').with(
+    it { is_expected.to contain_user('foo').with(
       'ensure' => 'present'
     )}
   end
@@ -216,7 +216,7 @@ describe 'accounts::user', :type => :define do
       :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
     }}
 
-    it { should contain_file('/home/foo/.ssh/auth_keys').with({
+    it { is_expected.to contain_file('/home/foo/.ssh/auth_keys').with({
       'ensure'  => 'present',
     }) }
   end
@@ -231,11 +231,11 @@ describe 'accounts::user', :type => :define do
       :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...'},
     }}
 
-    it { should contain_file('/home/my_auth_keys').with({
+    it { is_expected.to contain_file('/home/my_auth_keys').with({
       'ensure'  => 'present',
     }) }
 
-    it { should contain_ssh_authorized_key('foo_ssh-rsa').with(
+    it { is_expected.to contain_ssh_authorized_key('foo_ssh-rsa').with(
       'type' => 'ssh-rsa',
       'key' => 'AAAA...',
     ) }
@@ -252,12 +252,12 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('foo_ssh-rsa').with({
+    it { is_expected.to contain_ssh_authorized_key('foo_ssh-rsa').with({
       'key'     => 'AAAA',
       'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
     })}
 
-    it { should contain_file("/home/foo/.ssh/authorized_keys").with({
+    it { is_expected.to contain_file("/home/foo/.ssh/authorized_keys").with({
       'ensure'  => 'present',
       'owner'   => 'foo',
       'group'   => 'foo',
@@ -275,13 +275,13 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('jane_ssh-rsa').with({
+    it { is_expected.to contain_ssh_authorized_key('jane_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA',
       'user' => 'jane',
     })}
 
-    it { should contain_user('jane').with(
+    it { is_expected.to contain_user('jane').with(
       'ensure' => 'present'
     )}
 
@@ -298,14 +298,14 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('jake_ssh-rsa').with({
+    it { is_expected.to contain_ssh_authorized_key('jake_ssh-rsa').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-jake',
       'user' => 'jake',
       'options' => '',
     })}
 
-    it { should contain_user('jake').with(
+    it { is_expected.to contain_user('jake').with(
       'ensure' => 'present'
     )}
   end
@@ -323,14 +323,14 @@ describe 'accounts::user', :type => :define do
       },
     }}
 
-    it { should contain_ssh_authorized_key('luke_key').with({
+    it { is_expected.to contain_ssh_authorized_key('luke_key').with({
       'type' => 'ssh-rsa',
       'key'  => 'AAA-luke',
       'user' => 'luke',
       'options' => ['darth=vader', 'foo=bar'],
     })}
 
-    it { should contain_user('luke').with(
+    it { is_expected.to contain_user('luke').with(
       'ensure' => 'present'
     )}
   end

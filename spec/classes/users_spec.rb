@@ -9,25 +9,25 @@ describe 'accounts::users', :type => :class do
       :osfamily      => 'Debian',
       :puppetversion => Puppet.version,
     } }
-    it { should contain_user(user) }
+    it { is_expected.to contain_user(user) }
     # currently managed out of this class
     #it { should contain_group(user) }
 
-    it { should contain_file("/home/#{user}").with({
+    it { is_expected.to contain_file("/home/#{user}").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0755'
     }) }
 
-    it { should contain_file("/home/#{user}/.ssh").with({
+    it { is_expected.to contain_file("/home/#{user}/.ssh").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0700'
     }) }
 
-    it { should contain_file("/home/#{user}/.ssh/authorized_keys").with({
+    it { is_expected.to contain_file("/home/#{user}/.ssh/authorized_keys").with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
@@ -38,24 +38,24 @@ describe 'accounts::users', :type => :class do
   shared_examples 'not_having_user_account' do |user|
     let(:owner) { user }
     let(:group) { user }
-    it { should_not contain_user(user) }
-    it { should_not contain_group(user) }
+    it { is_expected.not_to contain_user(user) }
+    it { is_expected.not_to contain_group(user) }
 
-    it { should_not contain_file("/home/#{user}").with({
+    it { is_expected.not_to contain_file("/home/#{user}").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0700'
     }) }
 
-    it { should_not contain_file("/home/#{user}/.ssh").with({
+    it { is_expected.not_to contain_file("/home/#{user}/.ssh").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0700'
     }) }
 
-    it { should_not contain_file("/home/#{user}/.ssh/authorized_keys").with({
+    it { is_expected.not_to contain_file("/home/#{user}/.ssh/authorized_keys").with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
@@ -72,7 +72,7 @@ describe 'accounts::users', :type => :class do
 
     it do
       expect {
-        should compile
+        is_expected.to compile
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /is not a Hash/)
     end
   end

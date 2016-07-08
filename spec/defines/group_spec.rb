@@ -29,7 +29,7 @@ describe 'accounts::group', :type => :define do
 
     it do
       expect {
-        should compile
+         is_expected.to compile
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /parameter must be 'absent' or 'present'/)
     end
   end
@@ -41,7 +41,7 @@ describe 'accounts::group', :type => :define do
       :ensure   => 'absent'
     }}
 
-    it { should contain_group('my_group').with(
+    it { is_expected.to contain_group('my_group').with(
       'ensure' => 'absent'
     )}
   end

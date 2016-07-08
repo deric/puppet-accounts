@@ -10,7 +10,7 @@ describe 'accounts::groups', :type => :class do
 
     it do
       expect {
-        should compile
+         is_expected.to compile
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /is not a Hash/)
     end
   end
@@ -24,13 +24,13 @@ describe 'accounts::groups', :type => :class do
       :manage => true,
     }}
 
-    it { should compile.with_all_deps }
-    it { should contain_group('www-data').with(
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_group('www-data').with(
       'gid'    => 33,
       'ensure' => 'present'
     )}
 
-    it { should contain_group('users').with(
+    it { is_expected.to contain_group('users').with(
       'gid'    => 100,
       'ensure' => 'present'
     )}

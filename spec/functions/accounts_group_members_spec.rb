@@ -6,19 +6,19 @@ describe 'accounts_group_members' do
 
   describe 'basic usage ' do
     it 'should raise an error if run with extra arguments' do
-      subject.should run.with_params(1, 2, 3, 4).and_raise_error(Puppet::ParseError)
+      is_expected.to run.with_params(1, 2, 3, 4).and_raise_error(Puppet::ParseError)
     end
 
     it 'should raise an error with incorrect type of arguments' do
-      subject.should run.with_params(1, 2).and_raise_error(Puppet::ParseError)
+      is_expected.to run.with_params(1, 2).and_raise_error(Puppet::ParseError)
     end
 
     it 'should raise an error when running without arguments' do
-      subject.should run.with_params(nil).and_raise_error(Puppet::ParseError)
+      is_expected.to run.with_params(nil).and_raise_error(Puppet::ParseError)
     end
 
     it 'should raise an error when given incorrect type' do
-      subject.should run.with_params([]).and_raise_error(Puppet::ParseError)
+      is_expected.to run.with_params([]).and_raise_error(Puppet::ParseError)
     end
   end
 
@@ -30,7 +30,7 @@ describe 'accounts_group_members' do
         john: { 'groups' => ['bar', 'users']},
       }
 
-      subject.should run.with_params(users, {}).and_return(
+      is_expected.to run.with_params(users, {}).and_return(
         {
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},

@@ -120,54 +120,54 @@ describe 'accounts', :type => :class do
 
   context 'test hiera fixtures' do
     if Gem::Version.new(Puppet.version) >= Gem::Version.new('3.6.0')
-      it { should contain_user('myuser').with(
+      it { is_expected.to contain_user('myuser').with(
         'uid' => 1000,
         'comment' => 'My Awesome User',
         'purge_ssh_keys' => true,
       )}
     else
-      it { should contain_user('myuser').with(
+      it { is_expected.to contain_user('myuser').with(
         'uid' => 1000,
         'comment' => 'My Awesome User',
         # no purge_ssh_keys attribute
       )}
     end
 
-    it { should contain_ssh_authorized_key('myawesomefirstkey').with(
+    it { is_expected.to contain_ssh_authorized_key('myawesomefirstkey').with(
       'type' => 'ssh-rsa',
       'key' => 'yay',
     )}
 
-    it { should contain_ssh_authorized_key('myawesomesecondkey').with(
+    it { is_expected.to contain_ssh_authorized_key('myawesomesecondkey').with(
       'type' => 'ssh-rsa',
       'key' => 'hey',
     )}
 
     context 'root account' do
-      it { should contain_user('root').with(
+      it { is_expected.to contain_user('root').with(
         'uid' => 0,
         'shell' => '/bin/bash',
       )}
 
-      it { should contain_group('root').with(
+      it { is_expected.to contain_group('root').with(
         'gid'    => 0,
         'ensure' => 'present'
       )}
 
-      it { should contain_file("/root").with({
+      it { is_expected.to contain_file("/root").with({
         'ensure'  => 'directory',
         'owner'   => 'root',
         'group'   => '0',
         'mode'    => '0755'
       }) }
 
-      it { should contain_ssh_authorized_key('root_key1').with(
+      it { is_expected.to contain_ssh_authorized_key('root_key1').with(
         'type' => 'ssh-rsa',
         'key'  => 'AAA_key1',
         'user' => 'root',
       )}
 
-      it { should contain_ssh_authorized_key('root_key2').with(
+      it { is_expected.to contain_ssh_authorized_key('root_key2').with(
         'type' => 'ssh-rsa',
         'key'  => 'AAA_key2',
         'user' => 'root',
@@ -175,29 +175,29 @@ describe 'accounts', :type => :class do
     end
 
     context 'superman account' do
-      it { should contain_user('superman').with(
+      it { is_expected.to contain_user('superman').with(
         'shell' => '/bin/bash',
       )}
 
       it_behaves_like 'having account', 'superman', nil, 'superman', nil
 
-      it { should contain_group('superheroes').with(
+      it { is_expected.to contain_group('superheroes').with(
         'ensure' => 'present',
         'members' => ['batman', 'superman']
       )}
 
-      it { should contain_group('sudo').with(
+      it { is_expected.to contain_group('sudo').with(
         'ensure' => 'present',
       )}
 
-      it { should contain_ssh_authorized_key('super_key').with(
+      it { is_expected.to contain_ssh_authorized_key('super_key').with(
         'type' => 'ssh-dss',
         'key'  => 'AAABBB',
         'user' => 'superman',
         'options' => ['permitopen="10.0.0.1:3306"'],
       )}
 
-      it { should contain_file("/home/superman").with({
+      it { is_expected.to contain_file("/home/superman").with({
         'ensure'  => 'directory',
         'owner'   => 'superman',
         'group'   => 'superman',
@@ -206,7 +206,7 @@ describe 'accounts', :type => :class do
     end
 
     context 'deadpool account' do
-      it { should contain_user('deadpool').with(
+      it { is_expected.to contain_user('deadpool').with(
         'ensure' => 'absent',
       )}
     end
@@ -236,16 +236,16 @@ describe 'accounts', :type => :class do
       }}
     }}
 
-    it { should contain_user('foo').with(
+    it { is_expected.to contain_user('foo').with(
       'ensure' => 'present',
       'home' => '/home/foo'
     )}
 
-    it { should contain_group('foo').with(
+    it { is_expected.to contain_group('foo').with(
       'ensure' => 'present'
     )}
 
-    it { should contain_group('users').with(
+    it { is_expected.to contain_group('users').with(
       'ensure' => 'present',
       'members' => ['foo'],
     )}
@@ -263,16 +263,16 @@ describe 'accounts', :type => :class do
       },
     }}
 
-    it { should contain_user('foo').with(
+    it { is_expected.to contain_user('foo').with(
       'ensure' => 'present',
       'home' => '/home/foo'
     )}
 
-    it { should contain_group('foo').with(
+    it { is_expected.to contain_group('foo').with(
       'ensure' => 'present'
     )}
 
-    it { should contain_group('users').with(
+    it { is_expected.to contain_group('users').with(
       'ensure' => 'present',
       'members' => ['foo', 'myuser', 'root'], # acounts from hiera/default.yaml
     )}
@@ -297,7 +297,7 @@ describe 'accounts', :type => :class do
       }}
     }}
 
-    it { should_not contain_group('mickey').with(
+    it { is_expected.not_to contain_group('mickey').with(
       'ensure' => 'present'
     )}
   end
