@@ -102,6 +102,28 @@ accounts::users:
         key: 'AAAAB...'
 ```
 
+### Additional SSH key options
+
+SSH allows providing many options regarding authorized keys, see [SSH documentation](http://man.openbsd.org/OpenBSD-current/man8/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT) for complete specification.
+
+Options should be passed as an array:
+```yaml
+accounts::users:
+  foo:
+    ssh_keys:
+      'mykey1':
+        type: 'ssh-rsa'
+        key: 'AAAA....'
+        options:
+          - 'permitopen="10.4.3.29:3306"'
+          - 'permitopen="10.4.3.30:5432"'
+          - 'no-port-forwarding'
+          - 'no-X11-forwarding'
+          - 'no-agent-forwarding'
+          - 'from="serverA,serverB"'
+          - 'command="/path/to/script.sh arg1 $SSH_ORIGINAL_COMMAND"'
+```
+
 ## User
 
 * `authorized_keys_file` - allows proividing location of custom `authorized_keys`

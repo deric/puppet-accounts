@@ -248,13 +248,13 @@ describe 'accounts::user', :type => :define do
       :ssh_key => {
         'type'    => 'ssh-rsa',
         'key'     => 'AAAA',
-        'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
+        'options' => [ 'permitopen="10.4.3.29:3306"','permitopen="10.4.3.30:5432"']
       },
     }}
 
     it { is_expected.to contain_ssh_authorized_key('foo_ssh-rsa').with({
       'key'     => 'AAAA',
-      'options' => 'permitopen="10.4.3.29:3306",permitopen="10.4.3.30:5432"'
+      'options' =>  ['permitopen="10.4.3.29:3306"','permitopen="10.4.3.30:5432"']
     })}
 
     it { is_expected.to contain_file("/home/foo/.ssh/authorized_keys").with({
