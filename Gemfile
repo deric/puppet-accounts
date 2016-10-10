@@ -15,6 +15,11 @@ group :test do
   gem 'librarian-puppet' , '>=2.0'
   # newer versions require ruby 2.2
   gem 'listen', '< 3.1'
+  if RUBY_VERSION =~ /^1\.9\./ or RUBY_VERSION =~ /^1\.8\./
+    gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
+    gem 'json_pure', '< 2.0.0'
+    gem 'fog-google', '< 0.1.1'
+  end
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
   gem "puppet-lint-trailing_comma-check"
@@ -33,7 +38,12 @@ end
 
 group :system_tests do
   gem 'pry'
-  gem 'beaker'
+  if RUBY_VERSION =~ /^2\.0\./ or RUBY_VERSION =~ /^2\.1\./
+    # beaker 3 requires Ruby version >= 2.2.5
+    gem 'beaker', '< 3.0'
+  else
+    gem 'beaker'
+  end
   gem 'beaker-rspec'
   gem 'beaker-hiera'
   gem 'beaker-puppet_install_helper'
