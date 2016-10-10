@@ -126,12 +126,24 @@ define accounts::user(
       }
 
       if $managehome == true {
-        file { $home_dir:
-          ensure  => directory,
-          owner   => $username,
-          group   => $real_gid,
-          recurse => $recurse_permissions,
-          mode    => $home_permissions,
+        if $populate_home == true {
+          file { $home_dir:
+            ensure  => directory,
+            owner   => $username,
+            group   => $real_gid,
+            recurse => 'remote',
+            mode    => $home_permissions,
+            source  => "${home_directory_contents}/${username}",
+          }
+        }
+        else {
+          file { $home_dir:
+            ensure  => directory,
+            owner   => $username,
+            group   => $real_gid,
+            recurse => $recurse_permissions,
+            mode    => $home_permissions,
+          }
         }
 
         # see https://github.com/deric/puppet-accounts/pull/44

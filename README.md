@@ -148,6 +148,18 @@ accounts:
 
  Note that configuration from Hiera gets merged to with Puppet code.
 
+### Populate home folder
+
+Allows fetching user's directory content from some storage:
+
+```yaml
+accounts::users:
+ john:
+   populate_home: true
+   home_directory_contents: 'puppet:///modules/accounts'
+```
+which default to `puppet:///modules/accounts/{username}`.
+
 ### Testing
 
 Which accounts will be installed on specific machine can be checked from command line:

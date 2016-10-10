@@ -378,6 +378,45 @@ describe 'accounts::user', :type => :define do
         'match'  => '^umask \+[0-9][0-9][0-9]',
       }) }
     end
+  end
+
+
+  context 'populate home directory' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+    let(:params) do
+      {
+        home: home,
+        populate_home: true,
+      }
+    end
+
+    it { is_expected.to contain_file("#{home}").with({
+      'ensure'  => 'directory',
+      'owner'   => title,
+      'group'   => title,
+      'mode'    => '0755',
+      'recurse' => 'remote',
+      'source'  => "puppet:///modules/accounts/#{title}",
+    }) }
+
+    describe 'allow changing home dir source' do
+      let(:params) do
+        {
+          home: home,
+          populate_home: true,
+          home_directory_contents: '/mnt/store'
+        }
+      end
+      it { is_expected.to contain_file("#{home}").with({
+        'ensure'  => 'directory',
+        'owner'   => title,
+        'group'   => title,
+        'mode'    => '0755',
+        'recurse' => 'remote',
+        'source'  => "/mnt/store/#{title}",
+      }) }
+    end
 
   end
 
