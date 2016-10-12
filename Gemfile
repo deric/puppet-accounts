@@ -19,6 +19,7 @@ group :test do
     gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
     gem 'json_pure', '< 2.0.0'
     gem 'fog-google', '< 0.1.1'
+    gem 'google-api-client', '< 0.9'
   end
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"

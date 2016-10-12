@@ -1,7 +1,7 @@
 bundler_args: --without development
 sudo: false
-services:
-  - docker
+#services:
+#  - docker
 addons:
   apt:
     packages:
@@ -17,9 +17,8 @@ script:
   - RAKE_ENV=ci bundle exec rake lint
 #  - BEAKER_set=ubuntu-1404-docker RAKE_ENV=ci bundle exec rake acceptance
 rvm:
-# google-api-client doesn't support ruby < 2.0
-#  - 1.9.3
 # see http://rubies.travis-ci.org/
+  - 1.9.3
   - 2.0.0
   - 2.1.10
 env:
@@ -27,7 +26,8 @@ env:
   - PUPPET_VERSION="~> 3.4.0"
   - PUPPET_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
   - PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
-  - PUPPET_VERSION="~> 4.0.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 4.3.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.7.0" STRICT_VARIABLES=yes
