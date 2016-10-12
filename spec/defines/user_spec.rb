@@ -10,21 +10,21 @@ describe 'accounts::user', :type => :define do
     let(:owner) { user }
     let(:group) { user }
 
-    it { should_not contain_file("#{home_dir}").with({
+    it { is_expected.not_to contain_file("#{home_dir}").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0755'
     }) }
 
-    it { should_not contain_file("#{home_dir}/.ssh").with({
+    it { is_expected.not_to contain_file("#{home_dir}/.ssh").with({
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
       'mode'    => '0700'
     }) }
 
-    it { should_not contain_file("#{home_dir}/.ssh/authorized_keys").with({
+    it { is_expected.not_to contain_file("#{home_dir}/.ssh/authorized_keys").with({
       'ensure'  => 'present',
       'owner'   => owner,
       'group'   => group,
@@ -128,7 +128,7 @@ describe 'accounts::user', :type => :define do
 
     it do
       expect {
-        should compile
+        is_expected.to compile
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /parameter must be 'absent' or 'present'/)
     end
   end
@@ -417,7 +417,21 @@ describe 'accounts::user', :type => :define do
         'source'  => "/mnt/store/#{title}",
       }) }
     end
-
   end
 
+  context 'set allowdupe' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+    let(:params) do
+      {
+        allowdupe: true,
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name'      => 'foo',
+      'allowdupe' => true,
+    )}
+
+  end
 end

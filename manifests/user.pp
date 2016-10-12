@@ -1,5 +1,10 @@
 # Linux user account
 #
+#  Parameters:
+#
+#  * [allowdupe] - Whether to allow duplicate UIDs. Defaults to false.
+#  * [comment] - A description of the user. Generally the user’s full name.
+#
 define accounts::user(
   $uid = undef,
   $gid = undef,
@@ -30,6 +35,7 @@ define accounts::user(
   $populate_home = false,
   $home_directory_contents = 'puppet:///modules/accounts',
   $password_max_age = undef,
+  $allowdupe = false,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -118,6 +124,7 @@ define accounts::user(
         gid              => $real_gid,
         shell            => $shell,
         comment          => $comment,
+        allowdupe        => $allowdupe,
       }
 
       # Set password if available
