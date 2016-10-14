@@ -44,6 +44,9 @@ define accounts::user(
   $purge_ssh_keys = false,
   $shell ='/bin/bash',
   $pwhash = '',
+  $password = undef,
+  $salt = undef,
+  $hash = 'SHA-512',
   $managehome = true,
   $manage_group = true, # create a group with '$primary_group' name
   $manageumask = false,
@@ -66,6 +69,23 @@ define accounts::user(
   validate_bool($managehome)
   if ! is_array($purge_ssh_keys) {
     validate_bool($purge_ssh_keys)
+  }
+
+  validate_string($password)
+  if $pwhash != '' and $password {
+    fail("You cannot set both \$pwhash and \$password for ${username}.")
+  }
+  if $password {
+    if $salt {
+      validate_string($salt)
+    } else {
+      fail('You need to specify a salt for hashing cleartext passwords.')
+    }
+    if $hash {
+      validate_string($hash)
+    } else {
+      fail('You need to specify a hash function for hashing cleartext passwords.')
+    }
   }
 
   if ($gid) {
@@ -155,6 +175,11 @@ define accounts::user(
       # Set password if available
       if $pwhash != '' {
         User<| title == $username |> { password => $pwhash }
+      }
+      # Work on cleartext password if available
+      if $password {
+        $pwh = pw_hash($password, $hash, $salt)
+        User<| title == $username |> { password => $pwh }
       }
 
       if $managehome == true {
