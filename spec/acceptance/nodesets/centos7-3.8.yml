@@ -1,9 +1,9 @@
 HOSTS:
-  centos-7-x64:
+  centos7-3.8:
     platform: el-7-x86_64
     hypervisor : docker
-    image: centos:7
-    docker_preserve_image: true
+    image: deric/centos7-puppet:3.8.7
+    docker_preserve_image: false
 CONFIG:
   masterless: true
   log_level: verbose

@@ -143,6 +143,6 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       end
 
     end
- end
+  end
 
 end
