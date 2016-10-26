@@ -39,7 +39,9 @@ end
 
 group :system_tests do
   gem 'pry'
-  gem 'beaker'
-  gem 'beaker-rspec'
-  gem 'beaker-puppet_install_helper'
+  if RUBY_VERSION.split('.')[0,3].join.to_i > 225
+    gem 'beaker'
+    gem 'beaker-rspec'
+    gem 'beaker-puppet_install_helper'
+  end
 end
