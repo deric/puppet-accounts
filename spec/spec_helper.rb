@@ -9,7 +9,7 @@ Puppet::Util::Log.newdestination(:console)
 RSpec.configure do |c|
   #c.treat_symbols_as_metadata_keys_with_true_values = true
   c.include PuppetlabsSpec::Files
-  c.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
+  #c.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
 end
 
 at_exit { RSpec::Puppet::Coverage.report! }
