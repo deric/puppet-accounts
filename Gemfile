@@ -39,9 +39,10 @@ end
 
 group :system_tests do
   gem 'pry'
-  if RUBY_VERSION >= "2.2.5"
-    gem 'beaker'
-    gem 'beaker-rspec'
-    gem 'beaker-puppet_install_helper'
-  end
+  gem 'beaker' if RUBY_VERSION >= '2.3.0'
+  gem 'beaker', '< 3' if RUBY_VERSION >= '2.3.0'
+  gem 'beaker-rspec'
+  gem 'beaker-puppet_install_helper'
+  gem 'serverspec'
+  gem 'beaker-hostgenerator'
 end
