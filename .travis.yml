@@ -33,7 +33,7 @@ env:
   - PUPPET_VERSION="~> 4.3.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 4.7.0" STRICT_VARIABLES=yes
 matrix:
-  allow_failures:
+  include:
   - rvm: 2.3.1
     dist: trusty
     env: RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=ubuntu-14.04
