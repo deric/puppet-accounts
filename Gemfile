@@ -15,7 +15,7 @@ group :test do
   gem 'librarian-puppet' , '>=2.0'
   # newer versions require ruby 2.2
   gem "listen", "~> 3.0.0"
-  if RUBY_VERSION =~ /^1\.9\./ or RUBY_VERSION =~ /^1\.8\./
+  if RUBY_VERSION < "2.0.0"
     gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
     gem 'json_pure', '< 2.0.0'
     gem 'fog-google', '< 0.1.1'
@@ -39,7 +39,7 @@ end
 
 group :system_tests do
   gem 'pry'
-  if RUBY_VERSION.split('.')[0,3].join.to_i > 225
+  if RUBY_VERSION >= "2.2.5"
     gem 'beaker'
     gem 'beaker-rspec'
     gem 'beaker-puppet_install_helper'

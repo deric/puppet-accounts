@@ -9,7 +9,7 @@ require 'puppet-syntax/tasks/puppet-syntax'
 require 'metadata-json-lint/rake_task'
 
 # blacksmith does not support ruby 1.8.7 anymore
-if ENV.key? 'BEAKER_set' or (ENV['RAKE_ENV'] != 'ci' and RUBY_VERSION.split('.')[0,3].join.to_i > 187)
+if ENV['RAKE_ENV'] != 'ci' and RUBY_VERSION >= "1.8.7"
   require 'puppet_blacksmith/rake_tasks'
 end
 
