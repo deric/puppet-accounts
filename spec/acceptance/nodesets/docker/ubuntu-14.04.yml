@@ -3,7 +3,7 @@ HOSTS:
     platform: ubuntu-14.04-x64
     image: ubuntu:14.04
     hypervisor: docker
-    docker_preserve_image: true
+    docker_preserve_image: false
 CONFIG:
   log_level: verbose
   masterless: true
