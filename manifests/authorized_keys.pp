@@ -1,7 +1,7 @@
 # Manage authorized ssh keys
 #
 define accounts::authorized_keys(
-  $real_gid,
+  $real_gid = $title,
   $ssh_keys,
   $home_dir,
   $purge_ssh_keys,
