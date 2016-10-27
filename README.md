@@ -284,36 +284,21 @@ $ bundle install
 $ bundle exec rake spec
 ```
 
-## Acceptance testing
+## Acceptance testing (work in progress)
 
-Just run:
+Fastest way is to run tests on prepared Docker images:
 ```
-bundle exec rake acceptance
+rake beaker:debian8-3.7
 ```
-When host machine is provisioned (puppet installed, etc.):
+When host machine is NOT provisioned (puppet installed, etc.):
 ```
-BEAKER_provision=no bundle exec rake acceptance
-```
-detailed Vagrant log:
-```
-VAGRANT_LOG=DEBUG BEAKER_provision=no bundle exec rake acceptance
+PUPPET_install=yes bundle exec rake beaker:debian-8
 ```
 
-Run on specific OS (see `spec/acceptance/nodesets`):
+Run on specific OS (see `spec/acceptance/nodesets`), to see available sets:
 ```
-BEAKER_set=centos-7-x64 bundle exec rake acceptance
+rake beaker:sets
 ```
-
-Change Vagrant provider:
-```
-export VAGRANT_DEFAULT_PROVIDER=lxc
-```
-
-Don't destroy machine after running specs:
-```
-BEAKER_destroy=no bundle exec rake acceptance
-```
-
 
 ## License
 

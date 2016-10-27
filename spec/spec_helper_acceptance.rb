@@ -2,7 +2,7 @@ require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 
-run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
+run_puppet_install_helper if ENV['PUPPET_install'] == 'yes'
 
 UNSUPPORTED_PLATFORMS = ['Suse','windows','AIX','Solaris']
 

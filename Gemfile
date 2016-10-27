@@ -11,6 +11,7 @@ group :test do
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
   gem 'deep_merge'
+  gem 'hiera'
   gem 'librarian-puppet' , '>=2.0'
   # newer versions require ruby 2.2
   if RUBY_VERSION < "2.2.0"

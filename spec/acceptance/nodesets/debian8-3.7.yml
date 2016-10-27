@@ -1,0 +1,13 @@
+HOSTS:
+  debian-8-x64:
+    platform: debian-8-amd64
+    hypervisor : docker
+    image: deric/jessie-puppet:3.7.4
+    docker_preserve_image: false
+    roles:
+      - agent
+    debug: true
+CONFIG:
+  masterless: true
+  log_level: verbose
+  type: foss
