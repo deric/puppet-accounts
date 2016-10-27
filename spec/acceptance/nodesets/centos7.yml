@@ -10,3 +10,4 @@ HOSTS:
       - 'yum install -y crontabs tar wget openssl sysvinit-tools iproute which initscripts'
 CONFIG:
   trace_limit: 200
+  type: foss

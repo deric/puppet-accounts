@@ -40,8 +40,14 @@ end
 group :system_tests do
   gem 'pry'
   # beaker-rspec will require beaker gem
-  gem 'beaker-rspec' if RUBY_VERSION >= '2.3.0'
-  gem 'beaker-rspec', '< 3' if RUBY_VERSION >= '2.3.0'
+  if RUBY_VERSION >= '2.2.5'
+    gem 'beaker'
+  else
+    gem 'beaker', '< 3'
+  end
+  gem 'beaker-rspec'
   gem 'serverspec'
   gem 'beaker-hostgenerator'
+  gem 'beaker-puppet_install_helper'
+  gem 'master_manipulator'
 end

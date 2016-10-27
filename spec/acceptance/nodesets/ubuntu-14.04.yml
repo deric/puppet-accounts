@@ -10,3 +10,4 @@ HOSTS:
       - 'rm /usr/sbin/policy-rc.d && rm /sbin/initctl && dpkg-divert --rename --remove /sbin/initctl && apt-get update && apt-get install -y net-tools wget && locale-gen en_US.UTF-8'
 CONFIG:
   trace_limit: 200
+  type: foss
