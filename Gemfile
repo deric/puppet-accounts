@@ -7,8 +7,7 @@ group :test do
   gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
-  gem "rspec-puppet-facts"
-  gem 'rubocop'
+  gem 'rspec-puppet-facts'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
   gem 'deep_merge'
@@ -22,6 +21,9 @@ group :test do
     gem 'json_pure', '< 2.0.0'
     gem 'fog-google', '< 0.1.1'
     gem 'google-api-client', '< 0.9'
+    gem 'rubocop','~> 0.33.0'
+  else
+    gem 'rubocop'
   end
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
