@@ -3,18 +3,20 @@ source "https://rubygems.org"
 group :test do
   gem "rake"
   gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 5.0']
-  gem "rspec", '< 3.2.0'
-  gem 'rspec-puppet', '~> 2.3.0'
+  gem "rspec"
+  gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
-  gem 'rubocop', '0.33.0'
+  gem 'rubocop'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
   gem 'deep_merge'
   gem 'librarian-puppet' , '>=2.0'
   # newer versions require ruby 2.2
-  gem "listen", "~> 3.0.0"
+  if RUBY_VERSION < "2.2.0"
+    gem 'listen', '~> 3.0.0'
+  end
   if RUBY_VERSION < "2.0.0"
     gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
     gem 'json_pure', '< 2.0.0'
