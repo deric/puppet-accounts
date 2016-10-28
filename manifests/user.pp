@@ -3,7 +3,7 @@
 #  Parameters:
 #
 #  * [allowdupe] - Whether to allow duplicate UIDs. Defaults to false.
-#  * [comment] - A description of the user. Generally the user’s full name.
+#  * [comment] - A description of the user. Generally the user's full name.
 #
 define accounts::user(
   $uid = undef,
