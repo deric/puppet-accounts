@@ -119,12 +119,12 @@ define accounts::user(
       }
 
       user { $username:
-        ensure           => present,
-        uid              => $uid,
-        gid              => $real_gid,
-        shell            => $shell,
-        comment          => $comment,
-        allowdupe        => $allowdupe,
+        ensure    => present,
+        uid       => $uid,
+        gid       => $real_gid,
+        shell     => $shell,
+        comment   => $comment,
+        allowdupe => $allowdupe,
       }
 
       # Set password if available
