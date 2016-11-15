@@ -23,7 +23,7 @@ RSpec.configure do |c|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
       #binding.pry
-      #copy_hiera_data_to(host, './spec/acceptance/hiera/')
+      copy_hiera_data_to(host, './spec/acceptance/hiera/')
     end
     puppet_module_install(:source => proj_root, :module_name => 'accounts')
   end

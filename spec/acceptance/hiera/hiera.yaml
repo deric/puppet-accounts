@@ -1,0 +1,8 @@
+---
+:backends:
+  - yaml
+:hierarchy:
+  - default
+:yaml:
+  :datadir: '/etc/puppet/hiera'
+:merge_behavior: deep

@@ -1,0 +1,10 @@
+---
+accounts::users:
+  root:
+    ssh_keys:
+      'key1':
+        type: 'ssh-rsa'
+        key: 'AAAA'
+      'key2':
+        type: 'ssh-dsa'
+        key: 'BBBB'
