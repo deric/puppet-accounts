@@ -8,20 +8,18 @@ This is puppet module for managing user accounts, groups and setting ssh keys.
 
 Origin: https://github.com/deric/puppet-accounts
 
-in node definition include:
+Basic usage:
 
 ```puppet
-class {'accounts':
-  user_defaults => {
-    purge_ssh_keys => true, # will delete all authorized keys that are not in Puppet
-  }
-}
+class {'::accounts':}
 ```
 
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
 ```YAML
 accounts::user_defaults:
+  shell: '/bin/bash'
+  # will delete all authorized keys that are not in Puppet
   purge_ssh_keys: true
 accounts::groups:
   www-data:
@@ -73,6 +71,19 @@ accounts::users:
      - 'www-data'
 ```
 Optionally you can assign user to other groups by supplying a `groups` array.
+
+### Primary group
+
+Account's primary group can be configured using `primary_group` parameter:
+```yaml
+accounts::users:
+ john:
+   manage_group: true
+   primary_group: 'doe'
+   groups:
+     - 'sudo'
+```
+it can be defined numerically or as a group name. Setting [directly `gid`](https://docs.puppet.com/puppet/latest/reference/types/user.html#user-attribute-gid) parametr would have the same effect.
 
 ### Account removal
 
