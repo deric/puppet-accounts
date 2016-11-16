@@ -434,4 +434,24 @@ describe 'accounts::user', :type => :define do
     )}
 
   end
+
+  context 'primary group with different name than user account' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+    let(:params) do
+      {
+        # parameters is ignored because `primary_group` was explicitly set
+        manage_group: false,
+        primary_group: 'mygroup',
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name' => 'foo',
+      'gid'  => 'mygroup',
+      'home' => '/home/foo'
+    )}
+
+  end
+
 end

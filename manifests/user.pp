@@ -4,11 +4,18 @@
 #
 #  * [allowdupe] - Whether to allow duplicate UIDs. Defaults to false.
 #  * [comment] - A description of the user. Generally the user's full name.
+#  * [uid] - Force User ID (in Linux)
+#  * [gid] - Force Group ID
+#  * [manage_group] - Whether primary group with the same name as
+#                    the account name should be created
+#  * [primary_group] - name of user's primary group, if empty account name
+#                    wikk be used.
 #
 define accounts::user(
   $uid = undef,
   $gid = undef,
-  $primary_group = "${title}", # lint:ignore:only_variable_string # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
+  $primary_group = undef,
+  # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   $comment = "${title}",  # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
   $username = "${title}", # lint:ignore:only_variable_string
   $groups = [],
@@ -50,11 +57,14 @@ define accounts::user(
     $real_gid = $gid
   } else {
     if $ensure == 'present' {
-      if $manage_group {
+      if $primary_group {
         $real_gid = $primary_group
       } else {
         # see https://github.com/deric/puppet-accounts/issues/41
-        $real_gid = undef
+        $real_gid = $manage_group ? {
+          true  => $username,
+          false => undef
+        }
       }
     } else {
       $real_gid = undef
@@ -103,7 +113,11 @@ define accounts::user(
       }
 
       if $manage_group == true {
-        group { $primary_group:
+        $pg_name = $primary_group ? {
+          undef   => $username,
+          default => $primary_group
+        }
+        group { $pg_name:
           ensure  => absent,
           gid     => $real_gid,
           require => User[$username],
