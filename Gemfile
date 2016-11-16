@@ -23,6 +23,7 @@ group :test do
     gem 'fog-google', '< 0.1.1'
     gem 'google-api-client', '< 0.9'
     gem 'rubocop','~> 0.33.0'
+    gem 'public_suffix', '< 1.5.0'
   else
     gem 'rubocop'
   end
