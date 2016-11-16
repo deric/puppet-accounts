@@ -56,17 +56,15 @@ define accounts::user(
   if ($gid) {
     $real_gid = $gid
   } else {
-    if $ensure == 'present' {
-      if $manage_group == true {
-        $real_gid = pick($primary_group, $username)
-      } else {
-        # see https://github.com/deric/puppet-accounts/issues/41
-        $real_gid = undef
-      }
+    if $ensure == 'present' and $manage_group == true {
+      # choose first non empty argument
+      $real_gid = pick($primary_group, $username)
     } else {
+      # see https://github.com/deric/puppet-accounts/issues/41
       $real_gid = undef
     }
   }
+  User<| title == $username |> { gid => $real_gid }
 
   if $home {
     $home_dir = $home
@@ -105,7 +103,6 @@ define accounts::user(
       user { $username:
         ensure  => absent,
         uid     => $uid,
-        gid     => $real_gid,
         require => Anchor["accounts::user::remove_${name}"],
       }
 
@@ -133,7 +130,6 @@ define accounts::user(
       user { $username:
         ensure    => present,
         uid       => $uid,
-        gid       => $real_gid,
         shell     => $shell,
         comment   => $comment,
         allowdupe => $allowdupe,
