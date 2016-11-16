@@ -11,11 +11,11 @@
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 4.2.0"
+      "version_requirement": ">= 4.2.0 < 5.0.0"
     },
     {
       "name": "deric-gpasswd",
-      "version_requirement": ">= 0.2.2"
+      "version_requirement": ">= 0.2.2 < 1.0.0"
     }
   ],
   "operatingsystem_support": [
