@@ -440,8 +440,8 @@ describe 'accounts::user', :type => :define do
     let(:home) { '/home/foo' }
     let(:params) do
       {
-        # parameters is ignored because `primary_group` was explicitly set
-        manage_group: false,
+        # manage group must be `true`
+        manage_group: true,
         primary_group: 'mygroup',
       }
     end

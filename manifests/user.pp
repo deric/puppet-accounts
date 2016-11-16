@@ -57,14 +57,11 @@ define accounts::user(
     $real_gid = $gid
   } else {
     if $ensure == 'present' {
-      if $primary_group {
-        $real_gid = $primary_group
+      if $manage_group == true {
+        $real_gid = pick($primary_group, $username)
       } else {
         # see https://github.com/deric/puppet-accounts/issues/41
-        $real_gid = $manage_group ? {
-          true  => $username,
-          false => undef
-        }
+        $real_gid = undef
       }
     } else {
       $real_gid = undef

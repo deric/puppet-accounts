@@ -315,7 +315,7 @@ describe 'accounts', :type => :class do
 
   # see #41, #46
   # https://github.com/deric/puppet-accounts/issues/41
-  context 'honore manage group' do
+  context 'honore manage group=false' do
     let(:params){{
       :groups => { 'staff' => {
         'gid' => 3000
@@ -332,7 +332,7 @@ describe 'accounts', :type => :class do
       'ensure' => 'present',
       'home' => '/home/account1',
       'uid' => 1417,
-      'gid' => nil,
+      'gid' => nil, # should be :undef, but doesn't work yet
     )}
 
     it { is_expected.to contain_accounts__user('account1').with(
