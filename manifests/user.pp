@@ -53,7 +53,8 @@ define accounts::user(
       if $manage_group {
         $real_gid = $primary_group
       } else {
-        $real_gid = $uid
+        # see https://github.com/deric/puppet-accounts/issues/41
+        $real_gid = undef
       }
     } else {
       $real_gid = undef
