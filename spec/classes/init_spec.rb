@@ -313,4 +313,39 @@ describe 'accounts', :type => :class do
     it_behaves_like 'having account', 'foobar', 1001, 'foobar', 1001
   end
 
+  # see #41, #46
+  # https://github.com/deric/puppet-accounts/issues/41
+  context 'honore manage group' do
+    let(:params){{
+      :groups => { 'staff' => {
+        'gid' => 3000
+        }
+      },
+      :users => { 'account1' => {
+        'manage_group' => false,
+        'uid' => 1417,
+        'groups' => ['staff'],
+      }}
+    }}
+
+    it { is_expected.to contain_user('account1').with(
+      'ensure' => 'present',
+      'home' => '/home/account1',
+      'uid' => 1417,
+      'gid' => nil,
+    )}
+
+    it { is_expected.to contain_accounts__user('account1').with(
+      'username' => 'account1',
+      'uid' => 1417,
+      'gid' => nil,
+    )}
+
+    it { is_expected.to contain_group('staff').with(
+      'ensure' => 'present',
+      'gid' => 3000,
+      'members' => ['account1'],
+    )}
+  end
+
 end
