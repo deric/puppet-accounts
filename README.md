@@ -78,11 +78,13 @@ Account's primary group can be configured using `primary_group` parameter:
 ```yaml
 accounts::users:
  john:
+   # will create primary group `doe` instead of default `john` group
    primary_group: 'doe'
+   manage_group: true
    groups:
      - 'sudo'
 ```
-it can be defined numerically or as a group name. Setting [directly `gid`](https://docs.puppet.com/puppet/latest/reference/types/user.html#user-attribute-gid) parametr would have the same effect. Parameter `manage_group` is not considered when you set `primary_group` or `gid`.
+it can be defined numerically or as a group name. Setting [directly `gid`](https://docs.puppet.com/puppet/latest/reference/types/user.html#user-attribute-gid) parametr would have the same effect. Parameter `manage_group` is not considered when you set `gid`.
 
 ### Account removal
 
