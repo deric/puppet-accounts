@@ -4,13 +4,10 @@ require 'pry'
 describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   # see https://github.com/deric/puppet-accounts/issues/50
   context 'manage users' do
+    # group is declared in users definition
     let(:pp) do
       <<-EOS
-        class {'accounts::users':
-          manage => true,
-          defaults => {
-            shell => '/bin/dash',
-          },
+        class {'::accounts':
           users => {
             'dalp' => {
               'uid' => '1005',
@@ -48,12 +45,19 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe user('dalp') do
       it { should exist }
-      it { should have_gid 1005 }
+      it { should have_uid 1005 }
+    end
+
+    describe group('dalp') do
+      it { should exist }
+      # group ID was not stated explicitly, first available should
+      # be used
+      it { should have_gid 1001 }
     end
 
     describe user('deployer') do
       it { should exist }
-      it { should have_gid 1010 }
+      it { should have_uid 1010 }
     end
 
   end
