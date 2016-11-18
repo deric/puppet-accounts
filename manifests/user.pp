@@ -1,3 +1,21 @@
+# ==============================
+# SHOULD NOT BE CALLED DIRECTLY!
+# ==============================
+# Always include main class definition:
+#
+#  class{ '::accounts': }
+#
+# or with pure YAML declaration, site.pp:
+#
+#  hiera_include('classes')
+#
+# hiera configuration e.g. default.yaml:
+#   classes:
+#     - '::accounts'
+#   accounts::users:
+#     myuser:
+#       groups: ['users']
+#
 # Linux user account
 #
 #  Parameters:

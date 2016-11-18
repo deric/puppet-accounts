@@ -14,6 +14,19 @@ Basic usage:
 class {'::accounts':}
 ```
 
+or with pure YAML declaration make sure to use the `hiera_include` function e.g. in `site.pp` (see [Hiera docs for details](https://docs.puppet.com/hiera/3.2/complete_example.html#using-hierainclude)):
+```puppet
+hiera_include('classes')
+```
+and all other definition can be in YAML hierarchy:
+```yaml
+classes:
+  - '::accounts'
+accounts::users:
+  myuser:
+    groups: ['users']
+```
+
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
 ```YAML
