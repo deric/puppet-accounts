@@ -28,6 +28,10 @@
 #                    the account name should be created
 #  * [primary_group] - name of user's primary group, if empty account name
 #                    wikk be used.
+#  * [pwhash] - password hash for the user
+#  * [password] - (optional) cleartext password, will be hashed (mutually exclusive with `pwhash`!)
+#  * [salt] - (optional, default random/fact based) salt for hashing the `password`
+#  * [hash] - (optional, default 'SHA-512') password hash function to use (see puppetlabs/stdlib#pw_hash)
 #
 define accounts::user(
   $uid = undef,
@@ -76,10 +80,19 @@ define accounts::user(
     fail("You cannot set both \$pwhash and \$password for ${username}.")
   }
   if $password {
+    # explicit salt given. just ensure it's a string.
     if $salt {
-      validate_string($salt)
+      validate_re($salt, '^[A-Za-z0-9\./]{,16}$')
+      $_salt = $salt
+    # if no explicit salt is given, try to get it from fact or generate
+    # (generation thus only on first run, when user is not present)
     } else {
-      fail('You need to specify a salt for hashing cleartext passwords.')
+      if ! $salts[$title] {
+        #$set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./'
+        $_salt = fqdn_rand_string(16, undef, "User[${title}]")
+      } else {
+        $_salt = $salts[$title]
+      }
     }
     if $hash {
       validate_string($hash)
@@ -178,7 +191,7 @@ define accounts::user(
       }
       # Work on cleartext password if available
       if $password {
-        $pwh = pw_hash($password, $hash, $salt)
+        $pwh = pw_hash($password, $hash, $_salt)
         User<| title == $username |> { password => $pwh }
       }
 

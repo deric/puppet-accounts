@@ -480,15 +480,49 @@ describe 'accounts::user', :type => :define do
       end
       it { is_expected.to compile.and_raise_error(/You cannot set both \$pwhash and \$password/) }
     end
-    describe 'without salt' do
+
+    # we need to provide different hashes, as the fqdn_rand implementation differs
+    # between puppet versions...
+    hash = ''
+    if Gem::Version.new(Puppet.version) < Gem::Version.new("4.4.0")
+      hash = '$6$g9aYujG8oLQDJWBO$dNhF1lBTXpiG86V5Ra8nbzZIVmIioD293jZMHpA7bPHd34iIGPddfPWbjcX0bFVXRKA38LE1Z4K/Gqb4WNaxe/'
+    else
+      hash = '$6$qcmrAVy2N6yFHaD7$zAJCY8zAhLgeTe2bJ1Ui6pPXKTkJ..Qbx56tYhrVbZEbUiRG/hKLliAzvTQm3GlIds6DGncYFEJAd4w0HYxgV.'
+    end
+    describe 'without salt and empty fact' do
       let(:params) do
         {
           password: 'test1234',
         }
       end
-      it { is_expected.to compile.and_raise_error(/You need to specify a salt for hashing cleartext passwords./) }
+      let(:facts) do
+        {
+          :salts => {},
+          :fqdn  => 'testhost',
+          :osfamily => 'Debian',
+          :puppetversion => Puppet.version,
+        }
+      end
+      it { is_expected.to contain_user('foo').with(
+        'name'     => 'foo',
+        'password' => hash,
+      )}
     end
-    describe 'with salt' do
+    describe 'without salt and with fact' do
+      let(:params) { { :password => 'test1234' } }
+      let(:facts) do
+        {
+          :salts => { 'foo' => '7kjgdqd0uK3y8zJv' },
+          :osfamily => 'Debian',
+          :puppetversion => Puppet.version,
+        }
+      end
+      it { is_expected.to contain_user('foo').with(
+        'name'     => 'foo',
+        'password' => '$6$7kjgdqd0uK3y8zJv$jkPEoPrL8NTMfP60V9UGYf4I8l1EdsnCXOB2IAtOCGZmw4IX8MIji7kx9GsaUW1JifPhTVO1HjnSBHYfwVpZA.',
+      )}
+    end
+    describe 'with explicit salt' do
       let(:params) do
         {
           password: 'test1234',
