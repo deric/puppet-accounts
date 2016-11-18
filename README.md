@@ -29,7 +29,7 @@ accounts::users:
 
 Hiera allows flexible account management, if you want to have a group defined on all nodes, just put in global hiera config, e.g. `common.yml`:
 
-```YAML
+```yaml
 accounts::user_defaults:
   shell: '/bin/bash'
   # will delete all authorized keys that are not in Puppet
@@ -44,7 +44,7 @@ accounts::groups:
 
 and user accounts:
 
-```YAML
+```yaml
 accounts::users:
   john:
     comment: "John Doe"
@@ -149,12 +149,44 @@ accounts::users:
           - 'command="/path/to/script.sh arg1 $SSH_ORIGINAL_COMMAND"'
 ```
 
+### Password Management
+
+You can either provide an already hashed password or you can let the module take
+care of hashing.
+
+Providing hashed passwords from Hiera is secure by default. Please use something
+like hiera-eyaml or hiera-gpg for cleartext passwords within Puppet.
+
+Example with pre-hashed password:
+```yaml
+accounts::users:
+  john:
+    pwhash: "$6$GDH43O5m$FaJsdjUta1wXcITgKekNGUIfrqxYogW"
+```
+Example with cleartext password, using hiera-eyaml:
+```yaml
+accounts::users:
+  john:
+    password: >
+      ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQAw
+      ...
+      1yv7gBCuc3T2xV9gPYe+DrALDYB+]
+   ensure: present
+```
+The password hashing salt is generated with `fqdn_rand_string` from stdlib the first
+time the user is created. After that, the salt is read by a custom fact and reused,
+even on password changes (which is ok, it's just a salt...). You may specify an
+explicit salt if needed (see variable doc below).
+
 ## User
 
-* `authorized_keys_file` - allows proividing location of custom `authorized_keys`
+* `authorized_keys_file` - allows providing location of custom `authorized_keys`
 * `purge_ssh_keys` - delete all keys except those explicitly provided (default: `false`)
 * `ssh_key_source` - provide file with authorized keys
 * `pwhash` - set password hash
+* `password` - (optional) set cleartext password (mutually exclusive with `pwhash`!)
+* `salt` - (optional, default random/fact based) salt for hashing the `password`, this may only be up to 16 characters
+* `hash` - (optional, default 'SHA-512') password hash function to use (valid strings: see [puppetlabs/stdlib#pw_hash](https://github.com/puppetlabs/puppetlabs-stdlib#pw_hash))
 * `force_removal` - will kill user's process before removing account with `ensure => absent` (default: `true`)
 
 Example:
