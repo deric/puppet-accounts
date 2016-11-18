@@ -264,7 +264,7 @@ This modules heavily relies on Hiera functionality, thus it's recommended to use
 For more complex hierarchies (defined in multiple files) `deep_merge` gem is needed, see [Hiera docs](https://docs.puppetlabs.com/hiera/3.0/lookup_types.html#deep-merging-in-hiera).
 
 ```
-gem install deee_merge
+gem install deep_merge
 ```
 
 and update `merge_behavior` in your `hiera.yaml`, e.g.:
