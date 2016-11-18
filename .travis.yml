@@ -35,19 +35,26 @@ matrix:
   include:
     - rvm: 2.3.2
       dist: trusty
+      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=centos7-3.8
+      script: bundle exec rake acceptance
+      services: docker
+      sudo: required
+    - rvm: 2.3.2
+      dist: trusty
+      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.8
+      script: bundle exec rake acceptance
+      services: docker
+      sudo: required
+    - rvm: 2.3.2
+      dist: trusty
+      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-4.8
+      script: bundle exec rake acceptance
+      services: docker
+      sudo: required
+    - rvm: 2.3.2
+      dist: trusty
+      # includes puppet provisioning (will included latest puppet version)
       env: PUPPET_install=yes RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=ubuntu-14.04
-      script: bundle exec rake acceptance
-      services: docker
-      sudo: required
-    - rvm: 2.3.2
-      dist: trusty
-      env: RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=centos7-3.8
-      script: bundle exec rake acceptance
-      services: docker
-      sudo: required
-    - rvm: 2.3.2
-      dist: trusty
-      env: RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=debian8-3.8
       script: bundle exec rake acceptance
       services: docker
       sudo: required
