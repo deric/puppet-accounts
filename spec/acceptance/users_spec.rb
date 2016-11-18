@@ -52,12 +52,21 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       it { should exist }
       # group ID was not stated explicitly, first available should
       # be used
-      it { should have_gid 1001 }
+    end
+
+    describe command('getent group dalp') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /dalp:x:(\d+):dalp/ }
     end
 
     describe user('deployer') do
       it { should exist }
       it { should have_uid 1010 }
+    end
+
+    describe command('getent group deployer') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /deployer:x:(\d+):deployer/ }
     end
 
   end
