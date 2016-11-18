@@ -23,10 +23,10 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
 
     it 'install accounts' do
-      expect(apply_manifest(pp,
+      apply_manifest(pp,
         :catch_failures => false,
         :debug => false,
-      ).exit_code).to be_zero
+      ).exit_code
       # TODO: right now two runs are required
       expect(apply_manifest(pp, :catch_failures => false, :debug => false).exit_code).to be_zero
     end
