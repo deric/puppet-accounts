@@ -454,4 +454,62 @@ describe 'accounts::user', :type => :define do
 
   end
 
+  context 'set pwhash' do
+    let(:title) { 'foo' }
+    let(:params) do
+      {
+        pwhash: '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name'     => 'foo',
+      'password' => '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
+    )}
+  end
+
+  context 'set cleartext password' do
+    let(:title) { 'foo' }
+
+    describe 'with pwhash set' do
+      let(:params) do
+        {
+          password: 'test1234',
+          pwhash:   '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
+        }
+      end
+      it { is_expected.to compile.and_raise_error(/You cannot set both \$pwhash and \$password/) }
+    end
+    describe 'without salt' do
+      let(:params) do
+        {
+          password: 'test1234',
+        }
+      end
+      it { is_expected.to compile.and_raise_error(/You need to specify a salt for hashing cleartext passwords./) }
+    end
+    describe 'with salt' do
+      let(:params) do
+        {
+          password: 'test1234',
+          salt: 'S0V3h4DIBzbCl6R4',
+        }
+      end
+      it { is_expected.to contain_user('foo').with(
+        'name'     => 'foo',
+        'password' => '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
+      )}
+    end
+    describe 'with undef hash' do
+      let(:params){{
+        :password => 'test1234',
+        :salt => 'S0V3h4DIBzbCl6R4',
+        :hash => :undef,
+      }}
+      it { is_expected.to contain_user('foo').with(
+        'name'     => 'foo',
+        'password' => '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
+      )}
+    end
+  end
 end
