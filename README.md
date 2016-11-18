@@ -309,15 +309,26 @@ $ bundle install
 $ bundle exec rake spec
 ```
 
-## Acceptance testing (work in progress)
+## Acceptance testing
 
 Fastest way is to run tests on prepared Docker images:
 ```
-rake beaker:debian8-3.7
+BEAKER_set=debian8-3.8 bundle exec rake acceptance
+BEAKER_set=centos7-3.8 bundle exec rake acceptance
 ```
+For examining system state set Beaker's ENV variable `BEAKER_destroy=no`:
+
+```
+BEAKER_destroy=no BEAKER_set=debian8-3.8 bundle exec rake acceptance
+```
+and after finishing tests connect to container:
+```
+docker exec -it adoring_shirley bash
+```
+
 When host machine is NOT provisioned (puppet installed, etc.):
 ```
-PUPPET_install=yes bundle exec rake beaker:debian-8
+PUPPET_install=yes BEAKER_set=debian-8 bundle exec rake acceptance
 ```
 
 Run on specific OS (see `spec/acceptance/nodesets`), to see available sets:
