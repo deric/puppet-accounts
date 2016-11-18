@@ -36,19 +36,19 @@ matrix:
     - rvm: 2.3.1
       dist: trusty
       env: PUPPET_install=yes RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=ubuntu-14.04
-      script: bundle exec rake beaker
+      script: bundle exec rake acceptance
       services: docker
       sudo: required
     - rvm: 2.3.1
       dist: trusty
       env: PUPPET_install=yes RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=centos-7
-      script: bundle exec rake beaker
+      script: bundle exec rake acceptance
       services: docker
       sudo: required
     - rvm: 2.3.1
       dist: trusty
       env: PUPPET_install=yes RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=debian-8
-      script: bundle exec rake beaker
+      script: bundle exec rake acceptance
       services: docker
       sudo: required
   allow_failures:
