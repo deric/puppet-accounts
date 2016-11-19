@@ -25,12 +25,16 @@ class accounts(
   create_resources(accounts::group, $primary_groups)
 
   if $manage_users {
-    create_resources(accounts::user, $merged_users,
-      { before => Anchor['accounts::primary_groups_created']})
+    $udef = merge($user_defaults, { before => Anchor['accounts::primary_groups_created']})
+    create_resources(accounts::user, $merged_users, $udef)
   }
 
   if $manage_groups {
-    $default_groups = pick($user_defaults['groups'], [])
+    if has_key($user_defaults, 'groups'){
+      $default_groups = $user_defaults['groups']
+    } else {
+      $default_groups = []
+    }
     # Merge group definition with user's assignment to groups
     $members = accounts_group_members($merged_users, $merged_groups, $default_groups)
     create_resources(accounts::group, $members)

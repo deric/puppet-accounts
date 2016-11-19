@@ -522,4 +522,25 @@ describe 'accounts', :type => :class do
 
   end
 
+  context 'user_default are applied' do
+    let(:params){{
+      :users => { 'foo' => {
+        'home' => '/home/foo',
+      }},
+      :user_defaults => {
+        'shell'      => '/bin/ash',
+        'managehome' => true,
+      },
+    }}
+
+    it { is_expected.to contain_user('foo').with(
+      'name'       => 'foo',
+      'home'       => '/home/foo',
+      'shell'      => '/bin/ash',
+      'managehome' => true,
+    )}
+
+    it_behaves_like 'having_user_account', 'foo'
+  end
+
 end
