@@ -29,7 +29,7 @@ RSpec.configure do |c|
       on host, "mkdir -p /etc/puppetlabs/puppet", { :acceptable_exit_codes => [0,1] }
       on host, "mkdir -p #{HIERA_PATH}", { :acceptable_exit_codes => [0,1] }
       scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), hiera_config
-      scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), HIERA_PATH
+      scp_to host, File.expand_path('./spec/acceptance/hieradata'), HIERA_PATH
     end
     puppet_module_install(:source => proj_root, :module_name => 'accounts')
   end

@@ -6,7 +6,7 @@ HOSTS:
     docker_preserve_image: false
     roles:
       - agent
-    debug: true
+    debug: false
 CONFIG:
   masterless: true
   log_level: verbose

@@ -2,7 +2,7 @@
 :backends:
   - yaml
 :hierarchy:
-  - default
+  - common
 :yaml:
   :datadir: '/etc/puppetlabs/code/environments/production/hieradata'
 :merge_behavior: deep
