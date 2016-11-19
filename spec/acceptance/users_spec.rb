@@ -32,24 +32,24 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
 
     describe group('users') do
-      it { should exist }
+      it { is_expected.to exist }
     end
 
     describe file('/home/dalp') do
-      it { should be_directory }
+      it { is_expected.to be_directory }
     end
 
     describe file('/home/deployer') do
-      it { should be_directory }
+      it { is_expected.to be_directory }
     end
 
     describe user('dalp') do
-      it { should exist }
-      it { should have_uid 1005 }
+      it { is_expected.to exist }
+      it { is_expected.to have_uid 1005 }
     end
 
     describe group('dalp') do
-      it { should exist }
+      it { is_expected.to exist }
       # group ID was not stated explicitly, first available should
       # be used
     end
@@ -60,8 +60,8 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
 
     describe user('deployer') do
-      it { should exist }
-      it { should have_uid 1010 }
+      it { is_expected.to exist }
+      it { is_expected.to have_uid 1010 }
     end
 
     describe command('getent group deployer') do

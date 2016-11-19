@@ -30,36 +30,40 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         }).exit_code).to be_zero
     end
 
+    describe user('john') do
+      it { is_expected.to exist }
+    end
+
     describe group('john') do
-      it { should exist }
+      it { is_expected.to exist }
     end
 
     describe file('/home/john') do
-      it { should be_directory }
+      it { is_expected.to be_directory }
     end
 
     describe file('/home/john/.ssh') do
-      it { should be_directory }
-      it { should be_readable.by('owner') }
-      it { should_not be_readable.by('group') }
-      it { should_not be_readable.by('others') }
+      it { is_expected.to be_directory }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
     end
 
     describe file('/home/john/.ssh/authorized_keys') do
-      it { should be_file }
-      it { should be_readable.by('owner') }
-      it { should_not be_readable.by('group') }
-      it { should_not be_readable.by('others') }
+      it { is_expected.to be_file }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
     end
 
     describe group('engineers') do
-      it { should exist }
-      it { should have_gid 158 }
+      it { is_expected.to exist }
+      it { is_expected.to have_gid 158 }
     end
 
     describe group('users') do
-      it { should exist }
-      it { should have_gid 100 }
+      it { is_expected.to exist }
+      it { is_expected.to have_gid 100 }
     end
 
     describe command('groups john') do
@@ -109,12 +113,12 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
 
     describe group('testgroup') do
-      it { should exist }
-      it { should have_gid 800 }
+      it { is_expected.to exist }
+      it { is_expected.to have_gid 800 }
     end
 
     describe file('/home/testuser') do
-      it { should be_directory }
+      it { is_expected.to be_directory }
     end
 
     describe command('awk -F\':\' \'/testgroup/{print $4}\' /etc/group') do

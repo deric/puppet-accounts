@@ -34,10 +34,10 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     end
 
     describe file('/root/.ssh/authorized_keys') do
-      it { should be_file }
-      it { should be_readable.by('owner') }
-      it { should_not be_readable.by('group') }
-      it { should_not be_readable.by('others') }
+      it { is_expected.to be_file }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
     end
 
     describe command('cat /root/.ssh/authorized_keys | grep key1') do

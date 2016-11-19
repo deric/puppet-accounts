@@ -1,11 +1,12 @@
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
-require 'puppet'
 
 run_puppet_install_helper if ENV['PUPPET_install'] == 'yes'
 
 UNSUPPORTED_PLATFORMS = ['Suse','windows','AIX','Solaris']
+
+HIERA_PATH = '/etc/puppetlabs/code/environments/production'
 
 RSpec.configure do |c|
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
@@ -16,7 +17,6 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     #install_puppet
-    prod_path = '/etc/puppetlabs/code/environments/production'
     hosts.each do |host|
       if ['RedHat'].include?(fact('osfamily'))
         on host, 'yum install -y tar'
@@ -27,9 +27,9 @@ RSpec.configure do |c|
       on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
       #binding.pry
       on host, "mkdir -p /etc/puppetlabs/puppet", { :acceptable_exit_codes => [0,1] }
-      on host, "mkdir -p #{prod_path}", { :acceptable_exit_codes => [0,1] }
+      on host, "mkdir -p #{HIERA_PATH}", { :acceptable_exit_codes => [0,1] }
       scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), hiera_config
-      scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), prod_path
+      scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), HIERA_PATH
     end
     puppet_module_install(:source => proj_root, :module_name => 'accounts')
   end
