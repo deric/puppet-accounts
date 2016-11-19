@@ -24,18 +24,15 @@ class accounts(
 
   create_resources(accounts::group, $primary_groups)
 
-  class { '::accounts::users':
-    manage   => $manage_users,
-    users    => $merged_users,
-    defaults => $user_defaults,
-    before   => Anchor['accounts::primary_groups_created'],
+  if $manage_users {
+    create_resources(accounts::user, $merged_users,
+      { before => Anchor['accounts::primary_groups_created']})
   }
 
-  # each user resource will have dependency on a group, if needed
-  class { '::accounts::groups':
-    manage         => $manage_groups,
-    users          => $merged_users,
-    groups         => $merged_groups,
-    default_groups => $user_defaults['groups'],
+  if $manage_groups {
+    $default_groups = pick($user_defaults['groups'], [])
+    # Merge group definition with user's assignment to groups
+    $members = accounts_group_members($merged_users, $merged_groups, $default_groups)
+    create_resources(accounts::group, $members)
   }
 }
