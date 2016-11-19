@@ -2,12 +2,12 @@
   "name": "deric-accounts",
   "version": "1.5.0",
   "author": "Tomas Barton",
-  "summary": "Module for managing user accounts and groups.",
+  "summary": "Module for managing user accounts and groups and SSH keys.",
   "license": "Apache-2.0",
   "source": "https://github.com/deric/puppet-accounts",
   "project_page": "https://github.com/deric/puppet-accounts",
   "issues_url": "https://github.com/deric/puppet-accounts/issues",
-  "description": "Simple user management with hiera support.",
+  "description": "User and groups management with hiera support.",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
@@ -54,11 +54,11 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">= 2.7.0 < 5.0.0"
+      "version_requirement": ">= 3.0.0 < 5.0.0"
     },
     {
       "name": "puppet",
-      "version_requirement": ">= 2.7.0 < 5.0.0"
+      "version_requirement": ">= 3.0.0 < 5.0.0"
     }
   ]
 }
