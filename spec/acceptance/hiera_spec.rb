@@ -30,7 +30,7 @@ EOS
     end
 
     it 'install accounts' do
-      shell "echo \"#{yaml}\" > #{HIERA_PATH}/common.yaml"
+      shell "echo \"#{yaml}\" > #{HIERA_PATH}/hieradata/common.yaml"
 
       expect(apply_manifest(pp,
         :catch_failures => false,

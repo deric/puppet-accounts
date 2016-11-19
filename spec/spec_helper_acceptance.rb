@@ -26,9 +26,12 @@ RSpec.configure do |c|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
       #binding.pry
-      on host, "mkdir -p /etc/puppetlabs/puppet", { :acceptable_exit_codes => [0,1] }
-      on host, "mkdir -p #{HIERA_PATH}", { :acceptable_exit_codes => [0,1] }
+      on host, "mkdir -p /etc/puppetlabs/puppet", { :acceptable_exit_codes => [0] }
+      on host, "mkdir -p /etc/puppet", { :acceptable_exit_codes => [0] }
+      on host, "mkdir -p #{HIERA_PATH}", { :acceptable_exit_codes => [0] }
       scp_to host, File.expand_path('./spec/acceptance/hiera.yaml'), hiera_config
+      # compatibility with puppet 3.x
+      on host, "ln -s #{hiera_config} /etc/puppet/hiera.yaml", { :acceptable_exit_codes => [0] }
       scp_to host, File.expand_path('./spec/acceptance/hieradata'), HIERA_PATH
     end
     puppet_module_install(:source => proj_root, :module_name => 'accounts')
