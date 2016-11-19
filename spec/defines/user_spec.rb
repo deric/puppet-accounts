@@ -14,7 +14,7 @@ describe 'accounts::user', :type => :define do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0755'
+      'mode'    => '0700'
     }) }
 
     it { is_expected.not_to contain_file("#{home_dir}/.ssh").with({
@@ -40,7 +40,7 @@ describe 'accounts::user', :type => :define do
       'ensure'  => 'directory',
       'owner'   => owner,
       'group'   => group,
-      'mode'    => '0755'
+      'mode'    => '0700'
     }) }
 
     it { is_expected.to contain_file("#{home_dir}/.ssh").with({
@@ -395,7 +395,7 @@ describe 'accounts::user', :type => :define do
       'ensure'  => 'directory',
       'owner'   => title,
       'group'   => title,
-      'mode'    => '0755',
+      'mode'    => '0700',
       'recurse' => 'remote',
       'source'  => "puppet:///modules/accounts/#{title}",
     }) }
@@ -412,7 +412,7 @@ describe 'accounts::user', :type => :define do
         'ensure'  => 'directory',
         'owner'   => title,
         'group'   => title,
-        'mode'    => '0755',
+        'mode'    => '0700',
         'recurse' => 'remote',
         'source'  => "/mnt/store/#{title}",
       }) }

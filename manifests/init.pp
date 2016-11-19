@@ -6,7 +6,7 @@ class accounts(
   $users         = {},
   $groups        = {},
   $user_defaults = hiera_hash('accounts::user_defaults', {})
-) {
+) inherits ::accounts::params {
   validate_bool($manage_users)
   validate_bool($manage_groups)
   validate_hash($users)
@@ -25,7 +25,10 @@ class accounts(
   create_resources(accounts::group, $primary_groups)
 
   if $manage_users {
-    $udef = merge($user_defaults, { before => Anchor['accounts::primary_groups_created']})
+    $udef = merge($user_defaults, {
+      home_permissions => $::accounts::params::home_permissions,
+      before           => Anchor['accounts::primary_groups_created'],
+    })
     create_resources(accounts::user, $merged_users, $udef)
   }
 

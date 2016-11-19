@@ -48,11 +48,6 @@ define accounts::user(
   $manageumask = false,
   $umask = '0022',
   $home = undef,
-  $home_permissions = $::osfamily ? {
-                        'Debian' => '0755',
-                        'RedHat' => '0700',
-                        default  => '0700',
-                      },
   $ensure = present,
   $recurse_permissions = false,
   $authorized_keys_file = undef,
@@ -61,6 +56,7 @@ define accounts::user(
   $home_directory_contents = 'puppet:///modules/accounts',
   $password_max_age = undef,
   $allowdupe = false,
+  $home_permissions = '0700',
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
