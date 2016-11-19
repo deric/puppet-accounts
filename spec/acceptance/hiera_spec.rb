@@ -42,6 +42,25 @@ EOS
       it { is_expected.to exist }
       it { is_expected.to have_gid 3000 }
     end
+
+    describe user('account1') do
+      it { is_expected.to exist }
+      it { is_expected.to have_uid 1417 }
+    end
+
+    describe command('getent group staff') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /staff:x:(\d+):account1/ }
+    end
+
+    describe file('/home/account1') do
+      it { is_expected.to be_directory }
+    end
+
+    describe command('cat /etc/passwd | grep account1') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /test/ }
+    end
   end
 end
 
