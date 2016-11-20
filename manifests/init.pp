@@ -6,10 +6,7 @@ class accounts(
   $users         = {},
   $groups        = {},
   $user_defaults = hiera_hash('accounts::user_defaults', {}),
-  $first_uid     = undef,
-  $last_uid      = undef,
-  $first_gid     = undef,
-  $last_gid      = undef,
+  $options       = hiera_hash('accounts::config', {}),
 ) inherits ::accounts::params {
   validate_bool($manage_users)
   validate_bool($manage_groups)
@@ -24,10 +21,7 @@ class accounts(
   $merged_groups = merge($groups, $groups_h)
 
   class{'::accounts::config':
-    first_uid => $first_uid,
-    last_uid  => $last_uid,
-    first_gid => $first_gid,
-    last_gid  => $last_gid,
+    options => $options
   } ->
   anchor { 'accounts::primary_groups_created': }
   $primary_groups = accounts_primary_groups($merged_users, $merged_groups)

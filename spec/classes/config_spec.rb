@@ -9,12 +9,17 @@ describe 'accounts::config', :type => :class do
     }}
 
     let(:params){{
-      first_uid: 1010,
+      'options' => {
+        'umask' => '077',
+      }
     }}
 
-    #it { is_expected.to contain_shellvar('FIRST_UID').with({
-    #    value: 1010
-    #})}
+    it { is_expected.to contain_augeas('Set umask').with({
+      incl: '/etc/login.defs',
+      lens: 'Login_Defs.lns',
+      changes: [ "set UMASK 077"],
+    })}
+
   end
 
   describe 'on RedHat' do
@@ -24,10 +29,12 @@ describe 'accounts::config', :type => :class do
     }}
 
     let(:params){{
-      first_uid: 1010,
-      last_uid: 2020,
-      first_gid: 1050,
-      last_gid: 5050,
+      'options' => {
+        'first_uid' => 1010,
+        'last_uid'  => 2020,
+        'first_gid' => 1050,
+        'last_gid'  => 5050,
+      }
     }}
 
     it { is_expected.to contain_augeas('Set first uid').with({

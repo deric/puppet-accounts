@@ -252,6 +252,24 @@ When defining adding a user to multiple groups, we have to ensure, that all the 
   }
 ```
 
+## Global configuration
+
+Global settings affects also user accounts created outside of this module.
+
+```yaml
+accounts::config:
+  first_uid: 1000
+  last_uid: 99999
+  first_gid: 1000
+  last_gid: 99999
+  umask: '077'
+```
+ * `first_uid` - Sets the lowest UID for non system users
+ * `last_uid` - Sets the highest UID for non system users
+ * `first_gid` - Sets the lowest GID for non system groups
+ * `last_gid` - Sets the highest GID for non system groups
+ * `umask` - Default global `umask` (can be overriden in user's `~/.profile`)
+
 ## Puppet compatibility
 
 This modules heavily relies on Hiera functionality, thus it's recommended to use at least Puppet 3. Puppet 2.7 might work with `hiera-puppet` gem, but we don't test this automatically, see [docs](https://docs.puppetlabs.com/hiera/1/installing.html#step-2-install-the-puppet-functions) for more details.

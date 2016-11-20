@@ -1,81 +1,91 @@
+# Private class. Do not include directly this class.
+#
 # Global accounts configuration
 class accounts::config(
-  $first_uid = undef,
-  $last_uid  = undef,
-  $first_gid = undef,
-  $last_gid  = undef,
-  ) {
+  $options = {}
+) {
+
+  if has_key($options, 'umask') {
+    $umask = $options['umask']
+    augeas {'Set umask':
+      incl    => '/etc/login.defs',
+      lens    => 'Login_Defs.lns',
+      changes => [
+        "set UMASK ${umask}",
+      ],
+    }
+  }
 
   case $::osfamily {
 
     'Debian': {
-      if $first_uid != undef {
+      if has_key($options, 'first_uid') {
         shellvar { 'FIRST_UID':
           ensure => present,
           target => '/etc/adduser.conf',
-          value  => $first_uid,
+          value  => $options['first_uid'],
         }
       }
 
-      if $last_uid != undef {
+      if has_key($options, 'last_uid') {
         shellvar { 'LAST_UID':
           ensure => present,
           target => '/etc/adduser.conf',
-          value  => $last_uid,
+          value  => $options['last_uid'],
         }
       }
 
-      if $first_gid != undef {
+      if has_key($options, 'first_gid') {
         shellvar { 'FIRST_GID':
           ensure => present,
           target => '/etc/adduser.conf',
-          value  => $first_gid,
+          value  => $options['first_gid'],
         }
       }
 
-      if $last_gid != undef {
+      if has_key($options, 'last_gid') {
         shellvar { 'LAST_GID':
           ensure => present,
           target => '/etc/adduser.conf',
-          value  => $last_gid,
+          value  => $options['last_gid'],
         }
       }
     }
 
     'RedHat': {
-      if $first_uid != undef {
+      if has_key($options, 'first_uid') {
         augeas {'Set first uid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
           changes => [
-            "set UID_MIN ${first_uid}",
+            "set UID_MIN ${options['first_uid']}",
           ],
         }
       }
-      if $last_uid != undef {
+      if has_key($options, 'last_uid') {
         augeas {'Set last uid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
           changes => [
-            "set UID_MAX ${last_uid}",
+            "set UID_MAX ${options['last_uid']}",
           ],
         }
       }
-      if $first_gid != undef {
+      if has_key($options, 'first_gid') {
         augeas {'Set first gid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
           changes => [
-            "set GID_MIN ${first_gid}",
+            "set GID_MIN ${options['first_gid']}",
           ],
         }
       }
-      if $last_gid != undef {
+      if has_key($options, 'last_gid') {
         augeas {'Set last gid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
           changes => [
-            "set GID_MAX ${last_gid}",
+            "set GID_MAX ${options['last_gid']}",
           ],
         }
       }
