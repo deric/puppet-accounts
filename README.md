@@ -179,21 +179,39 @@ accounts::users:
    umask: '022'
 ```
 
-By default `umask` is not managed.
+By default `umask` is not managed. Note that you can configure global `umask` for all users via `accounts::config` (see bellow).
 
 ## Global settings
 
 You can provide global defaults for all users:
 
 ```yaml
-accounts:
- user_defaults:
-   shell: '/bin/dash'
-   groups: ['users']
+accounts::user_defaults:
+  shell: '/bin/dash'
+  groups: ['users']
 ```
  * `groups` common group(s) for all users
 
- Note that configuration from Hiera gets merged to with Puppet code.
+Note that configuration from Hiera gets merged to with Puppet code.
+
+### System-wide configuration
+
+Global settings affects also user accounts created outside of this module.
+
+```yaml
+accounts::config:
+  first_uid: 1000
+  last_uid: 99999
+  first_gid: 1000
+  last_gid: 99999
+  umask: '077'
+```
+ * `first_uid` - Sets the lowest UID for non system users
+ * `last_uid` - Sets the highest UID for non system users
+ * `first_gid` - Sets the lowest GID for non system groups
+ * `last_gid` - Sets the highest GID for non system groups
+ * `umask` - Default global `umask` (can be overriden in user's `~/.profile`)
+
 
 ### Populate home folder
 
@@ -207,7 +225,7 @@ accounts::users:
 ```
 which default to `puppet:///modules/accounts/{username}`.
 
-### Testing
+## Testing
 
 Which accounts will be installed on specific machine can be checked from command line:
 
@@ -251,24 +269,6 @@ When defining adding a user to multiple groups, we have to ensure, that all the 
     }}
   }
 ```
-
-## Global configuration
-
-Global settings affects also user accounts created outside of this module.
-
-```yaml
-accounts::config:
-  first_uid: 1000
-  last_uid: 99999
-  first_gid: 1000
-  last_gid: 99999
-  umask: '077'
-```
- * `first_uid` - Sets the lowest UID for non system users
- * `last_uid` - Sets the highest UID for non system users
- * `first_gid` - Sets the lowest GID for non system groups
- * `last_gid` - Sets the highest GID for non system groups
- * `umask` - Default global `umask` (can be overriden in user's `~/.profile`)
 
 ## Puppet compatibility
 
