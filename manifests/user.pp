@@ -33,8 +33,9 @@ define accounts::user(
   $uid = undef,
   $gid = undef,
   $primary_group = undef,
+  $comment = undef,
   # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
-  $comment = "${title}",  # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
+  # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
   $username = "${title}", # lint:ignore:only_variable_string
   $groups = [],
   $ssh_key_source = undef,
@@ -78,7 +79,6 @@ define accounts::user(
       $real_gid = undef
     }
   }
-  User<| title == $username |> { gid => $real_gid }
 
   if $home {
     $home_dir = $home
@@ -89,8 +89,12 @@ define accounts::user(
     }
   }
 
-  User<| title == $username |> { managehome => $managehome }
-  User<| title == $username |> { home => $home_dir }
+  User<| title == $username |> {
+    gid        => $real_gid,
+    comment    => $comment,
+    managehome => $managehome,
+    home       => $home_dir,
+  }
 
   case $ensure {
     'absent': {
@@ -145,7 +149,6 @@ define accounts::user(
         ensure    => present,
         uid       => $uid,
         shell     => $shell,
-        comment   => $comment,
         allowdupe => $allowdupe,
       }
 
