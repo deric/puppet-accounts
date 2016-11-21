@@ -21,7 +21,7 @@ class accounts(
   $merged_groups = merge($groups, $groups_h)
 
   class{'::accounts::config':
-    options => $options
+    options => $options,
   } ->
   anchor { 'accounts::primary_groups_created': }
   $primary_groups = accounts_primary_groups($merged_users, $merged_groups)

@@ -16,44 +16,16 @@ class accounts::config(
     }
   }
 
-  case $::osfamily {
-
-    'Debian': {
-      if has_key($options, 'first_uid') {
+  if has_key($options, 'first_uid') {
+    case $::osfamily {
+      'Debian': {
         shellvar { 'FIRST_UID':
           ensure => present,
           target => '/etc/adduser.conf',
           value  => $options['first_uid'],
         }
       }
-
-      if has_key($options, 'last_uid') {
-        shellvar { 'LAST_UID':
-          ensure => present,
-          target => '/etc/adduser.conf',
-          value  => $options['last_uid'],
-        }
-      }
-
-      if has_key($options, 'first_gid') {
-        shellvar { 'FIRST_GID':
-          ensure => present,
-          target => '/etc/adduser.conf',
-          value  => $options['first_gid'],
-        }
-      }
-
-      if has_key($options, 'last_gid') {
-        shellvar { 'LAST_GID':
-          ensure => present,
-          target => '/etc/adduser.conf',
-          value  => $options['last_gid'],
-        }
-      }
-    }
-
-    'RedHat': {
-      if has_key($options, 'first_uid') {
+      'RedHat': {
         augeas {'Set first uid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
@@ -62,7 +34,22 @@ class accounts::config(
           ],
         }
       }
-      if has_key($options, 'last_uid') {
+      default: {
+        fail("I don't know how to set first UID on osfamily ${::osfamily}")
+      }
+    }
+  }
+
+  if has_key($options, 'last_uid') {
+    case $::osfamily {
+      'Debian': {
+        shellvar { 'LAST_UID':
+          ensure => present,
+          target => '/etc/adduser.conf',
+          value  => $options['last_uid'],
+        }
+      }
+      'RedHat': {
         augeas {'Set last uid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
@@ -71,7 +58,22 @@ class accounts::config(
           ],
         }
       }
-      if has_key($options, 'first_gid') {
+      default: {
+        fail("I don't know how to set last UID on osfamily ${::osfamily}")
+      }
+    }
+  }
+
+  if has_key($options, 'first_gid') {
+    case $::osfamily {
+      'Debian': {
+        shellvar { 'FIRST_GID':
+          ensure => present,
+          target => '/etc/adduser.conf',
+          value  => $options['first_gid'],
+        }
+      }
+      'RedHat': {
         augeas {'Set first gid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
@@ -80,7 +82,22 @@ class accounts::config(
           ],
         }
       }
-      if has_key($options, 'last_gid') {
+      default: {
+        fail("I don't know how to set first GID on osfamily ${::osfamily}")
+      }
+    }
+  }
+
+  if has_key($options, 'last_gid') {
+    case $::osfamily {
+      'Debian': {
+        shellvar { 'LAST_GID':
+          ensure => present,
+          target => '/etc/adduser.conf',
+          value  => $options['last_gid'],
+        }
+      }
+      'RedHat': {
         augeas {'Set last gid':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
@@ -89,16 +106,10 @@ class accounts::config(
           ],
         }
       }
-    }
-    default: {
-      if $first_uid != undef {
-        fail("I don't know how to set first uids on osfamily ${::osfamily}")
-      }
-      if $first_uid != undef {
-        fail("I don't know how to set first gids on osfamily ${::osfamily}")
+      default: {
+        fail("I don't know how to set last GID on osfamily ${::osfamily}")
       }
     }
-
   }
 
 }
