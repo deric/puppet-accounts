@@ -28,6 +28,10 @@
 #                    the account name should be created
 #  * [primary_group] - name of user's primary group, if empty account name
 #                    wikk be used.
+#  * [pwhash] - password hash for the user
+#  * [password] - (optional) cleartext password, will be hashed (mutually exclusive with `pwhash`!)
+#  * [salt] - (optional, default random/fact based) salt for hashing the `password`
+#  * [hash] - (optional, default 'SHA-512') password hash function to use (see puppetlabs/stdlib#pw_hash)
 #
 define accounts::user(
   $uid = undef,
@@ -44,6 +48,9 @@ define accounts::user(
   $purge_ssh_keys = false,
   $shell ='/bin/bash',
   $pwhash = '',
+  $password = undef,
+  $salt = undef,
+  $hash = 'SHA-512',
   $managehome = true,
   $manage_group = true, # create a group with '$primary_group' name
   $manageumask = false,
@@ -66,6 +73,32 @@ define accounts::user(
   validate_bool($managehome)
   if ! is_array($purge_ssh_keys) {
     validate_bool($purge_ssh_keys)
+  }
+
+  validate_string($password)
+  if $pwhash != '' and $password {
+    fail("You cannot set both \$pwhash and \$password for ${username}.")
+  }
+  if $password {
+    # explicit salt given. just ensure it's a string.
+    if $salt {
+      validate_re($salt, '^[A-Za-z0-9\./]{,16}$')
+      $_salt = $salt
+    # if no explicit salt is given, try to get it from fact or generate
+    # (generation thus only on first run, when user is not present)
+    } else {
+      if ! $salts[$title] {
+        #$set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./'
+        $_salt = fqdn_rand_string(16, undef, "User[${title}]")
+      } else {
+        $_salt = $salts[$title]
+      }
+    }
+    if $hash {
+      validate_string($hash)
+    } else {
+      fail('You need to specify a hash function for hashing cleartext passwords.')
+    }
   }
 
   if ($gid) {
@@ -155,6 +188,11 @@ define accounts::user(
       # Set password if available
       if $pwhash != '' {
         User<| title == $username |> { password => $pwhash }
+      }
+      # Work on cleartext password if available
+      if $password {
+        $pwh = pw_hash($password, $hash, $_salt)
+        User<| title == $username |> { password => $pwh }
       }
 
       if $managehome == true {
