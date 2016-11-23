@@ -22,7 +22,7 @@ class accounts(
 
   class{'::accounts::config':
     options => $options,
-    before => Anchor['accounts::users_created'],
+    before  => Anchor['accounts::users_created'],
   }
 
   if $manage_users {

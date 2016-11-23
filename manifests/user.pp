@@ -126,7 +126,7 @@ define accounts::user(
   }
 
   User<| title == $username |> {
-   # gid        => $real_gid,
+    #gid       => $real_gid,
     comment    => $comment,
     managehome => $managehome,
     home       => $home_dir,
