@@ -43,7 +43,7 @@ class accounts(
     }
     # Merge group definition with user's assignment to groups
     # No anchor is needed, all requirements are defined individially for each resource
-    $members = accounts_group_members($_users, $_groups, {}, $default_groups)
+    $members = accounts_group_members($_users, $_groups, $default_groups)
     create_resources(accounts::group, $members)
   }
 }
