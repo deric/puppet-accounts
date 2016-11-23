@@ -125,7 +125,9 @@ EOS
 
     describe command('groups jordi') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /jordi : jordi sudo/ }
+      its(:stdout) { is_expected.to match /jordi : jordi/ }
+      its(:stdout) { is_expected.to match /sudo/ }
+      its(:stdout) { is_expected.to match /it/ }
     end
 
     describe command('groups it') do
