@@ -2,18 +2,18 @@ module Puppet::Parser::Functions
   newfunction(:accounts_group_members, :type => :rvalue, :doc => <<-EOS
 From Hash of all users and their configuration assign users to group definitions
 given as second argument
-an optional 3rd argument are the default groups for all users
+an optional 4rd argument are the default groups for all users
 EOS
   ) do |args|
 
-    if args.size != 2 and args.size != 3
-      raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts 2 or 3")
+    if args.size != 3 and args.size != 4
+      raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts 3 or 4")
     end
 
-    if args[0].class != Hash and args[1].class != Hash
-      raise(Puppet::ParseError, "accounts_group_members(): both must be a Hash, you passed a " + args[0].class.to_s + " and "+ args[1].class.to_s)
+    if args[0].class != Hash or args[1].class != Hash
+      raise(Puppet::ParseError, "accounts_group_members(): first two arguments must be a Hash, you passed a " + args[0].class.to_s + " and "+ args[1].class.to_s)
     end
-    if args.size == 3 and args[2].class != Array
+    if args.size == 4 and args[3].class != Array
       raise(Puppet::ParseError, "accounts_group_members(): last argument must be an Array, you passed a " + args[2].class.to_s)
     end
 
@@ -30,15 +30,21 @@ EOS
     end
 
     res = args[1].clone
+    primary_groups = args[2]
     args[0].each do |user, val|
       # don't assign users marked for removal to groups
       next if val.key? 'ensure' and val['ensure'] == 'absent'
       if val.key? 'groups'
         val['groups'].each do |g|
-          assign_helper.call(res, g, user)
+          if primary_groups.key? g and primary_group['members'].include? user
+            # don't assign user to his primary group
+            # it would cause a dependency cycle
+          else
+            assign_helper.call(res, g, user) unless primary_groups.key? g
+          end
         end
-      elsif args.size == 3
-        args[2].each do |g|
+      elsif args.size == 4
+        args[3].each do |g|
           assign_helper.call(res, g, user)
         end
       end

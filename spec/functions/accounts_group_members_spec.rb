@@ -30,7 +30,7 @@ describe 'accounts_group_members' do
         john: { 'groups' => ['bar', 'users']},
       }
 
-      is_expected.to run.with_params(users, {}).and_return(
+      is_expected.to run.with_params(users, {}, {}).and_return(
         {
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},
@@ -46,7 +46,7 @@ describe 'accounts_group_members' do
         tracy: { 'groups' => ['sudo', 'users'], 'ensure' => 'absent'},
       }
 
-      is_expected.to run.with_params(users, {}).and_return(
+      is_expected.to run.with_params(users, {}, {}).and_return(
         {
           'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'users' => {
@@ -64,7 +64,7 @@ describe 'accounts_group_members' do
         foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
       }
 
-      is_expected.to run.with_params(users, {}).and_return({})
+      is_expected.to run.with_params(users, {}, {}).and_return({})
     end
 
     it 'finds group with gid' do
@@ -74,7 +74,7 @@ describe 'accounts_group_members' do
           'require' => []},
       }
 
-      is_expected.to run.with_params(users, {}).and_return({})
+      is_expected.to run.with_params(users, {}, {}).and_return({})
     end
   end
 end
