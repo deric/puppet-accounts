@@ -353,7 +353,7 @@ describe 'accounts', :type => :class do
       :manage_groups => true,
     }}
 
-    it do
+    it "checks type", :if => Puppet.version < "4.0.0" do
       expect {
          is_expected.to compile
       }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /is not a Hash/)
@@ -451,7 +451,7 @@ describe 'accounts', :type => :class do
         :manage_users => true,
       }}
 
-      it do
+      it 'checks type', :if => Puppet.version < "4.0.0" do
         expect {
           is_expected.to compile
         }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /is not a Hash/)

@@ -8,11 +8,14 @@ class accounts(
   $user_defaults = hiera_hash('accounts::user_defaults', {}),
   $options       = hiera_hash('accounts::config', {}),
 ) inherits ::accounts::params {
-  validate_bool($manage_users)
-  validate_bool($manage_groups)
-  validate_hash($users)
-  validate_hash($groups)
-  validate_hash($user_defaults)
+  # validations are not necessary on Puppet 4
+  if versioncmp($::puppetversion, '4.0.0') < 0 {
+    validate_bool($manage_users)
+    validate_bool($manage_groups)
+    validate_hash($users)
+    validate_hash($groups)
+    validate_hash($user_defaults)
+  }
 
   $users_h  = hiera_hash('accounts::users', {})
   $groups_h = hiera_hash('accounts::groups', {})
