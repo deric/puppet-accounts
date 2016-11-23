@@ -81,17 +81,17 @@ define accounts::user(
   }
   if $password {
     # explicit salt given. just ensure it's a string.
-    if $salt {
+    if $::salt {
       validate_re($salt, '^[A-Za-z0-9\./]{,16}$')
       $_salt = $salt
     # if no explicit salt is given, try to get it from fact or generate
     # (generation thus only on first run, when user is not present)
     } else {
-      if ! $salts[$title] {
+      if ! $::salts[$title] {
         #$set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./'
         $_salt = fqdn_rand_string(16, undef, "User[${title}]")
       } else {
-        $_salt = $salts[$title]
+        $_salt = $::salts[$title]
       }
     }
     if $hash {
