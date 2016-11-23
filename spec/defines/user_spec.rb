@@ -69,7 +69,7 @@ describe 'accounts::user', :type => :define do
 
     it { is_expected.to contain_user('foobar').with(
       'uid' => 1001,
-      'gid' => 1001
+    #  'gid' => 1001
     )}
 
     it_behaves_like 'having_home_dir', 'foobar', '1001', '/home/foobar'
@@ -448,9 +448,10 @@ describe 'accounts::user', :type => :define do
 
     it { is_expected.to contain_user('foo').with(
       'name' => 'foo',
-      'gid'  => 'mygroup',
+    #  'gid'  => 'mygroup',
       'home' => '/home/foo'
     )}
+    # primary_group is processed outside of this (user) scope
 
   end
 

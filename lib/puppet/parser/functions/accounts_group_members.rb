@@ -25,7 +25,7 @@ EOS
         res[g]['members'] = [] unless res[g].key?('members')
         res[g]['require'] = [] unless res[g].key?('require')
       end
-      res[g]['members'] << user
+      res[g]['members'] << user unless res[g]['members'].include? user
       res[g]['require'] << "User[#{user}]"
     end
 
@@ -34,14 +34,18 @@ EOS
     args[0].each do |user, val|
       # don't assign users marked for removal to groups
       next if val.key? 'ensure' and val['ensure'] == 'absent'
+      val['primary_group'] = user.to_s unless val.key? 'primary_group'
+      val['manage_group'] = true unless val.key? 'manage_group'
+      if val['manage_group']
+        g = val['primary_group']
+        assign_helper.call(res, g, user)
+        if val.key? 'gid'
+          res[g]['gid'] = val['gid'] # manually override GID
+        end
+      end
       if val.key? 'groups'
         val['groups'].each do |g|
-          if primary_groups.key? g and primary_group['members'].include? user
-            # don't assign user to his primary group
-            # it would cause a dependency cycle
-          else
-            assign_helper.call(res, g, user) unless primary_groups.key? g
-          end
+          assign_helper.call(res, g, user)
         end
       elsif args.size == 4
         args[3].each do |g|
@@ -49,13 +53,6 @@ EOS
         end
       end
     end
-    # make sure any primary group is present
-    args[0].each do |user, val|
-      if val.key? 'primary_group'
-        res.delete(val['primary_group'])
-      end
-    end
-
     res
   end
 

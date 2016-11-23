@@ -104,6 +104,9 @@ define accounts::user(
   if ($gid) {
     $real_gid = $gid
   } else {
+    # Actuall primary group assignment is done later
+    # intentionally omitting primary group in order to avoid dependency cycles
+    # see https://github.com/deric/puppet-accounts/issues/39
     if $ensure == 'present' and $manage_group == true {
       # choose first non empty argument
       $real_gid = pick($primary_group, $username)
@@ -123,7 +126,7 @@ define accounts::user(
   }
 
   User<| title == $username |> {
-    gid        => $real_gid,
+   # gid        => $real_gid,
     comment    => $comment,
     managehome => $managehome,
     home       => $home_dir,
