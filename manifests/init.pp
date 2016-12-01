@@ -20,33 +20,33 @@ class accounts(
   $users_h  = hiera_hash('accounts::users', {})
   $groups_h = hiera_hash('accounts::groups', {})
 
-  $merged_users = merge($users, $users_h)
-  $merged_groups = merge($groups, $groups_h)
+  $_users = merge($users, $users_h)
+  anchor { 'accounts::users_created': }
 
   class{'::accounts::config':
     options => $options,
-  } ->
-  anchor { 'accounts::primary_groups_created': }
-  $primary_groups = accounts_primary_groups($merged_users, $merged_groups)
-
-  create_resources(accounts::group, $primary_groups)
+    before  => Anchor['accounts::users_created'],
+  }
 
   if $manage_users {
     $udef = merge($user_defaults, {
       home_permissions => $::accounts::params::home_permissions,
-      before           => Anchor['accounts::primary_groups_created'],
+      require          => Anchor['accounts::users_created'],
     })
-    create_resources(accounts::user, $merged_users, $udef)
+    create_resources(accounts::user, $_users, $udef)
   }
 
   if $manage_groups {
+    $_groups = merge($groups, $groups_h)
+
     if has_key($user_defaults, 'groups'){
       $default_groups = $user_defaults['groups']
     } else {
       $default_groups = []
     }
     # Merge group definition with user's assignment to groups
-    $members = accounts_group_members($merged_users, $merged_groups, $default_groups)
+    # No anchor is needed, all requirements are defined individially for each resource
+    $members = accounts_group_members($_users, $_groups, $default_groups)
     create_resources(accounts::group, $members)
   }
 }

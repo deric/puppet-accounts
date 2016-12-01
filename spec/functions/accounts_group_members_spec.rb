@@ -35,6 +35,8 @@ describe 'accounts_group_members' do
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},
           'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
+          'foo' => {'members' => [:foo], 'require' => ['User[foo]']},
+          'john' => {'members' => [:john], 'require' => ['User[john]']},
         }
       )
     end
@@ -48,6 +50,8 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
+          'alice' => {'members' => [:alice], 'require'=> ['User[alice]']},
+          'bob' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'users' => {
             'members' => [:alice, :bob],
@@ -64,7 +68,9 @@ describe 'accounts_group_members' do
         foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
       }
 
-      is_expected.to run.with_params(users, {}).and_return({})
+      is_expected.to run.with_params(users, {}).and_return(
+        {'testgroup' => {'members' => [:foo], 'require' => ['User[foo]']}}
+      )
     end
 
     it 'finds group with gid' do
@@ -74,7 +80,9 @@ describe 'accounts_group_members' do
           'require' => []},
       }
 
-      is_expected.to run.with_params(users, {}).and_return({})
+      is_expected.to run.with_params(users, {}).and_return(
+        {"testgroup"=>{"members"=>[:foo], "require"=>["User[foo]"], "gid"=>123}}
+      )
     end
   end
 end

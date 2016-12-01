@@ -16,6 +16,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
           },
           users => {
             'john' => {
+              'gid'     => 1550,
               'shell'   => '/bin/bash',
               'groups'  => ['users', 'engineers'],
               'ssh_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }
@@ -73,5 +74,11 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       its(:stdout) { is_expected.to match /158\(engineers\)/ }
       its(:stdout) { is_expected.to match /100\(users\)/ }
     end
+
+    describe command('id -g john') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /1550/ }
+    end
+
   end
 end
