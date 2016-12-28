@@ -16,6 +16,7 @@ group :test do
   # newer versions require ruby 2.2
   if RUBY_VERSION < "2.2.0"
     gem 'listen', '~> 3.0.0'
+    gem 'nokogiri', '1.6.8.1'
   end
   if RUBY_VERSION < "2.0.0"
     gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
