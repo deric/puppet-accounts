@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 group :test do
-  gem "rake"
+  gem 'rake', '< 11.0'
   gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 5.0']
   gem "rspec"
   gem 'rspec-puppet'
