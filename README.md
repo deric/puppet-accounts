@@ -188,6 +188,7 @@ explicit salt if needed (see variable doc below).
 * `salt` - (optional, default random/fact based) salt for hashing the `password`, this may only be up to 16 characters
 * `hash` - (optional, default 'SHA-512') password hash function to use (valid strings: see [puppetlabs/stdlib#pw_hash](https://github.com/puppetlabs/puppetlabs-stdlib#pw_hash))
 * `force_removal` - will kill user's process before removing account with `ensure => absent` (default: `true`)
+* `hushlogin` - creates a `.hushlogin` file in users home directory that disables the motd
 
 Example:
 
@@ -198,6 +199,7 @@ accounts::users:
    managehome: true
    purge_ssh_keys: false
    pwhash: ''
+   hushlogin: true
 ```
 
 ### `umask`
@@ -211,7 +213,7 @@ accounts::users:
    umask: '022'
 ```
 
-By default `umask` is not managed. Note that you can configure global `umask` for all users via `accounts::config` (see bellow).
+By default `umask` is not managed. Note that you can configure global `umask` for all users via `accounts::config` (see below).
 
 ## Global settings
 
@@ -221,6 +223,7 @@ You can provide global defaults for all users:
 accounts::user_defaults:
   shell: '/bin/dash'
   groups: ['users']
+  hushlogin: true
 ```
  * `groups` common group(s) for all users
 

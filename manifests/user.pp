@@ -52,6 +52,7 @@ define accounts::user(
   $salt = undef,
   $hash = 'SHA-512',
   $managehome = true,
+  $hushlogin = false,
   $manage_group = true, # create a group with '$primary_group' name
   $manageumask = false,
   $umask = '0022',
@@ -233,6 +234,20 @@ define accounts::user(
             path   => "${home_dir}/.bashrc",
             line   => "umask ${umask}",
             match  => '^umask \+[0-9][0-9][0-9]',
+          }
+        }
+
+        if $hushlogin == true {
+          file { "${home_dir}/.hushlogin":
+            ensure => file,
+            owner  => $username,
+            group  => $real_gid,
+            mode   => $home_permissions,
+          }
+        }
+        else {
+          file { "${home_dir}/.hushlogin":
+            ensure  => absent,
           }
         }
 
