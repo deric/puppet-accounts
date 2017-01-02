@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 group :test do
-  gem 'rake', '< 11.0'
   gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 5.0']
   gem "rspec"
   gem 'rspec-puppet'
@@ -13,11 +12,6 @@ group :test do
   gem 'deep_merge'
   gem 'hiera'
   gem 'librarian-puppet' , '>=2.0'
-  # newer versions require ruby 2.2
-  if RUBY_VERSION < "2.2.0"
-    gem 'listen', '~> 3.0.0'
-    gem 'nokogiri', '1.6.8.1'
-  end
   if RUBY_VERSION < "2.0.0"
     gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
     gem 'json_pure', '< 2.0.0'
@@ -27,6 +21,16 @@ group :test do
     gem 'public_suffix', '< 1.5.0'
   else
     gem 'rubocop'
+  end
+  if RUBY_VERSION < "2.1.0"
+    gem 'nokogiri', '< 1.7.0'
+    gem 'rake', '< 11.0'
+  else
+    gem 'rake'
+  end
+  # newer versions require ruby 2.2
+  if RUBY_VERSION < "2.2.0"
+    gem 'listen', '~> 3.0.0'
   end
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
