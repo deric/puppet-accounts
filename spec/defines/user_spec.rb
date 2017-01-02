@@ -56,6 +56,10 @@ describe 'accounts::user', :type => :define do
       'group'   => group,
       'mode'    => '0600'
     }) }
+
+    it { is_expected.to contain_file("#{home_dir}/.hushlogin").with(
+      'ensure' => 'absent'
+    )}
   end
 
   context 'create new user' do
@@ -546,5 +550,23 @@ describe 'accounts::user', :type => :define do
         'password' => '$6$S0V3h4DIBzbCl6R4$v8LQvd8EGNo2jyTpJAx6kPC/E9Yd0wPtYTWguYI2JhmOV.Lmxg0d0skcP2IXDN3OU9jibaeUpjTLk66NCu3pT.',
       )}
     end
+  end
+
+  context 'hushlogin' do
+    let(:title) { 'foo' }
+    let(:params) do
+      {
+        hushlogin: true,
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name' => 'foo',
+    )}
+
+    it { is_expected.to contain_file('/home/foo/.hushlogin').with(
+      'ensure' => 'file',
+      'owner'  => 'foo',
+    )}
   end
 end
