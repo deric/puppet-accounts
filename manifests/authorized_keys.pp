@@ -48,7 +48,6 @@ define accounts::authorized_keys(
       options => $ssh_key['options'],
       target  => $auth_keys,
       require => File[$auth_keys],
-      before  => Anchor["accounts::auth_keys_created_${title}"],
     }
   }
 
@@ -65,7 +64,7 @@ define accounts::authorized_keys(
         group   => $real_gid,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
-        require => [File["${home_dir}/.ssh"], Anchor["accounts::auth_keys_created_${title}"]],
+        require => [File["${home_dir}/.ssh"]],
       }
       Ssh_authorized_key<| |> -> File[$auth_keys]
     }
