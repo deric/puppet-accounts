@@ -31,7 +31,7 @@ define accounts::authorized_keys(
     ensure  => present,
     user    => $username,
     target  => $auth_keys,
-    type    => 'ssh-rsa',
+    'type'  => 'ssh-rsa',
     require => File[$auth_keys],
   }
 
