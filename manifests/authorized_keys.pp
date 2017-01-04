@@ -26,7 +26,7 @@ define accounts::authorized_keys(
     require => File[$home_dir],
   }
 
- anchor { "accounts::auth_keys_created_${title}": }
+  anchor { "accounts::auth_keys_created_${title}": }
 
   # Error: Use of reserved word: type, must be quoted if intended to be a String value
   $ssh_key_defaults = {
