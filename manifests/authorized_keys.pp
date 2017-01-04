@@ -30,7 +30,9 @@ define accounts::authorized_keys(
   $ssh_key_defaults = {
     ensure  => present,
     user    => $username,
-    'type'  => 'ssh-rsa',
+    target  => $auth_keys,
+    type    => 'ssh-rsa',
+    require => File[$auth_keys],
   }
 
   anchor { "accounts::auth_keys_created_${title}": }
@@ -44,7 +46,8 @@ define accounts::authorized_keys(
       type    => $ssh_key['type'],
       key     => $ssh_key['key'],
       options => $ssh_key['options'],
-      require =>  File[$auth_keys],
+      target  => $auth_keys,
+      require => File[$auth_keys],
       before  => Anchor["accounts::auth_keys_created_${title}"],
     }
   }
