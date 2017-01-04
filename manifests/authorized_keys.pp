@@ -48,7 +48,7 @@ define accounts::authorized_keys(
       key     => $ssh_key['key'],
       options => $ssh_key['options'],
       target  => $auth_keys,
-      require => [File["${home_dir}/.ssh"], Anchor["accounts::auth_keys_created_${title}"]],
+      require => [File[$auth_keys], Anchor["accounts::auth_keys_created_${title}"]],
     }
   }
 
