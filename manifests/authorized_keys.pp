@@ -35,8 +35,6 @@ define accounts::authorized_keys(
     require => File[$auth_keys],
   }
 
-  anchor { "accounts::auth_keys_created_${title}": }
-
   # backwards compatibility only - will be removed in 2.0
   # see https://github.com/deric/puppet-accounts/issues/40
   if !empty($ssh_key) {
@@ -66,7 +64,6 @@ define accounts::authorized_keys(
         content => template("${module_name}/authorized_keys.erb"),
         require => [File["${home_dir}/.ssh"]],
       }
-      Ssh_authorized_key<| |> -> File[$auth_keys]
     }
   } else {
     file { $auth_keys:
