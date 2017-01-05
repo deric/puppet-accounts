@@ -64,13 +64,20 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
 classes:
   - '::accounts'
 accounts::users:
-  user:
-    authorized_keys_file: '/etc/ssh/authorized_keys_user'
-    comment: "foo Bar"
+  user1:
+    authorized_keys_file: '/etc/ssh/user1/user1_authorized_keys'
+    comment: "user1"
     ssh_keys:
-      'user':
+      'local_key':
         type: "ssh-rsa"
-        key: "asdjsjgiov"
+        key: "AAAB"
+  user2:
+    authorized_keys_file: '/etc/ssh/user2/user2_authorized_keys'
+    comment: "user2"
+    ssh_keys:
+      'user2':
+        type: "ssh-rsa"
+        key: "AAAAB="
 EOS
     end
 
@@ -89,23 +96,32 @@ EOS
       ).exit_code).to be_zero
     end
 
-    describe file('/etc/ssh/authorized_keys_user') do
+    describe file('/etc/ssh/user1/user1_authorized_keys') do
       it { is_expected.to be_file }
       it { is_expected.to be_readable.by('owner') }
       it { is_expected.not_to be_readable.by('group') }
       it { is_expected.not_to be_readable.by('others') }
     end
 
-    describe file('/etc/ssh') do
-      it { should be_directory }
-      it { should be_readable.by('owner') }
-      it { should_not be_readable.by('group') }
-      it { should_not be_readable.by('others') }
+    describe file('/etc/ssh/user2/user2_authorized_keys') do
+      it { is_expected.to be_file }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
     end
 
-    describe command('cat /etc/ssh/authorized_keys_user') do
+    describe command('cat /etc/ssh/user1/user1_authorized_keys') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /ssh-rsa asdjsjgiov user/ }
+      its(:stdout) { is_expected.to match /ssh-rsa AAAB/ }
     end
+
+    describe command('cat /etc/ssh/user2/user2_authorized_keys') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /ssh-rsa AAAAB= user2/ }
+    end
+  end
+
+  after(:all) do
+    shell "rm #{HIERA_PATH}/hieradata/common.yaml"
   end
 end

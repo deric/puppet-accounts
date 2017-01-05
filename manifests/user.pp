@@ -66,6 +66,7 @@ define accounts::user(
   $password_max_age = undef,
   $allowdupe = false,
   $home_permissions = '0700',
+  $manage_ssh_dir = true,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -260,6 +261,7 @@ define accounts::user(
           home_dir             => $home_dir,
           purge_ssh_keys       => $purge_ssh_keys,
           require              => File[$home_dir],
+          manage_ssh_dir       => $manage_ssh_dir,
         }
       }
 

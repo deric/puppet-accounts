@@ -60,6 +60,9 @@ describe 'accounts::user', :type => :define do
     it { is_expected.to contain_file("#{home_dir}/.hushlogin").with(
       'ensure' => 'absent'
     )}
+
+    it { is_expected.to contain_anchor("accounts::auth_keys_created_#{user}")}
+    it { is_expected.to contain_anchor("accounts::ssh_dir_created_#{user}")}
   end
 
   context 'create new user' do
@@ -228,6 +231,9 @@ describe 'accounts::user', :type => :define do
     it { is_expected.to contain_file('/home/foo/.ssh/auth_keys').with({
       'ensure'  => 'present',
     }) }
+
+    it { is_expected.to contain_anchor("accounts::auth_keys_created_foo")}
+    it { is_expected.to contain_anchor("accounts::ssh_dir_created_foo")}
   end
 
   context 'supply custom path to authorized_keys file outside of home dir' do
@@ -573,5 +579,30 @@ describe 'accounts::user', :type => :define do
       'ensure' => 'file',
       'owner'  => 'foo',
     )}
+  end
+
+  context 'optional ssh dir management' do
+    let(:title) { 'foo' }
+    let(:params) do
+      {
+        :manage_ssh_dir => false,
+        :ssh_keys => {
+          'my_key' => {
+            'type' => 'ssh-rsa',
+            'key' => 'AAABBB',
+          },
+        },
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name' => 'foo',
+    )}
+
+    it { is_expected.not_to contain_file('/home/foo/.ssh').with(
+      'ensure' => 'file',
+      'owner'  => 'foo',
+    )}
+
   end
 end

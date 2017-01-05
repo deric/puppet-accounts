@@ -9,7 +9,8 @@ define accounts::authorized_keys(
   $username = $title,
   $authorized_keys_file = undef,
   $ssh_key = undef,
-  $ensure = 'present'
+  $ensure = 'present',
+  $manage_ssh_dir = true,
   ){
 
   if $authorized_keys_file {
@@ -20,16 +21,19 @@ define accounts::authorized_keys(
     $auth_key_file = "${ssh_dir}/authorized_keys"
   }
 
-  ensure_resource('file', $ssh_dir, {
-    'ensure'  => directory,
-    'owner'   => $username,
-    'group'   => $real_gid,
-    'mode'    => '0700',
-    'require' => File[$home_dir],
-    'before'  => Anchor["accounts::auth_keys_created_${title}"],
-  })
-
+  anchor { "accounts::ssh_dir_created_${title}": }
   anchor { "accounts::auth_keys_created_${title}": }
+
+  if $manage_ssh_dir {
+    ensure_resource('file', $ssh_dir, {
+      'ensure'  => directory,
+      'owner'   => $username,
+      'group'   => $real_gid,
+      'mode'    => '0700',
+      'require' => File[$home_dir],
+      'before'  => Anchor["accounts::ssh_dir_created_${title}"],
+    })
+  }
 
   # Error: Use of reserved word: type, must be quoted if intended to be a String value
   $ssh_key_defaults = {
@@ -38,7 +42,7 @@ define accounts::authorized_keys(
     'type'  => 'ssh-rsa', # intentional quotes! (Puppet 4 compatibility)
     target  => $auth_key_file,
     before  => Anchor["accounts::auth_keys_created_${title}"],
-    require => File[$ssh_dir],
+    require => Anchor["accounts::ssh_dir_created_${title}"],
   }
 
   # backwards compatibility only - will be removed in 2.0
@@ -52,7 +56,7 @@ define accounts::authorized_keys(
       options => $ssh_key['options'],
       target  => $auth_key_file,
       before  => Anchor["accounts::auth_keys_created_${title}"],
-      require => File[$ssh_dir],
+      require => Anchor["accounts::ssh_dir_created_${title}"],
     }
   }
 
@@ -69,7 +73,7 @@ define accounts::authorized_keys(
         group   => $real_gid,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
-        require => [File[$ssh_dir], Anchor["accounts::auth_keys_created_${title}"]],
+        require => [Anchor["accounts::ssh_dir_created_${title}"], Anchor["accounts::auth_keys_created_${title}"]],
       }
     }
   } else {
@@ -79,7 +83,7 @@ define accounts::authorized_keys(
       group   => $real_gid,
       source  => $ssh_key_source,
       mode    => '0600',
-      require => File[$ssh_dir],
+      require => Anchor["accounts::ssh_dir_created_${title}"],
     }
   }
 }

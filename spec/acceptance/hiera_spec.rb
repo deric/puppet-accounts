@@ -61,6 +61,10 @@ EOS
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /test/ }
     end
+
+    after(:all) do
+      shell "rm #{HIERA_PATH}/hieradata/common.yaml"
+    end
   end
 
   context 'avoid cyclic dependency' do
