@@ -220,6 +220,11 @@ describe 'accounts::user', :type => :define do
       :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
     }}
 
+    it { is_expected.to contain_file('/home/foo/.ssh').with({
+      'ensure'  => 'directory',
+      'mode'    => '0700',
+    }) }
+
     it { is_expected.to contain_file('/home/foo/.ssh/auth_keys').with({
       'ensure'  => 'present',
     }) }

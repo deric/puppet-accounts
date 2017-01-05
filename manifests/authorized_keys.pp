@@ -13,18 +13,21 @@ define accounts::authorized_keys(
   ){
 
   if $authorized_keys_file {
+    $ssh_dir = accounts_parent_dir($authorized_keys_file)
     $auth_key_file = $authorized_keys_file
   } else {
-    $auth_key_file = "${home_dir}/.ssh/authorized_keys"
+    $ssh_dir = "${home_dir}/.ssh"
+    $auth_key_file = "${ssh_dir}/authorized_keys"
   }
 
-  file { "${home_dir}/.ssh":
-    ensure  => directory,
-    owner   => $username,
-    group   => $real_gid,
-    mode    => '0700',
-    require => File[$home_dir],
-  }
+  ensure_resource('file', $ssh_dir, {
+    'ensure'  => directory,
+    'owner'   => $username,
+    'group'   => $real_gid,
+    'mode'    => '0700',
+    'require' => File[$home_dir],
+    'before'  => Anchor["accounts::auth_keys_created_${title}"],
+  })
 
   anchor { "accounts::auth_keys_created_${title}": }
 
@@ -35,6 +38,7 @@ define accounts::authorized_keys(
     'type'  => 'ssh-rsa', # intentional quotes! (Puppet 4 compatibility)
     target  => $auth_key_file,
     before  => Anchor["accounts::auth_keys_created_${title}"],
+    require => File[$ssh_dir],
   }
 
   # backwards compatibility only - will be removed in 2.0
@@ -48,6 +52,7 @@ define accounts::authorized_keys(
       options => $ssh_key['options'],
       target  => $auth_key_file,
       before  => Anchor["accounts::auth_keys_created_${title}"],
+      require => File[$ssh_dir],
     }
   }
 
@@ -64,7 +69,7 @@ define accounts::authorized_keys(
         group   => $real_gid,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
-        require => Anchor["accounts::auth_keys_created_${title}"],
+        require => [File[$ssh_dir], Anchor["accounts::auth_keys_created_${title}"]],
       }
     }
   } else {
@@ -74,7 +79,7 @@ define accounts::authorized_keys(
       group   => $real_gid,
       source  => $ssh_key_source,
       mode    => '0600',
-      require => File["${home_dir}/.ssh"],
+      require => File[$ssh_dir],
     }
   }
 }
