@@ -13,9 +13,9 @@ define accounts::authorized_keys(
   ){
 
   if $authorized_keys_file {
-    $auth_keys = $authorized_keys_file
+    $auth_key_file = $authorized_keys_file
   } else {
-    $auth_keys = "${home_dir}/.ssh/authorized_keys"
+    $auth_key_file = "${home_dir}/.ssh/authorized_keys"
   }
 
   file { "${home_dir}/.ssh":
@@ -33,7 +33,7 @@ define accounts::authorized_keys(
     ensure  => present,
     user    => $username,
     'type'  => 'ssh-rsa', # intentional quotes! (Puppet 4 compatibility)
-    target  => $auth_keys,
+    target  => $auth_key_file,
     before  => Anchor["accounts::auth_keys_created_${title}"],
   }
 
@@ -46,7 +46,7 @@ define accounts::authorized_keys(
       type    => $ssh_key['type'],
       key     => $ssh_key['key'],
       options => $ssh_key['options'],
-      target  => $auth_keys,
+      target  => $auth_key_file,
       before  => Anchor["accounts::auth_keys_created_${title}"],
     }
   }
@@ -58,7 +58,7 @@ define accounts::authorized_keys(
   # prior to Puppet 3.6 `purge_ssh_keys` is not supported
   if versioncmp($::puppetversion, '3.6.0') < 0 and $purge_ssh_keys {
     if !empty($ssh_keys) or !empty($ssh_key) {
-      file { $auth_keys:
+      file { $auth_key_file:
         ensure  => $ensure,
         owner   => $username,
         group   => $real_gid,
@@ -68,7 +68,7 @@ define accounts::authorized_keys(
       }
     }
   } else {
-    file { $auth_keys:
+    file { $auth_key_file:
       ensure  => $ensure,
       owner   => $username,
       group   => $real_gid,
