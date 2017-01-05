@@ -26,14 +26,17 @@ define accounts::authorized_keys(
     require => File[$home_dir],
   }
 
+  anchor { "accounts::auth_keys_created_${title}": }
+
   # Error: Use of reserved word: type, must be quoted if intended to be a String value
   $ssh_key_defaults = {
     ensure  => present,
     user    => $username,
+    target  => $auth_keys,
     'type'  => 'ssh-rsa',
+    before  => Anchor["accounts::auth_keys_created_${title}"],
+    require => File[$auth_keys],
   }
-
-  anchor { "accounts::auth_keys_created_${title}": }
 
   # backwards compatibility only - will be removed in 2.0
   # see https://github.com/deric/puppet-accounts/issues/40
@@ -44,8 +47,8 @@ define accounts::authorized_keys(
       type    => $ssh_key['type'],
       key     => $ssh_key['key'],
       options => $ssh_key['options'],
-      require =>  File[$auth_keys],
-      before  => Anchor["accounts::auth_keys_created_${title}"],
+      target  => $auth_keys,
+      require => [File[$auth_keys], Anchor["accounts::auth_keys_created_${title}"]],
     }
   }
 
@@ -62,9 +65,8 @@ define accounts::authorized_keys(
         group   => $real_gid,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
-        require => [File["${home_dir}/.ssh"], Anchor["accounts::auth_keys_created_${title}"]],
+        require => [File["${home_dir}/.ssh"]],
       }
-      Ssh_authorized_key<| |> -> File[$auth_keys]
     }
   } else {
     file { $auth_keys:
