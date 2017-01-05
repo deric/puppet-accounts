@@ -32,10 +32,9 @@ define accounts::authorized_keys(
   $ssh_key_defaults = {
     ensure  => present,
     user    => $username,
+    'type'  => 'ssh-rsa', # intentional quotes! (Puppet 4 compatibility)
     target  => $auth_keys,
-    'type'  => 'ssh-rsa',
     before  => Anchor["accounts::auth_keys_created_${title}"],
-    require => File[$auth_keys],
   }
 
   # backwards compatibility only - will be removed in 2.0
@@ -48,7 +47,7 @@ define accounts::authorized_keys(
       key     => $ssh_key['key'],
       options => $ssh_key['options'],
       target  => $auth_keys,
-      require => [File[$auth_keys], Anchor["accounts::auth_keys_created_${title}"]],
+      before  => Anchor["accounts::auth_keys_created_${title}"],
     }
   }
 
@@ -65,7 +64,7 @@ define accounts::authorized_keys(
         group   => $real_gid,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
-        require => [File["${home_dir}/.ssh"]],
+        require => Anchor["accounts::auth_keys_created_${title}"],
       }
     }
   } else {
