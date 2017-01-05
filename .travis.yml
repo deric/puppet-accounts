@@ -42,6 +42,12 @@ matrix:
       sudo: required
     - rvm: 2.3.2
       dist: trusty
+      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.4
+      script: bundle exec rake acceptance
+      services: docker
+      sudo: required
+    - rvm: 2.3.2
+      dist: trusty
       env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.8
       script: bundle exec rake acceptance
       services: docker
