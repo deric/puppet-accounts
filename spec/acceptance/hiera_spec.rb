@@ -139,6 +139,9 @@ EOS
       its(:stdout) { is_expected.to match /it : it sudo/ }
     end
 
+    after(:all) do
+      shell "rm #{HIERA_PATH}/hieradata/common.yaml"
+    end
   end
 end
 

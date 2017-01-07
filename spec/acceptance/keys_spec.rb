@@ -63,16 +63,20 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
 <<-EOS
 classes:
   - '::accounts'
+accounts::user_defaults:
+  ssh_dir_owner: 'root'
+  ssh_dir_group: 'root'
+  manage_ssh_dir: false
 accounts::users:
   user1:
-    authorized_keys_file: '/etc/ssh/user1/user1_authorized_keys'
+    authorized_keys_file: '/etc/ssh/user1_authorized_keys'
     comment: "user1"
     ssh_keys:
       'local_key':
         type: "ssh-rsa"
         key: "AAAB"
   user2:
-    authorized_keys_file: '/etc/ssh/user2/user2_authorized_keys'
+    authorized_keys_file: '/etc/ssh/user2_authorized_keys'
     comment: "user2"
     ssh_keys:
       'user2':
@@ -96,28 +100,38 @@ EOS
       ).exit_code).to be_zero
     end
 
-    describe file('/etc/ssh/user1/user1_authorized_keys') do
+    describe file('/etc/ssh/user1_authorized_keys') do
       it { is_expected.to be_file }
       it { is_expected.to be_readable.by('owner') }
       it { is_expected.not_to be_readable.by('group') }
       it { is_expected.not_to be_readable.by('others') }
     end
 
-    describe file('/etc/ssh/user2/user2_authorized_keys') do
+    describe file('/etc/ssh/user2_authorized_keys') do
       it { is_expected.to be_file }
       it { is_expected.to be_readable.by('owner') }
       it { is_expected.not_to be_readable.by('group') }
       it { is_expected.not_to be_readable.by('others') }
     end
 
-    describe command('cat /etc/ssh/user1/user1_authorized_keys') do
+    describe command('stat -c "%a %U %G" /etc/ssh/user1_authorized_keys') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /600 root root/ }
+    end
+
+    describe command('cat /etc/ssh/user1_authorized_keys') do
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /ssh-rsa AAAB/ }
     end
 
-    describe command('cat /etc/ssh/user2/user2_authorized_keys') do
+    describe command('cat /etc/ssh/user2_authorized_keys') do
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /ssh-rsa AAAAB= user2/ }
+    end
+
+    describe command('stat -c "%a %U %G" /etc/ssh/user2_authorized_keys') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /600 root root/ }
     end
   end
 

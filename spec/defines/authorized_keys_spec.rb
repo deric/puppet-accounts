@@ -19,7 +19,7 @@ describe 'accounts::authorized_keys', :type => :define do
 
   context 'when ssh key is given' do
     let(:params){{
-      :real_gid => group,
+      :ssh_dir_group => group,
       :ssh_keys => {
         'key1' => {
           'type' => 'ssh-rsa',
@@ -42,7 +42,7 @@ describe 'accounts::authorized_keys', :type => :define do
 
   context 'handle multiple keys' do
     let(:params){{
-      :real_gid => group,
+      :ssh_dir_group => group,
       :ssh_keys => {
         'key1' => {
           'type' => 'ssh-rsa',

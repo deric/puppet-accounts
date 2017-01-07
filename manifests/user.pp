@@ -67,6 +67,8 @@ define accounts::user(
   $allowdupe = false,
   $home_permissions = '0700',
   $manage_ssh_dir = true,
+  $ssh_dir_owner = undef,
+  $ssh_dir_group = undef,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -117,6 +119,9 @@ define accounts::user(
       $real_gid = undef
     }
   }
+
+  $_ssh_dir_owner = pick($ssh_dir_owner, $username)
+  $_ssh_dir_group = pick($ssh_dir_group, $real_gid, $username)
 
   if $home {
     $home_dir = $home
@@ -245,16 +250,14 @@ define accounts::user(
             group  => $real_gid,
             mode   => $home_permissions,
           }
-        }
-        else {
+        } else {
           file { "${home_dir}/.hushlogin":
             ensure  => absent,
           }
         }
 
         accounts::authorized_keys { $username:
-          real_gid             => $real_gid,
-          ssh_key              => $ssh_key,
+          ssh_key              => $ssh_key, # DEPRECATED
           ssh_keys             => $ssh_keys,
           ssh_key_source       => $ssh_key_source,
           authorized_keys_file => $authorized_keys_file,
@@ -262,6 +265,8 @@ define accounts::user(
           purge_ssh_keys       => $purge_ssh_keys,
           require              => File[$home_dir],
           manage_ssh_dir       => $manage_ssh_dir,
+          ssh_dir_owner        => $_ssh_dir_owner,
+          ssh_dir_group        => $_ssh_dir_group,
         }
       }
 

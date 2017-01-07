@@ -1,16 +1,35 @@
 # Manage authorized ssh keys
 #
+#  * [ssh_keys] - Hash containing public ssh keys:
+#      {
+#        'key1' => {
+#          'type' => 'ssh-rsa',
+#          'key' => 'AAAA',
+#        },
+#        'key2' => {
+#          'type' => 'ssh-rsa',
+#          'key' => 'BBBB',
+#        }
+#      }
+#  * [home_dir] user's home directory
+#  * [purge_ssh_keys] keys that are not explicitly stated in
+#    `ssh_keys` will be removed
+#  * [ssh_key_source] path to file with `authorized_keys` content (overrides `ssh_keys`)
+#  * [ssh_dir_owner] .ssh dir owner and authorized_keys file as well
+#  * [ssh_dir_group] .ssh dir group and authorized_keys file as well
+#
 define accounts::authorized_keys(
   $ssh_keys,
   $home_dir,
   $purge_ssh_keys,
-  $real_gid = $title,
   $ssh_key_source = undef,
   $username = $title,
   $authorized_keys_file = undef,
   $ssh_key = undef,
   $ensure = 'present',
   $manage_ssh_dir = true,
+  $ssh_dir_owner = $title,
+  $ssh_dir_group = $title,
   ){
 
   if $authorized_keys_file {
@@ -27,8 +46,8 @@ define accounts::authorized_keys(
   if $manage_ssh_dir {
     ensure_resource('file', $ssh_dir, {
       'ensure'  => directory,
-      'owner'   => $username,
-      'group'   => $real_gid,
+      'owner'   => $ssh_dir_owner,
+      'group'   => $ssh_dir_group,
       'mode'    => '0700',
       'require' => File[$home_dir],
       'before'  => Anchor["accounts::ssh_dir_created_${title}"],
@@ -60,8 +79,16 @@ define accounts::authorized_keys(
     }
   }
 
-  if !empty($ssh_keys) {
-    create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
+  if($ssh_dir_owner != $title or $ssh_dir_group != $title) {
+    # manage authorized keys from template
+    File<| title == $auth_key_file |> {
+      content => template("${module_name}/authorized_keys.erb"),
+    }
+  } else {
+    # ssh_authorized_key does not support changing key owner
+    if !empty($ssh_keys) {
+      create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
+    }
   }
 
   # prior to Puppet 3.6 `purge_ssh_keys` is not supported
@@ -69,8 +96,8 @@ define accounts::authorized_keys(
     if !empty($ssh_keys) or !empty($ssh_key) {
       file { $auth_key_file:
         ensure  => $ensure,
-        owner   => $username,
-        group   => $real_gid,
+        owner   => $ssh_dir_owner,
+        group   => $ssh_dir_group,
         mode    => '0600',
         content => template("${module_name}/authorized_keys.erb"),
         require => [Anchor["accounts::ssh_dir_created_${title}"], Anchor["accounts::auth_keys_created_${title}"]],
@@ -79,8 +106,8 @@ define accounts::authorized_keys(
   } else {
     file { $auth_key_file:
       ensure  => $ensure,
-      owner   => $username,
-      group   => $real_gid,
+      owner   => $ssh_dir_owner,
+      group   => $ssh_dir_group,
       source  => $ssh_key_source,
       mode    => '0600',
       require => Anchor["accounts::ssh_dir_created_${title}"],

@@ -600,9 +600,48 @@ describe 'accounts::user', :type => :define do
     )}
 
     it { is_expected.not_to contain_file('/home/foo/.ssh').with(
-      'ensure' => 'file',
+      'ensure' => 'directory',
       'owner'  => 'foo',
+      'mode'   => '0700',
+    )}
+  end
+
+  context 'change ownership of .ssh dir' do
+    let(:title) { 'foo' }
+    let(:home) { '/home/foo' }
+    let(:params) do
+      {
+        :manage_ssh_dir => true,
+        :ssh_dir_owner => 'root',
+        :ssh_dir_group => 'root',
+        :ssh_keys => {
+          'my_key' => {
+            'type' => 'ssh-rsa',
+            'key' => 'AAABBB',
+          },
+        },
+      }
+    end
+
+    it { is_expected.to contain_user('foo').with(
+      'name' => 'foo',
     )}
 
+    it { is_expected.to contain_file("#{home}/.ssh").with(
+      'ensure' => 'directory',
+      'owner'  => 'root',
+      'group'  => 'root',
+    )}
+
+    it { is_expected.to contain_file("#{home}/.ssh/authorized_keys").with({
+      'ensure'  => 'present',
+      'owner'   => 'root',
+      'group'   => 'root',
+      'mode'    => '0600'
+    }) }
+
+    it { is_expected.to contain_file("#{home}/.ssh/authorized_keys")
+      .with_content(/ssh-rsa AAABBB my_key_ssh-rsa/)
+    }
   end
 end
