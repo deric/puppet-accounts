@@ -189,6 +189,9 @@ explicit salt if needed (see variable doc below).
 * `hash` - (optional, default 'SHA-512') password hash function to use (valid strings: see [puppetlabs/stdlib#pw_hash](https://github.com/puppetlabs/puppetlabs-stdlib#pw_hash))
 * `force_removal` - will kill user's process before removing account with `ensure => absent` (default: `true`)
 * `hushlogin` - creates a `.hushlogin` file in users home directory that disables the motd
+* `ssh_dir_owner` (default: `user`) owner of `.ssh` directory (and `authorized_keys` file in the directory). Should not be changed unless you're moving out of user's home (see #64 for more details).
+* ssh_dir_group` (default: `user`) owner of `.ssh` directory (and `authorized_keys` file in the directory).
+* `manage_ssh_dir` Whether `.ssh` directory should be managed by this module (default: `true`)
 
 Example:
 

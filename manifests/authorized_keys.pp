@@ -14,6 +14,7 @@
 #  * [home_dir] user's home directory
 #  * [purge_ssh_keys] keys that are not explicitly stated in
 #    `ssh_keys` will be removed
+#  * [manage_ssh_dir] whether `.ssh` directory should be managed by this module (default: `true`)
 #  * [ssh_key_source] path to file with `authorized_keys` content (overrides `ssh_keys`)
 #  * [ssh_dir_owner] .ssh dir owner and authorized_keys file as well
 #  * [ssh_dir_group] .ssh dir group and authorized_keys file as well
