@@ -1,6 +1,6 @@
 {
   "name": "deric-accounts",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "author": "Tomas Barton",
   "summary": "Module for managing user accounts and groups and SSH keys.",
   "license": "Apache-2.0",
