@@ -56,7 +56,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe command('getent group dalp') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /dalp:x:(\d+):dalp/ }
+      its(:stdout) { is_expected.to match /dalp:x:(\d+):/ }
     end
 
     describe user('deployer') do
@@ -72,7 +72,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe command('getent group deployer') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /deployer:x:(\d+):deployer/ }
+      its(:stdout) { is_expected.to match /deployer:x:(\d+):/ }
     end
 
   end

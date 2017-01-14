@@ -35,8 +35,8 @@ describe 'accounts_group_members' do
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},
           'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
-          'foo' => {'members' => [:foo], 'require' => ['User[foo]']},
-          'john' => {'members' => [:john], 'require' => ['User[john]']},
+          'foo' => {'members' => [], 'require' => []},
+          'john' => {'members' => [], 'require' => []},
         }
       )
     end
@@ -50,8 +50,8 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'alice' => {'members' => [:alice], 'require'=> ['User[alice]']},
-          'bob' => {'members' => [:bob], 'require'=> ['User[bob]']},
+          'alice' => {'members' => [], 'require'=> []},
+          'bob' => {'members' => [], 'require'=> []},
           'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'users' => {
             'members' => [:alice, :bob],
@@ -62,14 +62,14 @@ describe 'accounts_group_members' do
     end
   end
 
-  describe 'extract also primary groups' do
+  describe 'do not extract primary groups' do
     it 'finds group specified by primary_group' do
       users = {
         foo: { 'primary_group' => 'testgroup', 'manage_group' => true},
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {'testgroup' => {'members' => [:foo], 'require' => ['User[foo]']}}
+        {'testgroup' => {'members' => [], 'require' => []}}
       )
     end
 
@@ -81,7 +81,7 @@ describe 'accounts_group_members' do
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {"testgroup"=>{"members"=>[:foo], "require"=>["User[foo]"], "gid"=>123}}
+        {"testgroup"=>{"members"=>[], "require"=>[], "gid"=>123}}
       )
     end
   end

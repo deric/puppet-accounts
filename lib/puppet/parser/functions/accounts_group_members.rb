@@ -25,8 +25,10 @@ EOS
         res[g]['members'] = [] unless res[g].key?('members')
         res[g]['require'] = [] unless res[g].key?('require')
       end
-      res[g]['members'] << user unless res[g]['members'].include? user
-      res[g]['require'] << "User[#{user}]"
+      unless user.nil?
+        res[g]['members'] << user unless res[g]['members'].include? user
+        res[g]['require'] << "User[#{user}]"
+      end
     end
 
     res = args[1].clone
@@ -37,7 +39,8 @@ EOS
       val['manage_group'] = true unless val.key? 'manage_group'
       if val['manage_group']
         g = val['primary_group']
-        assign_helper.call(res, g, user)
+        # no need to assign user to his primary group
+        assign_helper.call(res, g, nil)
         if val.key? 'gid'
           res[g]['gid'] = val['gid'] # manually override GID
         end
