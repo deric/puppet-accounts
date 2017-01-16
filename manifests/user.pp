@@ -267,10 +267,11 @@ define accounts::user(
           authorized_keys_file => $authorized_keys_file,
           home_dir             => $home_dir,
           purge_ssh_keys       => $purge_ssh_keys,
-          require              => File[$home_dir],
           manage_ssh_dir       => $manage_ssh_dir,
           ssh_dir_owner        => $_ssh_dir_owner,
           ssh_dir_group        => $_ssh_dir_group,
+          gid                  => $real_gid,
+          require              => File[$home_dir],
         }
       }
 

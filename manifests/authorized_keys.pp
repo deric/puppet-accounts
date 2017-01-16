@@ -23,14 +23,15 @@ define accounts::authorized_keys(
   $ssh_keys,
   $home_dir,
   $purge_ssh_keys,
+  $gid = $title,
+  $ssh_dir_owner = $title,
+  $ssh_dir_group = $title,
   $ssh_key_source = undef,
   $username = $title,
   $authorized_keys_file = undef,
   $ssh_key = undef,
   $ensure = 'present',
   $manage_ssh_dir = true,
-  $ssh_dir_owner = $title,
-  $ssh_dir_group = $title,
   ){
 
   if $authorized_keys_file {
@@ -80,7 +81,7 @@ define accounts::authorized_keys(
     }
   }
 
-  if($ssh_dir_owner != $title or $ssh_dir_group != $title) {
+  if($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
     # manage authorized keys from template
     File<| title == $auth_key_file |> {
       content => template("${module_name}/authorized_keys.erb"),
