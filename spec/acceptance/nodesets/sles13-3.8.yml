@@ -1,0 +1,14 @@
+HOSTS:
+  sles-13-x64:
+    platform: sles-13-amd64
+    hypervisor : docker
+    image: deric/opensuse-puppet:harlequin-3.8.5
+    docker_preserve_image: false
+    roles:
+      - agent
+    debug: false
+    docker_cmd: '["sh","-c", "git clone https://github.com/deric/puppet-gpasswd.git /etc/puppet/modules/gpasswd && /usr/sbin/sshd-gen-keys-start && /usr/sbin/sshd -D"]'
+CONFIG:
+  masterless: true
+  log_level: verbose
+  type: foss

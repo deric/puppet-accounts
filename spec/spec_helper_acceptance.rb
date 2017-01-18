@@ -4,7 +4,7 @@ require 'beaker/puppet_install_helper'
 
 run_puppet_install_helper if ENV['PUPPET_install'] == 'yes'
 
-UNSUPPORTED_PLATFORMS = ['Suse','windows','AIX','Solaris']
+UNSUPPORTED_PLATFORMS = ['windows','AIX','Solaris']
 
 HIERA_PATH = '/etc/puppetlabs/code/environments/production'
 
