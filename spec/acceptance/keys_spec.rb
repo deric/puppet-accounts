@@ -133,9 +133,46 @@ EOS
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /600 root root/ }
     end
-  end
 
-  after(:all) do
-    shell "rm #{HIERA_PATH}/hieradata/common.yaml"
-  end
+    after(:all) do
+      shell "rm #{HIERA_PATH}/hieradata/common.yaml"
+    end
+ end
+
+
+  context 'provide custom ssh options' do
+    let(:pp) do
+<<-EOS
+hiera_include('classes')
+EOS
+    end
+
+    it 'runs without cycle' do
+      # we use global yaml config
+      expect(apply_manifest(pp,
+        :catch_failures => false,
+        :debug => false
+      ).exit_code).to be_zero
+    end
+
+    describe file('/home/george/.ssh') do
+      it { is_expected.to be_directory }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
+    end
+
+    describe file('/home/george/.ssh/authorized_keys') do
+      it { is_expected.to be_file }
+      it { is_expected.to be_readable.by('owner') }
+      it { is_expected.not_to be_readable.by('group') }
+      it { is_expected.not_to be_readable.by('others') }
+    end
+
+    describe command('cat /home/george/.ssh/authorized_keys') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /from="\*.sales.example.net,!pc.sales.example.net",permitopen="192.0.2.1:80" ssh-dss AAAAB2...19Q== george@example.net/ }
+    end
+ end
+
 end

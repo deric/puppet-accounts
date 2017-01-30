@@ -1,1 +1,13 @@
 ---
+classes:
+  - '::accounts'
+accounts::users:
+  george:
+    ssh_keys:
+      'george@example.net':
+        type: "ssh-dss"
+        key: "AAAAB2...19Q=="
+        options:
+          - 'from="*.sales.example.net,!pc.sales.example.net"'
+          - 'permitopen="192.0.2.1:80"'
+
