@@ -68,6 +68,27 @@ describe 'accounts::authorized_keys', :type => :define do
     it { is_expected.to contain_file(file).with_content(/ssh-rsa BBBB key2_ssh-rsa/) }
   end
 
+  context 'pass ssh key options' do
+    let(:params){{
+      :ssh_keys => {
+        'key1' => {
+          'type' => 'ssh-rsa',
+          'key' => 'AAAA',
+          'options' => ['from="pc.sales.example.net"', 'permitopen="192.0.2.1:80"']
+        },
+      },
+      :home_dir => "/home/#{user}",
+      :purge_ssh_keys => true,
+    }}
 
+    it { is_expected.to contain_file(file).with(
+      'ensure' => 'present',
+      'owner'  => user,
+      'group'  => group,
+      'mode'   => '0600',
+    )}
+
+    it { is_expected.to contain_file(file).with_content(/from="pc.sales.example.net",permitopen="192.0.2.1:80" ssh-rsa AAAA key1_ssh-rsa/) }
+  end
 
 end
