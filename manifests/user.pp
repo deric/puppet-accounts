@@ -196,6 +196,7 @@ define accounts::user(
         ensure    => present,
         uid       => $uid,
         shell     => $shell,
+        groups    => $groups,
         allowdupe => $allowdupe,
       }
 
