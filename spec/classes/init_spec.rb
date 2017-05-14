@@ -172,6 +172,15 @@ describe 'accounts', :type => :class do
         )}
       else
         it { is_expected.to contain_file("/root/.ssh/authorized_keys")
+          .with({
+            'ensure'  => 'present',
+            'owner'   => 'root',
+            'group'   => '0',
+            'mode'    => '0600'
+          })
+        }
+
+        it { is_expected.to contain_file("/root/.ssh/authorized_keys")
           .with_content(/ssh-rsa AAA_key1 root_key1_ssh-rsa/)
         }
 

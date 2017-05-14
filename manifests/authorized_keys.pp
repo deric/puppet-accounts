@@ -81,38 +81,38 @@ define accounts::authorized_keys(
     }
   }
 
-  if($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
-    # manage authorized keys from template
-    File<| title == $auth_key_file |> {
-      content => template("${module_name}/authorized_keys.erb"),
+  # prior to Puppet 3.6 `purge_ssh_keys` is not supported
+  # `purge_ssh_keys` is defined on User resource
+  if versioncmp($::puppetversion, '3.6.0') < 0 {
+    if $purge_ssh_keys {
+      File<| title == $auth_key_file |> {
+        content => template("${module_name}/authorized_keys.erb"),
+      }
+    } else {
+      notify{"$username purge keys is false ": }
     }
   } else {
-    # ssh_authorized_key does not support changing key owner
-    if !empty($ssh_keys) {
+    if ($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
+      # manage authorized keys from template
+      File<| title == $auth_key_file |> {
+        content => template("${module_name}/authorized_keys.erb"),
+      }
+    } elsif !empty($ssh_keys) {
+      # ssh_authorized_key does not support changing key owner
       create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
     }
   }
-
-  # prior to Puppet 3.6 `purge_ssh_keys` is not supported
-  if versioncmp($::puppetversion, '3.6.0') < 0 and $purge_ssh_keys {
-    if !empty($ssh_keys) or !empty($ssh_key) {
-      file { $auth_key_file:
-        ensure  => $ensure,
-        owner   => $ssh_dir_owner,
-        group   => $ssh_dir_group,
-        mode    => '0600',
-        content => template("${module_name}/authorized_keys.erb"),
-        require => [Anchor["accounts::ssh_dir_created_${title}"], Anchor["accounts::auth_keys_created_${title}"]],
-      }
-    }
-  } else {
-    file { $auth_key_file:
-      ensure  => $ensure,
-      owner   => $ssh_dir_owner,
-      group   => $ssh_dir_group,
+  if $ssh_key_source {
+    File<| title == $auth_key_file |> {
       source  => $ssh_key_source,
-      mode    => '0600',
-      require => Anchor["accounts::ssh_dir_created_${title}"],
     }
+  }
+
+  file { $auth_key_file:
+    ensure  => $ensure,
+    owner   => $ssh_dir_owner,
+    group   => $ssh_dir_group,
+    mode    => '0600',
+    require => [Anchor["accounts::ssh_dir_created_${title}"], Anchor["accounts::auth_keys_created_${title}"]],
   }
 }
