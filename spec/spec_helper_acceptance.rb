@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 
 run_puppet_install_helper if ENV['PUPPET_install'] == 'yes'
 
-UNSUPPORTED_PLATFORMS = ['windows','AIX','Solaris']
+UNSUPPORTED_PLATFORMS = ['windows','AIX','Solaris'].freeze
 
 HIERA_PATH = '/etc/puppetlabs/code/environments/production'
 

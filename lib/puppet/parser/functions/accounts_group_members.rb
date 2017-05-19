@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Puppet::Parser::Functions
-  newfunction(:accounts_group_members, :type => :rvalue, :doc => <<-EOS
-From Hash of all users and their configuration assign users to group definitions
-given as second argument
-an optional 3rd argument are the default groups for all users
+  newfunction(:accounts_group_members, :type => :rvalue, :doc => <<~EOS
+    From Hash of all users and their configuration assign users to group definitions
+    given as second argument
+    an optional 3rd argument are the default groups for all users
 EOS
-  ) do |args|
+             ) do |args|
 
     if args.size != 2 and args.size != 3
       raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts 2 or 3")
@@ -57,5 +59,4 @@ EOS
     end
     res
   end
-
 end

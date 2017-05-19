@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec-system/spec_helper'
 require 'rspec-system-puppet/helpers'
 require 'rspec-system-serverspec/helpers'

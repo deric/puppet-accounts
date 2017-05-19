@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'pry'
 
@@ -5,27 +7,27 @@ describe 'YAML declaration', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osf
   # see https://github.com/deric/puppet-accounts/issues/46
   context 'manage users and groups' do
     let(:yaml) do
-<<-EOS
-classes:
-  - '::accounts'
-accounts::user_defaults:
-  purge_ssh_keys: false
-accounts::users:
-  account1:
-    manage_group: false
-    uid: 1417
-    groups:
-      - staff
-    comment: 'test'
-accounts::groups:
-  staff:
-    gid: 3000
+<<~EOS
+  classes:
+    - '::accounts'
+  accounts::user_defaults:
+    purge_ssh_keys: false
+  accounts::users:
+    account1:
+      manage_group: false
+      uid: 1417
+      groups:
+        - staff
+      comment: 'test'
+  accounts::groups:
+    staff:
+      gid: 3000
 EOS
     end
 
         let(:pp) do
-<<-EOS
-hiera_include('classes')
+<<~EOS
+  hiera_include('classes')
 EOS
     end
 
@@ -34,8 +36,7 @@ EOS
 
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe group('staff') do
@@ -69,30 +70,30 @@ EOS
 
   context 'avoid cyclic dependency' do
     let(:yaml) do
-<<-EOS
-classes:
-  - '::accounts'
-accounts:
- user_defaults:
-   authorized_keys_file: '/etc/ssh/%u/authorized_keys'
-   manage_group: true
-   shell: "/bin/bash"
-accounts::users:
-  it:
-    comment: "IT Admin"
-    managehome: true
-    pwhash: '$1$dn3lUNjy$i00w1UuAzN7M/yNtGX0a9/'
-    groups: ['sudo', 'it']
-  jordi:
-    comment: "Jordi Garcia"
-    groups: ['sudo', 'it']
-    shell: '/bin/bash'
+<<~EOS
+  classes:
+    - '::accounts'
+  accounts:
+   user_defaults:
+     authorized_keys_file: '/etc/ssh/%u/authorized_keys'
+     manage_group: true
+     shell: "/bin/bash"
+  accounts::users:
+    it:
+      comment: "IT Admin"
+      managehome: true
+      pwhash: '$1$dn3lUNjy$i00w1UuAzN7M/yNtGX0a9/'
+      groups: ['sudo', 'it']
+    jordi:
+      comment: "Jordi Garcia"
+      groups: ['sudo', 'it']
+      shell: '/bin/bash'
 EOS
     end
 
         let(:pp) do
-<<-EOS
-hiera_include('classes')
+<<~EOS
+  hiera_include('classes')
 EOS
     end
 
@@ -101,8 +102,7 @@ EOS
 
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe group('it') do

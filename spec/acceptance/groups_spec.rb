@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'pry'
 
@@ -79,6 +81,5 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /1550/ }
     end
-
   end
 end

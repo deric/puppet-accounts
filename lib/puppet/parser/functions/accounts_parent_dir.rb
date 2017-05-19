@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Puppet::Parser::Functions
-  newfunction(:accounts_parent_dir, :type => :rvalue, :doc => <<-EOS
-Return directory from path to file
+  newfunction(:accounts_parent_dir, :type => :rvalue, :doc => <<~EOS
+    Return directory from path to file
 EOS
-  ) do |args|
+             ) do |args|
 
     if args.size != 1
       raise(Puppet::ParseError, "accounts_group_members(): Wrong number of args, given #{args.size}, accepts 1")

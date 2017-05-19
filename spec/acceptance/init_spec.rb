@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'pry'
 
@@ -106,8 +108,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     it 'install accounts' do
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false,
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
       # TODO: right now two runs are required
       expect(apply_manifest(pp, :catch_failures => false, :debug => false).exit_code).to be_zero
     end
@@ -136,8 +137,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       it 'applies manifest' do
         expect(apply_manifest(pp,
           :catch_failures => false,
-          :debug => true,
-        ).exit_code).to be_zero
+          :debug => true).exit_code).to be_zero
       end
 
       describe command('awk -F\':\' \'/testgroup/{print $4}\' /etc/group') do
@@ -145,8 +145,6 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         its(:stdout) { is_expected.to match /www-data/ }
         its(:stdout) { is_expected.to match /testuser/ }
       end
-
     end
   end
-
 end

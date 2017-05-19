@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'pry'
 
@@ -29,8 +31,7 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
       shell 'echo "ssh-rsa CCCC key3" > /root/.ssh/authorized_keys'
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false,
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe file('/root/.ssh/authorized_keys') do
@@ -55,39 +56,38 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
       its(:stdout) { is_expected.not_to match /ssh-rsa CCCC key3/ }
       its(:exit_status) { is_expected.to eq 1 }
     end
-
   end
 
   context 'use custom key location' do
     let(:yaml) do
-<<-EOS
-classes:
-  - '::accounts'
-accounts::user_defaults:
-  ssh_dir_owner: 'root'
-  ssh_dir_group: 'root'
-  manage_ssh_dir: false
-accounts::users:
-  user1:
-    authorized_keys_file: '/etc/ssh/user1_authorized_keys'
-    comment: "user1"
-    ssh_keys:
-      'local_key':
-        type: "ssh-rsa"
-        key: "AAAB"
-  user2:
-    authorized_keys_file: '/etc/ssh/user2_authorized_keys'
-    comment: "user2"
-    ssh_keys:
-      'user2':
-        type: "ssh-rsa"
-        key: "AAAAB="
+<<~EOS
+  classes:
+    - '::accounts'
+  accounts::user_defaults:
+    ssh_dir_owner: 'root'
+    ssh_dir_group: 'root'
+    manage_ssh_dir: false
+  accounts::users:
+    user1:
+      authorized_keys_file: '/etc/ssh/user1_authorized_keys'
+      comment: "user1"
+      ssh_keys:
+        'local_key':
+          type: "ssh-rsa"
+          key: "AAAB"
+    user2:
+      authorized_keys_file: '/etc/ssh/user2_authorized_keys'
+      comment: "user2"
+      ssh_keys:
+        'user2':
+          type: "ssh-rsa"
+          key: "AAAAB="
 EOS
     end
 
         let(:pp) do
-<<-EOS
-hiera_include('classes')
+<<~EOS
+  hiera_include('classes')
 EOS
     end
 
@@ -96,8 +96,7 @@ EOS
 
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe file('/etc/ssh/user1_authorized_keys') do
@@ -142,8 +141,8 @@ EOS
 
   context 'provide custom ssh options' do
     let(:pp) do
-<<-EOS
-hiera_include('classes')
+<<~EOS
+  hiera_include('classes')
 EOS
     end
 
@@ -151,8 +150,7 @@ EOS
       # we use global yaml config
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe file('/home/george/.ssh') do
@@ -174,5 +172,4 @@ EOS
       its(:stdout) { is_expected.to match /from="\*.sales.example.net,!pc.sales.example.net",permitopen="192.0.2.1:80" ssh-dss AAAAB2...19Q== george@example.net/ }
     end
  end
-
 end

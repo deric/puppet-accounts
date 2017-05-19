@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'pry'
 
@@ -27,8 +29,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       # https://github.com/deric/puppet-accounts/issues/60
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false
-      ).exit_code).to be_zero
+        :debug => false).exit_code).to be_zero
     end
 
     describe group('users') do
@@ -74,7 +75,5 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to match /deployer:x:(\d+):/ }
     end
-
   end
-
 end

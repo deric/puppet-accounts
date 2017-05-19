@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Facter.add('salts') do
   confine :kernel => "Linux"
   confine { File.exist? '/etc/shadow' }
