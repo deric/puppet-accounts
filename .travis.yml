@@ -18,12 +18,13 @@ script:
 rvm:
 # see http://rubies.travis-ci.org/
   - 1.9.3
-  - 2.0.0
   - 2.1.10
+  - 2.2.7
+  - 2.3.3
 env:
 #  - BEAKER_set="debian-8-docker"
-  - PUPPET_VERSION="~> 3.4.0"
-  - PUPPET_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
+#  - PUPPET_VERSION="~> 3.4.0"
+#  - PUPPET_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
   # doesn't work with allowdupe param
@@ -32,6 +33,8 @@ env:
   - PUPPET_VERSION="~> 4.3.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 4.7.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 4.8.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.9.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.10.0" STRICT_VARIABLES=yes
 matrix:
   include:
     - rvm: 2.3.2
@@ -65,5 +68,22 @@ matrix:
       script: bundle exec rake acceptance
       services: docker
       sudo: required
+  exclude:
+    - rvm: 2.2.7
+      env: PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
+    - rvm: 2.2.7
+      env: PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
+    - rvm: 2.2.7
+      env: PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
+    - rvm: 2.2.7
+      env: PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
+    - rvm: 2.3.3
+      env: PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
+    - rvm: 2.3.3
+      env: PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
+    - rvm: 2.3.3
+      env: PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
+    - rvm: 2.3.3
+      env: PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
 #  allow_failures:
 #    - env: RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=debian8-3.8
