@@ -34,7 +34,7 @@ describe 'accounts_group_members' do
         {
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},
-          'users' => {'members' => %i[foo john], 'require'=> ['User[foo]','User[john]']},
+          'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
           'foo' => {'members' => [], 'require' => []},
           'john' => {'members' => [], 'require' => []},
         }
@@ -54,7 +54,7 @@ describe 'accounts_group_members' do
           'bob' => {'members' => [], 'require'=> []},
           'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'users' => {
-            'members' => %i[alice bob],
+            'members' => [:alice,:bob],
             'require'=> ['User[alice]', 'User[bob]']
           },
         }
