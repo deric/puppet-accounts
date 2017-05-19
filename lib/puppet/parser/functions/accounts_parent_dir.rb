@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Puppet::Parser::Functions
-  newfunction(:accounts_parent_dir, :type => :rvalue, :doc => <<~EOS
+  newfunction(:accounts_parent_dir, :type => :rvalue, :doc => <<-EOS
     Return directory from path to file
 EOS
              ) do |args|

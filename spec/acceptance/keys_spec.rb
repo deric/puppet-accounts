@@ -60,7 +60,7 @@ describe 'manage ssh keys', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
 
   context 'use custom key location' do
     let(:yaml) do
-<<~EOS
+<<-EOS
   classes:
     - '::accounts'
   accounts::user_defaults:
@@ -86,7 +86,7 @@ EOS
     end
 
         let(:pp) do
-<<~EOS
+<<-EOS
   hiera_include('classes')
 EOS
     end
@@ -141,7 +141,7 @@ EOS
 
   context 'provide custom ssh options' do
     let(:pp) do
-<<~EOS
+<<-EOS
   hiera_include('classes')
 EOS
     end

@@ -7,7 +7,7 @@ describe 'YAML declaration', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osf
   # see https://github.com/deric/puppet-accounts/issues/46
   context 'manage users and groups' do
     let(:yaml) do
-<<~EOS
+<<-EOS
   classes:
     - '::accounts'
   accounts::user_defaults:
@@ -26,7 +26,7 @@ EOS
     end
 
         let(:pp) do
-<<~EOS
+<<-EOS
   hiera_include('classes')
 EOS
     end
@@ -70,7 +70,7 @@ EOS
 
   context 'avoid cyclic dependency' do
     let(:yaml) do
-<<~EOS
+<<-EOS
   classes:
     - '::accounts'
   accounts:
@@ -92,7 +92,7 @@ EOS
     end
 
         let(:pp) do
-<<~EOS
+<<-EOS
   hiera_include('classes')
 EOS
     end

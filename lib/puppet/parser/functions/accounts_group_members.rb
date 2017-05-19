@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Puppet::Parser::Functions
-  newfunction(:accounts_group_members, :type => :rvalue, :doc => <<~EOS
+  newfunction(:accounts_group_members, :type => :rvalue, :doc => <<-EOS
     From Hash of all users and their configuration assign users to group definitions
     given as second argument
     an optional 3rd argument are the default groups for all users

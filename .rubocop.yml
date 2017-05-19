@@ -475,3 +475,5 @@ Style/IfWithSemicolon:
 Style/Encoding:
   Enabled: false
 
+Style/IndentHeredoc:
+  Enabled: false
