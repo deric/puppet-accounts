@@ -43,12 +43,12 @@ matrix:
       script: bundle exec rake acceptance
       services: docker
       sudo: required
-    - rvm: 2.3.2
-      dist: trusty
-      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.4
-      script: bundle exec rake acceptance
-      services: docker
-      sudo: required
+    #- rvm: 2.3.2
+    #  dist: trusty
+    #  env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.4
+    #  script: bundle exec rake acceptance
+    #  services: docker
+    #  sudo: required
     - rvm: 2.3.2
       dist: trusty
       env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.8
@@ -69,6 +69,10 @@ matrix:
       services: docker
       sudo: required
   exclude:
+    - rvm: 1.9.3
+      env: PUPPET_VERSION="~> 4.9.0" STRICT_VARIABLES=yes
+    - rvm: 1.9.3
+      env: PUPPET_VERSION="~> 4.10.0" STRICT_VARIABLES=yes
     - rvm: 2.2.7
       env: PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
     - rvm: 2.2.7
