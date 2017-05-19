@@ -44,7 +44,8 @@ define accounts::user(
   $comment = undef,
   # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
-  $username = "${title}", # lint:ignore:only_variable_string
+  $username = "${title}",
+  # lint:endignore
   $groups = [],
   $ssh_key_source = undef,
   $ssh_key = '',
@@ -238,8 +239,8 @@ define accounts::user(
             line    => "umask ${umask}",
             match   => '^umask \+[0-9][0-9][0-9]',
             require => File[$home_dir],
-          } ->
-          file_line { "umask_line_bashrc_${username}":
+          }
+          -> file_line { "umask_line_bashrc_${username}":
             ensure => present,
             path   => "${home_dir}/.bashrc",
             line   => "umask ${umask}",

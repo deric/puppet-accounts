@@ -89,7 +89,7 @@ define accounts::authorized_keys(
         content => template("${module_name}/authorized_keys.erb"),
       }
     } else {
-      notify{"$username purge keys is false ": }
+      notify{"${username} purge keys is false ": }
     }
   } else {
     if ($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
