@@ -76,4 +76,59 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
       its(:stdout) { is_expected.to match /deployer:x:(\d+):/ }
     end
   end
+
+  context 'without creating primary group' do
+    let(:yaml) do
+<<-EOS
+classes:
+  - '::accounts'
+
+accounts::users:
+  testuser:
+    ensure: 'present'
+    home: "/home/testuser"
+    shell: "/bin/bash"
+    uid: 1141
+    gid: 1141
+    primary_group: 'mygroup'
+    manage_group: true
+EOS
+    end
+
+        let(:pp) do
+<<-EOS
+  hiera_include('classes')
+EOS
+    end
+
+    it 'runs without cycle' do
+      shell "echo \"#{yaml}\" > #{HIERA_PATH}/hieradata/common.yaml"
+
+      expect(apply_manifest(pp,
+        :catch_failures => false,
+        :debug => false).exit_code).to be_zero
+    end
+
+    describe group('testuser') do
+      it { should_not exist }
+    end
+
+    describe group('testuser') do
+      it { is_expected.to exist }
+      it { is_expected.to have_uid 1141 }
+    end
+
+    describe group('mygroup') do
+      it { is_expected.to exist }
+      it { is_expected.to have_gid 1141 }
+    end
+
+    describe file('/home/testuser') do
+      it { is_expected.to be_directory }
+    end
+
+    after(:all) do
+      shell "rm #{HIERA_PATH}/hieradata/common.yaml"
+    end
+ end
 end
