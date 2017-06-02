@@ -7,7 +7,7 @@ HOSTS:
     roles:
       - agent
     debug: false
-    docker_cmd: '["sh","-c", "git clone https://github.com/deric/puppet-gpasswd.git /etc/puppet/modules/gpasswd && /usr/sbin/sshd-gen-keys-start && /usr/sbin/sshd -D"]'
+    docker_cmd: '["sh","-c", "/usr/sbin/sshd-gen-keys-start && /usr/sbin/sshd -D"]'
 CONFIG:
   masterless: true
   log_level: verbose
