@@ -29,7 +29,6 @@ define accounts::authorized_keys(
   $ssh_key_source = undef,
   $username = $title,
   $authorized_keys_file = undef,
-  $ssh_key = undef,
   $ensure = 'present',
   $manage_ssh_dir = true,
   ){

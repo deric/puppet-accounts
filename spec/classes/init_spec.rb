@@ -500,7 +500,7 @@ describe 'accounts', :type => :class do
     let(:owner) { user }
     let(:group) { user }
 
-    it { is_expected.to contain_user(user) }
+   it { is_expected.to contain_user(user) }
     # currently managed out of this class
     #it { should contain_group(user) }
 
@@ -603,25 +603,12 @@ describe 'accounts', :type => :class do
       it_behaves_like 'not_having_user_account', 'foo'
     end
 
-    describe 'multiple users with the same key comment' do
-      let(:params) do
-        {
-        :users => {
-          'tom' => {'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}},
-          'jerry' => {'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}},
-        },
-      }
-      end
-      it_behaves_like 'having_user_account', 'tom'
-      it_behaves_like 'having_user_account', 'jerry'
-    end
-
     describe 'multiple users without key comment' do
       let(:params) do
         {
         :users => {
-          'tom' => {'pwhash' => 'xxxxxxx','ssh_key' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}},
-          'jerry' => {'pwhash' => 'xxxxxxx','ssh_key' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}},
+          'tom' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'toms_key' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}}},
+          'jerry' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'jerrys_key' => {'type' => 'ecdsa-sha2-nistp256','key' => 'xxxxxxx'}}},
         },
       }
       end

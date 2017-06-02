@@ -18,9 +18,9 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
           },
           users => {
             'john' => {
-              'shell'   => '/bin/bash',
-              'groups'  => ['users', 'engineers'],
-              'ssh_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }
+              'shell'    => '/bin/bash',
+              'groups'   => ['users', 'engineers'],
+              'ssh_keys' => {'john-rsa' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }}
             }
           }
         }
@@ -28,7 +28,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
       expect(apply_manifest(pp, {
         :catch_failures => false,
-        :debug          => false,
+        :debug          => true,
         }).exit_code).to be_zero
     end
 
@@ -108,7 +108,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     it 'install accounts' do
       expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false).exit_code).to be_zero
+        :debug => true).exit_code).to be_zero
       # TODO: right now two runs are required
       expect(apply_manifest(pp, :catch_failures => false, :debug => false).exit_code).to be_zero
     end

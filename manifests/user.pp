@@ -48,7 +48,6 @@ define accounts::user(
   # lint:endignore
   $groups = [],
   $ssh_key_source = undef,
-  $ssh_key = '',
   $ssh_keys = {},
   $purge_ssh_keys = false,
   $shell ='/bin/bash',
@@ -78,13 +77,16 @@ define accounts::user(
 
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
-  validate_hash($ssh_keys)
-  validate_bool($managehome)
-  if ! is_array($purge_ssh_keys) {
-    validate_bool($purge_ssh_keys)
+
+  if versioncmp($::puppetversion, '4.0.0') < 0 {
+    validate_hash($ssh_keys)
+    validate_bool($managehome)
+    if ! is_array($purge_ssh_keys) {
+      validate_bool($purge_ssh_keys)
+    }
+    validate_string($password)
   }
 
-  validate_string($password)
   if $pwhash != '' and $password {
     fail("You cannot set both \$pwhash and \$password for ${username}.")
   }
@@ -262,7 +264,6 @@ define accounts::user(
         }
 
         accounts::authorized_keys { $username:
-          ssh_key              => $ssh_key, # DEPRECATED
           ssh_keys             => $ssh_keys,
           ssh_key_source       => $ssh_key_source,
           authorized_keys_file => $authorized_keys_file,

@@ -265,7 +265,7 @@ describe 'accounts::user', :type => :define do
       {
       :home                 => home,
       :authorized_keys_file => '/home/foo/.ssh/auth_keys',
-      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...' },
+      :ssh_keys             => {'foo_rsa' => {'type' => 'ssh-rsa', 'key' => 'AAAA...' }},
     }
     end
 
@@ -292,7 +292,7 @@ describe 'accounts::user', :type => :define do
       {
       :home                 => home,
       :authorized_keys_file => '/home/my_auth_keys',
-      :ssh_key              => {'type' => 'ssh-rsa', 'key' => 'AAAA...'},
+      :ssh_keys              => {'foo_ssh_rsa' => {'type' => 'ssh-rsa', 'key' => 'AAAA...'}},
     }
     end
 
@@ -300,13 +300,6 @@ describe 'accounts::user', :type => :define do
       is_expected.to contain_file('/home/my_auth_keys').with({
       'ensure'  => 'present',
     }) }
-
-    it {
-      is_expected.to contain_ssh_authorized_key('foo_ssh-rsa').with(
-        'type' => 'ssh-rsa',
-        'key' => 'AAAA...'
-      )
-    }
   end
 
   context 'provide ssh key options' do
@@ -314,11 +307,11 @@ describe 'accounts::user', :type => :define do
 
     let(:params) do
       {
-      :ssh_key => {
+      :ssh_keys => {'foo_ssh-rsa' => {
         'type'    => 'ssh-rsa',
         'key'     => 'AAAA',
         'options' => [ 'permitopen="10.4.3.29:3306"','permitopen="10.4.3.30:5432"']
-      },
+      }},
     }
     end
 
@@ -342,10 +335,10 @@ describe 'accounts::user', :type => :define do
 
     let(:params) do
       {
-      :ssh_key => {
+      :ssh_keys => {'jane_ssh-rsa' => {
         'type'    => 'ssh-rsa',
         'key'     => 'AAA',
-      },
+      }},
     }
     end
 
@@ -368,11 +361,11 @@ describe 'accounts::user', :type => :define do
 
     let(:params) do
       {
-      :ssh_key => {
+      :ssh_keys => {'jake_ssh-rsa' => {
         'type'    => 'ssh-rsa',
         'options' => '',
         'key'     => 'AAA-jake',
-      },
+      }},
     }
     end
 
