@@ -10,7 +10,7 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
 
   commands  :addmember => 'usermod',
             :delmember => 'usermod',
-            :modmember => 'usermod'
+            :modmember => 'gpasswd' #TODO: is there any alternative?
 
   has_feature :manages_members unless %w{HP-UX}.include? Facter.value(:operatingsystem)
   has_feature :libuser if Puppet.features.libuser?
@@ -21,7 +21,7 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
     cmd = Array(super.map{|x| x = "#{x}"}.shelljoin)
 
     @resource[:members] and cmd += @resource[:members].map do |x|
-      [ command(:addmember),'-a',x,@resource[:name] ].shelljoin
+      [ command(:addmember),'-aG', @resource[:name], x ].shelljoin
     end
 
     # A bit hacky way how to update /etc/group in a single shell session
@@ -74,8 +74,9 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
     to_be_added = members.dup.sort!
     if @resource[:attribute_membership] == :minimum
       to_be_added = to_be_added | @objectinfo.mem
+      puts "to add: #{to_be_added}"
       not to_be_added.empty? and cmd += to_be_added.map { |x|
-        [ command(:addmember),'-a',x,@resource[:name] ].shelljoin
+        [ command(:addmember),'-aG',@resource[:name],x ].shelljoin
       }
       mod_group(cmd)
     else

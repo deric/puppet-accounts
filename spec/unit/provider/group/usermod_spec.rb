@@ -8,7 +8,7 @@ describe Puppet::Type.type(:group).provider(:usermod) do
     described_class.stubs(:command).with(:modify).returns '/usr/sbin/groupmod'
     described_class.stubs(:command).with(:addmember).returns '/usr/sbin/usermod'
     described_class.stubs(:command).with(:delmember).returns '/usr/sbin/usermod'
-    described_class.stubs(:command).with(:modmember).returns '/usr/sbin/usermod'
+    described_class.stubs(:command).with(:modmember).returns '/usr/bin/gpasswd'
   end
 
   let(:resource) { Puppet::Type.type(:group).new(:name => 'mygroup', :provider => provider) }
@@ -77,7 +77,7 @@ describe Puppet::Type.type(:group).provider(:usermod) do
           :combine => true)
         resource[:members] = ['test_one','test_two','test_three']
         resource[:members].each do |member|
-          provider.expects(:execute).with("/usr/sbin/usermod -a -G mygroup #{member}",
+          provider.expects(:execute).with("/usr/sbin/usermod -aG mygroup #{member}",
           :custom_environment => {},
           :failonfail => true,
           :combine => true
@@ -95,7 +95,7 @@ describe Puppet::Type.type(:group).provider(:usermod) do
         resource[:attribute_membership] = 'minimum'
         resource[:members] = ['test_one','test_two','test_three']
         resource[:members].each do |member|
-          provider.expects(:execute).with("/usr/sbin/usermod -a -G mygroup #{member}",
+          provider.expects(:execute).with("/usr/sbin/usermod -aG mygroup #{member}",
             {
               :custom_environment => {},
               :failonfail => true,
@@ -117,7 +117,7 @@ describe Puppet::Type.type(:group).provider(:usermod) do
         resource[:attribute_membership] = 'minimum'
         resource[:members] = ['test_one','test_two','test_three']
         (resource[:members] | old_members).each do |member|
-          provider.expects(:execute).with("/usr/sbin/usermod -a -G mygroup #{member}",
+          provider.expects(:execute).with("/usr/sbin/usermod -aG mygroup #{member}",
             {:custom_environment => {},
           :failonfail => true,
           :combine => true})
@@ -136,7 +136,7 @@ describe Puppet::Type.type(:group).provider(:usermod) do
         )
         resource[:attribute_membership] = :inclusive
         resource[:members] = members
-        provider.expects(:execute).with("/usr/sbin/usermod -M #{members.sort.join(',')} mygroup",
+        provider.expects(:execute).with("/usr/bin/gpasswd -M #{members.sort.join(',')} mygroup",
             {:custom_environment => {},
           :failonfail => true,
           :combine => true})
