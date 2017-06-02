@@ -5,7 +5,6 @@ group :test do
   gem "rspec"
   gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
-  gem "metadata-json-lint"
   gem 'rspec-puppet-facts'
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
@@ -19,8 +18,10 @@ group :test do
     gem 'google-api-client', '< 0.9'
     gem 'rubocop','~> 0.33.0'
     gem 'public_suffix', '< 1.5.0'
+    gem 'metadata-json-lint', '< 1.2.0'
   else
     gem 'rubocop'
+    gem "metadata-json-lint"
   end
   if RUBY_VERSION < "2.1.0"
     gem 'nokogiri', '< 1.7.0'
