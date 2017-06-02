@@ -66,21 +66,6 @@ define accounts::authorized_keys(
     require => Anchor["accounts::ssh_dir_created_${title}"],
   }
 
-  # backwards compatibility only - will be removed in 2.0
-  # see https://github.com/deric/puppet-accounts/issues/40
-  if !empty($ssh_key) {
-    ssh_authorized_key { "${username}_${ssh_key['type']}":
-      ensure  => present,
-      user    => $username,
-      type    => $ssh_key['type'],
-      key     => $ssh_key['key'],
-      options => $ssh_key['options'],
-      target  => $auth_key_file,
-      before  => Anchor["accounts::auth_keys_created_${title}"],
-      require => Anchor["accounts::ssh_dir_created_${title}"],
-    }
-  }
-
   # prior to Puppet 3.6 `purge_ssh_keys` is not supported
   # `purge_ssh_keys` is defined on User resource
   if versioncmp($::puppetversion, '3.6.0') < 0 {
