@@ -26,7 +26,7 @@ RSpec.configure do |c|
       #on host, 'gem install bundler'
       #on host, 'cd /etc/puppet && bundle install --without development'
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
+      #on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
       #binding.pry
       on host, "mkdir -p /etc/puppetlabs/puppet", { :acceptable_exit_codes => [0] }
       on host, "mkdir -p /etc/puppet", { :acceptable_exit_codes => [0] }
