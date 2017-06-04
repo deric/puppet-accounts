@@ -4,7 +4,7 @@
 Forge](http://img.shields.io/puppetforge/v/deric/accounts.svg)](https://forge.puppetlabs.com/deric/accounts) [![Build Status](https://travis-ci.org/deric/puppet-accounts.png)](https://travis-ci.org/deric/puppet-accounts) [![Puppet Forge
 Downloads](http://img.shields.io/puppetforge/dt/deric/accounts.svg)](https://forge.puppetlabs.com/deric/accounts/scores)
 
-This is puppet module for managing user accounts, groups and setting ssh keys.
+This is puppet module for managing user accounts, groups and setting ssh keys. There's been [an unresolved issue in Puppet](https://tickets.puppetlabs.com/browse/PUP-1298) as group members can't be easily defined in group. This module tries to simplify user & group management with simple DSL that is translated into Puppet code and provides a workaround for aforementioned issue.
 
 Origin: https://github.com/deric/puppet-accounts
 
