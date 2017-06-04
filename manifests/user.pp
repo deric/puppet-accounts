@@ -73,6 +73,7 @@ define accounts::user(
   $manage_ssh_dir = true,
   $ssh_dir_owner = undef,
   $ssh_dir_group = undef,
+  $provider = 'usermgr',
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -144,6 +145,7 @@ define accounts::user(
     comment    => $comment,
     managehome => $managehome,
     home       => $home_dir,
+    provider   => $provider,
   }
 
   case $ensure {
