@@ -21,7 +21,13 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
     cmd = Array(super.map{|x| x = "#{x}"}.shelljoin)
 
     @resource[:members] and cmd += @resource[:members].map do |x|
-      [ command(:addmember),'-aG', @resource[:name], x ].shelljoin
+      m = x.match /(.*):primary$/
+      if m.nil?
+        [ command(:addmember),'-aG', @resource[:name], x ].shelljoin
+      else
+        # set primary group
+        [ command(:addmember),'-g', @resource[:name], m[1] ].shelljoin
+      end
     end
 
     # A bit hacky way how to update /etc/group in a single shell session
@@ -30,7 +36,9 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
     # see: https://github.com/deric/puppet-accounts/issues/60
     if @resource[:members] and @resource[:members].size == 1
       user = @resource[:members].first
-      cmd << "sed -i.bak -e 's/^\\(#{user}\\)\\(.*\\)/\\1\\2#{user}/g' /etc/group"
+      unless user =~ /:primary$/
+        cmd << "sed -i.bak -e 's/^\\(#{user}\\)\\(.*\\)/\\1\\2#{user}/g' /etc/group"
+      end
     end
 
     mod_group(cmd)
@@ -74,16 +82,24 @@ Puppet::Type.type(:group).provide :usermod, :parent => Puppet::Type::Group::Prov
     to_be_added = members.dup.sort!
     if @resource[:attribute_membership] == :minimum
       to_be_added = to_be_added | @objectinfo.mem
-      puts "to add: #{to_be_added}"
-      not to_be_added.empty? and cmd += to_be_added.map { |x|
-        [ command(:addmember),'-aG',@resource[:name],x ].shelljoin
-      }
+      not to_be_added.empty? and cmd += to_be_added.map do |x|
+        m = x.match /(.*):primary$/
+        if m.nil?
+          [ command(:addmember),'-aG',@resource[:name],x ].shelljoin
+        else
+          [ command(:addmember),'-g',@resource[:name],m[1] ].shelljoin
+        end
+      end
       mod_group(cmd)
     else
       # inclusive strategy
       # assuming that provided members are complete set
-      unless to_be_added.empty?
-        cmd << [ command(:modmember),'-M',to_be_added.join(','), @resource[:name] ].shelljoin
+      users = []
+      to_be_added.each do |x|
+        users << x unless x =~ /:primary$/
+      end
+      unless users.empty?
+        cmd << [ command(:modmember),'-M',users.join(','), @resource[:name] ].shelljoin
         mod_group(cmd)
       end
     end

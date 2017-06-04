@@ -144,6 +144,24 @@ describe Puppet::Type.type(:group).provider(:usermod) do
         provider.members=(members)
       end
     end
+
+    describe "primary group membership" do
+      it "assign user's primary group" do
+        Etc.stubs(:getgrnam).with('mygroup').returns(
+          Struct::Group.new('mygroup','x','99999',[])
+        )
+        resource[:members] = ['john:primary']
+        provider.expects(:execute).with("/usr/sbin/usermod -g mygroup john",
+          {
+            :custom_environment => {},
+            :failonfail => true,
+            :combine => true
+          }
+        )
+        provider.create
+        provider.members=(resource[:members])
+      end
+    end
   end
 
   describe "#gid=" do

@@ -66,9 +66,9 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
     end
 
     # primary group id
-    describe command('id -g deployer') do
+    describe command('id -g -n deployer') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /1010/ }
+      its(:stdout) { is_expected.to match /deployer/ }
     end
 
     describe command('getent group deployer') do
