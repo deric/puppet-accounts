@@ -83,13 +83,15 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 classes:
   - '::accounts'
 
+accounts::groups:
+  mygroup:
+    gid: 1141
 accounts::users:
   testuser:
     ensure: 'present'
     home: "/home/testuser"
     shell: "/bin/bash"
     uid: 1141
-    gid: 1141
     primary_group: 'mygroup'
     manage_group: true
 EOS
@@ -104,16 +106,16 @@ EOS
     it 'runs without cycle' do
       shell "echo \"#{yaml}\" > #{HIERA_PATH}/hieradata/common.yaml"
 
-      expect(apply_manifest(pp,
+    expect(apply_manifest(pp,
         :catch_failures => false,
-        :debug => false).exit_code).to be_zero
+        :debug => true).exit_code).to be_zero
     end
 
     describe group('testuser') do
-      it { should_not exist }
+      it { is_expected.not_to exist }
     end
 
-    describe group('testuser') do
+    describe user('testuser') do
       it { is_expected.to exist }
       it { is_expected.to have_uid 1141 }
     end
@@ -121,6 +123,16 @@ EOS
     describe group('mygroup') do
       it { is_expected.to exist }
       it { is_expected.to have_gid 1141 }
+    end
+
+    describe command('id -g testuser') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /1141/ }
+    end
+
+    describe command('id -g -n testuser') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /mygroup/ }
     end
 
     describe file('/home/testuser') do
