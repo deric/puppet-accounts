@@ -31,6 +31,7 @@ class accounts(
   if $manage_users {
     $udef = merge($user_defaults, {
       home_permissions => $::accounts::params::home_permissions,
+      provider         => $::accounts::params::user_provider,
       require          => Anchor['accounts::users_created'],
     })
     create_resources(accounts::user, $_users, $udef)
