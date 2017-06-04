@@ -35,8 +35,8 @@ describe 'accounts_group_members' do
           'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
           'bar' => {'members' => [:john],'require'=> ['User[john]']},
           'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
-          'foo' => {'members' => [], 'require' => []},
-          'john' => {'members' => [], 'require' => []},
+          'foo' => {'members' => ['foo:primary'], 'require' => ['User[foo]']},
+          'john' => {'members' => ['john:primary'], 'require' => ['User[john]']},
         }
       )
     end
@@ -50,8 +50,8 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'alice' => {'members' => [], 'require'=> []},
-          'bob' => {'members' => [], 'require'=> []},
+          'alice' => {'members' => ['alice:primary'], 'require'=> ['User[alice]']},
+          'bob' => {'members' => ['bob:primary'], 'require'=> ['User[bob]']},
           'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
           'users' => {
             'members' => [:alice,:bob],
@@ -69,7 +69,7 @@ describe 'accounts_group_members' do
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {'testgroup' => {'members' => [], 'require' => []}}
+        {'testgroup' => {'members' => ['foo:primary'], 'require' => ['User[foo]']}}
       )
     end
 
@@ -81,7 +81,7 @@ describe 'accounts_group_members' do
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {"testgroup"=>{"members"=>[], "require"=>[], "gid"=>123}}
+        {"testgroup"=>{"members"=>['foo:primary'], "require"=>['User[foo]'], "gid"=>123}}
       )
     end
   end

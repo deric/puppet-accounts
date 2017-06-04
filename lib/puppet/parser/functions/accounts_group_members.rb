@@ -20,17 +20,19 @@ EOS
     end
 
     # assign `user` to group `g`
-    assign_helper = lambda do |res, g, user|
+    assign_helper = lambda do |res, g, user, primary|
       unless res.key?(g) # create group if not defined yet
         res[g] = {'members' => [], 'require' => []}
       else
         res[g]['members'] = [] unless res[g].key?('members')
         res[g]['require'] = [] unless res[g].key?('require')
       end
-      unless user.nil?
+      unless primary
         res[g]['members'] << user unless res[g]['members'].include? user
-        res[g]['require'] << "User[#{user}]"
+      else
+        res[g]['members'] << "#{user}:primary"
       end
+      res[g]['require'] << "User[#{user}]"
     end
 
     res = args[1].clone
@@ -41,19 +43,20 @@ EOS
       val['manage_group'] = true unless val.key? 'manage_group'
       if val['manage_group']
         g = val['primary_group']
-        # no need to assign user to his primary group
-        assign_helper.call(res, g, nil)
+        # normally there's no need to assign user to his primary group
+        # in this case we're trying to pass primary membership information to group resourcee
+        assign_helper.call(res, g, user, true)
         if val.key? 'gid'
           res[g]['gid'] = val['gid'] # manually override GID
         end
       end
       if val.key? 'groups'
         val['groups'].each do |g|
-          assign_helper.call(res, g, user)
+          assign_helper.call(res, g, user, false)
         end
       elsif args.size == 3
         args[2].each do |g|
-          assign_helper.call(res, g, user)
+          assign_helper.call(res, g, user, false)
         end
       end
     end
