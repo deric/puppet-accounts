@@ -97,7 +97,7 @@ accounts::users:
 EOS
     end
 
-        let(:pp) do
+    let(:pp) do
 <<-EOS
   hiera_include('classes')
 EOS
@@ -106,7 +106,7 @@ EOS
     it 'runs without cycle' do
       shell "echo \"#{yaml}\" > #{HIERA_PATH}/hieradata/common.yaml"
 
-    expect(apply_manifest(pp,
+      expect(apply_manifest(pp,
         :catch_failures => false,
         :debug => true).exit_code).to be_zero
     end
@@ -143,4 +143,62 @@ EOS
       shell "rm #{HIERA_PATH}/hieradata/common.yaml"
     end
  end
+
+ context 'inclusive membership' do
+    let(:yaml) do
+<<-EOS
+classes:
+  - '::accounts'
+
+accounts::groups:
+  www-data:
+    gid: 33
+    members:
+      - foo
+      - bar
+      - john
+accounts::users:
+  foo:
+    ensure: present
+  bar:
+    uid: 1250
+  john:
+    uid: 1251
+EOS
+    end
+
+    let(:pp) do
+<<-EOS
+  hiera_include('classes')
+EOS
+    end
+
+    it 'runs without cycle' do
+      shell "echo \"#{yaml}\" > #{HIERA_PATH}/hieradata/common.yaml"
+      # add some extra members
+      shell "usermod -aG www-data root"
+
+      expect(apply_manifest(pp,
+        :catch_failures => false,
+        :debug => true).exit_code).to be_zero
+    end
+
+    describe group('www-data') do
+      it { is_expected.to exist }
+      it { is_expected.to have_gid 33 }
+    end
+
+    # make sure extra members are removed
+    describe command('getent group www-data') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match /foo/ }
+      its(:stdout) { is_expected.to match /bar/ }
+      its(:stdout) { is_expected.to match /john/ }
+      its(:stdout) { is_expected.not_to match /root/ }
+    end
+
+    after(:all) do
+      shell "rm #{HIERA_PATH}/hieradata/common.yaml"
+    end
+  end
 end
