@@ -23,6 +23,7 @@ define accounts::group (
   $ensure    = 'present',
   $members   = [],
   $gid       = undef,
+  $provider  = undef,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -30,9 +31,10 @@ define accounts::group (
 
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {
-    'ensure'  => $ensure,
-    'gid'     => $gid,
-    'members' => sort(unique($members)),
+    'ensure'   => $ensure,
+    'gid'      => $gid,
+    'members'  => sort(unique($members)),
+    'provider' => $provider,
     'attribute_membership' => 'inclusive',
   })
 }

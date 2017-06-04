@@ -6,6 +6,7 @@ class accounts(
   $users         = {},
   $groups        = {},
   $user_defaults = hiera_hash('accounts::user_defaults', {}),
+  $group_defaults = hiera_hash('accounts::group_defaults', {}),
   $options       = hiera_hash('accounts::config', {}),
 ) inherits ::accounts::params {
   # validations are not necessary on Puppet 4
@@ -48,6 +49,10 @@ class accounts(
     # Merge group definition with user's assignment to groups
     # No anchor is needed, all requirements are defined individially for each resource
     $members = accounts_group_members($_users, $_groups, $default_groups)
-    create_resources(accounts::group, $members)
+
+    $gdef = merge($group_defaults, {
+      provider => $::accounts::params::group_provider,
+    })
+    create_resources(accounts::group, $members, $gdef)
   }
 }
