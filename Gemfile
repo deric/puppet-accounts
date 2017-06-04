@@ -19,7 +19,9 @@ group :test do
     gem 'google-api-client', '< 0.9'
     gem 'rubocop','~> 0.33.0'
     gem 'public_suffix', '< 1.5.0'
+    gem 'metadata-json-lint', '< 1.2.0'
   else
+    gem 'metadata-json-lint'
     gem 'rubocop'
   end
   if RUBY_VERSION < "2.1.0"
