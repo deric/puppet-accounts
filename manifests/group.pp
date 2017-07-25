@@ -19,10 +19,11 @@
 # Definition of a Linux/Unix group
 #
 define accounts::group (
-  $groupname = $title,
-  $ensure    = 'present',
-  $members   = [],
-  $gid       = undef,
+  $groupname       = $title,
+  $ensure          = 'present',
+  $members         = [],
+  $gid             = undef,
+  $auth_membership = true,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -33,6 +34,6 @@ define accounts::group (
     'ensure'          => $ensure,
     'gid'             => $gid,
     'members'         => sort(unique($members)),
-    'auth_membership' => true,
+    'auth_membership' => $auth_membership,
   })
 }
