@@ -30,9 +30,9 @@ define accounts::group (
 
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {
-    'ensure'  => $ensure,
-    'gid'     => $gid,
-    'members' => sort(unique($members)),
-    'attribute_membership' => 'inclusive',
+    'ensure'          => $ensure,
+    'gid'             => $gid,
+    'members'         => sort(unique($members)),
+    'auth_membership' => true,
   })
 }
