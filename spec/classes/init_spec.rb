@@ -145,23 +145,14 @@ describe 'accounts', :type => :class do
   end
 
   context 'test hiera fixtures' do
-    if Gem::Version.new(Puppet.version) >= Gem::Version.new('3.6.0')
-      it {
-        is_expected.to contain_user('myuser').with(
-          'uid' => 1000,
-          'comment' => 'My Awesome User',
-          'purge_ssh_keys' => true
-        )
-      }
-    else
-      it {
-        is_expected.to contain_user('myuser').with(
-          'uid' => 1000,
-          'comment' => 'My Awesome User',
-        # no purge_ssh_keys attribute
-        )
-      }
-    end
+
+    it {
+      is_expected.to contain_user('myuser').with(
+        'uid' => 1000,
+        'comment' => 'My Awesome User',
+      # no purge_ssh_keys attribute
+      )
+    }
 
     it {
       is_expected.to contain_ssh_authorized_key('myawesomefirstkey').with(
