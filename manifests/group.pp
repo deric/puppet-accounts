@@ -19,17 +19,15 @@
 # Definition of a Linux/Unix group
 #
 define accounts::group (
-  $groupname       = $title,
-  $ensure          = 'present',
-  $members         = [],
-  $gid             = undef,
-  $auth_membership = true,
+  String $groupname = $title,
+  Enum['present', 'absent'] $ensure = 'present',
+  Array[String] $members = [],
+  Boolean $auth_membership = true,
+  # TODO: validate gid
+  $gid = undef,
 ) {
 
   assert_private()
-
-  validate_re($ensure, [ '^absent$', '^present$' ],
-    'The $ensure parameter must be \'absent\' or \'present\'')
 
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {

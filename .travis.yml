@@ -17,7 +17,7 @@ script:
 #  - BEAKER_set=ubuntu-1404-docker RAKE_ENV=ci bundle exec rake acceptance
 rvm:
 # see http://rubies.travis-ci.org/
-  - 2.2.7
+# - 2.2.7 # currently there aren't many significat differences between ruby versions
   - 2.3.3
 env:
   - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
