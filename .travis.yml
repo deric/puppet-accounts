@@ -20,25 +20,19 @@ rvm:
   - 2.2.7
   - 2.3.3
 env:
-  - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES=yes
-  - PUPPET_VERSION="~> 5.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
+  - PUPPET_VERSION="~> 5.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
 matrix:
   include:
-    - rvm: 2.3.3
-      dist: trusty
-      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=centos7-3.8
-      script: bundle exec rake acceptance
-      services: docker
-      sudo: required
-    #- rvm: 2.3.2
+    #- rvm: 2.3.3
     #  dist: trusty
-    #  env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.4
+    #  env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=centos7-3.8
     #  script: bundle exec rake acceptance
     #  services: docker
     #  sudo: required
     - rvm: 2.3.3
       dist: trusty
-      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-3.8
+      env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-4.10
       script: bundle exec rake acceptance
       services: docker
       sudo: required
