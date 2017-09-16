@@ -76,6 +76,8 @@ define accounts::user(
   $ssh_dir_group = undef,
 ) {
 
+  assert_private()
+
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
   validate_hash($ssh_keys)

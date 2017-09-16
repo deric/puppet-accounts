@@ -34,6 +34,8 @@ define accounts::authorized_keys(
   $manage_ssh_dir = true,
   ){
 
+  assert_private()
+
   if $authorized_keys_file {
     $ssh_dir = accounts_parent_dir($authorized_keys_file)
     $auth_key_file = $authorized_keys_file

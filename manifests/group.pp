@@ -26,6 +26,8 @@ define accounts::group (
   $auth_membership = true,
 ) {
 
+  assert_private()
+
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
 
