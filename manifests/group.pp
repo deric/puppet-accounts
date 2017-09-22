@@ -1,6 +1,3 @@
-# ==============================
-# SHOULD NOT BE CALLED DIRECTLY!
-# ==============================
 # Always include main class definition:
 #
 #  class{ '::accounts': }
@@ -25,6 +22,7 @@ define accounts::group (
   Boolean $auth_membership = true,
   # TODO: validate gid
   $gid = undef,
+  String $provider = 'gpasswd',
 ) {
 
   assert_private()
@@ -35,5 +33,6 @@ define accounts::group (
     'gid'             => $gid,
     'members'         => sort(unique($members)),
     'auth_membership' => $auth_membership,
+    'provider'        => $provider,
   })
 }

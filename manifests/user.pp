@@ -1,6 +1,3 @@
-# ==============================
-# SHOULD NOT BE CALLED DIRECTLY!
-# ==============================
 # Always include main class definition:
 #
 #  class{ '::accounts': }

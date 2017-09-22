@@ -1,5 +1,3 @@
-# Private class. Do not include directly this class.
-#
 # Global accounts configuration
 class accounts::config(
   Hash $options = {}
