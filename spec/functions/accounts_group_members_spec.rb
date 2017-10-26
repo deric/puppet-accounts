@@ -32,11 +32,11 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'sudo' => {'members' => [:foo], 'require'=> ['User[foo]']},
-          'bar' => {'members' => [:john],'require'=> ['User[john]']},
-          'users' => {'members' => [:foo,:john], 'require'=> ['User[foo]','User[john]']},
-          'foo' => {'members' => [], 'require' => []},
-          'john' => {'members' => [], 'require' => []},
+          'sudo' => {'members' => [:foo], 'before'=> ['User[foo]']},
+          'bar' => {'members' => [:john],'before'=> ['User[john]']},
+          'users' => {'members' => [:foo,:john], 'before'=> ['User[foo]','User[john]']},
+          'foo' => {'members' => [], 'before' => []},
+          'john' => {'members' => [], 'before' => []},
         }
       )
     end
@@ -50,12 +50,12 @@ describe 'accounts_group_members' do
 
       is_expected.to run.with_params(users, {}).and_return(
         {
-          'alice' => {'members' => [], 'require'=> []},
-          'bob' => {'members' => [], 'require'=> []},
-          'sudo' => {'members' => [:bob], 'require'=> ['User[bob]']},
+          'alice' => {'members' => [], 'before'=> []},
+          'bob' => {'members' => [], 'before'=> []},
+          'sudo' => {'members' => [:bob], 'before'=> ['User[bob]']},
           'users' => {
             'members' => [:alice,:bob],
-            'require'=> ['User[alice]', 'User[bob]']
+            'before'=> ['User[alice]', 'User[bob]']
           },
         }
       )
@@ -69,7 +69,7 @@ describe 'accounts_group_members' do
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {'testgroup' => {'members' => [], 'require' => []}}
+        {'testgroup' => {'members' => [], 'before' => []}}
       )
     end
 
@@ -77,11 +77,11 @@ describe 'accounts_group_members' do
       users = {
         foo: { 'primary_group' => 'testgroup',
           'manage_group' => true, 'gid' => 123,
-          'require' => []},
+          'before' => []},
       }
 
       is_expected.to run.with_params(users, {}).and_return(
-        {"testgroup"=>{"members"=>[], "require"=>[], "gid"=>123}}
+        {"testgroup"=>{"members"=>[], "before"=>[], "gid"=>123}}
       )
     end
   end
