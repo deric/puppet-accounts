@@ -31,6 +31,7 @@ define accounts::group (
     'The $ensure parameter must be \'absent\' or \'present\'')
 
   # avoid problems when group declared elsewhere
+  notify("forcelocal = ${forcelocal}")
   ensure_resource('group', $groupname, {
     'ensure'          => $ensure,
     'gid'             => $gid,
