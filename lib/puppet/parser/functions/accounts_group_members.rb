@@ -22,14 +22,14 @@ EOS
     # assign `user` to group `g`
     assign_helper = lambda do |res, g, user|
       unless res.key?(g) # create group if not defined yet
-        res[g] = {'members' => [], 'require' => []}
+        res[g] = {'members' => [], 'before' => []}
       else
         res[g]['members'] = [] unless res[g].key?('members')
-        res[g]['require'] = [] unless res[g].key?('require')
+        res[g]['before'] = [] unless res[g].key?('before')
       end
       unless user.nil?
         res[g]['members'] << user unless res[g]['members'].include? user
-        res[g]['require'] << "User[#{user}]"
+        res[g]['before'] << "User[#{user}]"
       end
     end
 
