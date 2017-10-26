@@ -40,5 +40,6 @@ class accounts(
     # No anchor is needed, all requirements are defined individially for each resource
     $members = accounts_group_members($_users, $_groups, $default_groups)
     create_resources(accounts::group, $members)
+    Accounts::Group<| |> -> Accounts::User<| |>
   }
 }
