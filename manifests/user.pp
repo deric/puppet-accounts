@@ -33,6 +33,7 @@
 #                     Should not be changed unless you're moving out of user's home.
 #  * [ssh_dir_group] (default: `user`) owner of `.ssh` directory (and `authorized_keys` file in the directory).
 #  * [manage_ssh_dir] Whether `.ssh` directory should be managed by this module (default: `true`)
+#  * [forcelocal] (optional, default false) Forces the management of local accounts
 #
 define accounts::user(
   $uid = undef,
@@ -69,6 +70,7 @@ define accounts::user(
   $allowdupe = false,
   $home_permissions = '0700',
   $manage_ssh_dir = true,
+  $forcelocal = false,
   $ssh_dir_owner = undef,
   $ssh_dir_group = undef,
 ) {
@@ -193,10 +195,11 @@ define accounts::user(
       }
 
       user { $username:
-        ensure    => present,
-        uid       => $uid,
-        shell     => $shell,
-        allowdupe => $allowdupe,
+        ensure     => present,
+        uid        => $uid,
+        shell      => $shell,
+        allowdupe  => $allowdupe,
+        forcelocal => $forcelocal,
       }
 
       # Set password if available

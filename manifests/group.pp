@@ -20,6 +20,7 @@ define accounts::group (
   Enum['present', 'absent'] $ensure = 'present',
   Array[String] $members = [],
   Boolean $auth_membership = true,
+  Boolean $forcelocal = false,
   # TODO: validate gid
   $gid = undef,
   String $provider = 'gpasswd',
@@ -33,6 +34,7 @@ define accounts::group (
     'gid'             => $gid,
     'members'         => sort(unique($members)),
     'auth_membership' => $auth_membership,
+    'forcelocal'      => $forcelocal,
     'provider'        => $provider,
   })
 }
