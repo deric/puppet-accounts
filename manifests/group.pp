@@ -24,6 +24,7 @@ define accounts::group (
   $members         = [],
   $gid             = undef,
   $auth_membership = true,
+  $forcelocal      = false,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
@@ -35,5 +36,6 @@ define accounts::group (
     'gid'             => $gid,
     'members'         => sort(unique($members)),
     'auth_membership' => $auth_membership,
+    'forcelocal'      => $forcelocal,
   })
 }
