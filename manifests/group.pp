@@ -24,16 +24,19 @@ define accounts::group (
   $members         = [],
   $gid             = undef,
   $auth_membership = true,
+  $forcelocal      = false,
 ) {
 
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
 
   # avoid problems when group declared elsewhere
+  notify("forcelocal = ${forcelocal}")
   ensure_resource('group', $groupname, {
     'ensure'          => $ensure,
     'gid'             => $gid,
     'members'         => sort(unique($members)),
     'auth_membership' => $auth_membership,
+    'forcelocal'      => $forcelocal,
   })
 }
