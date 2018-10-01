@@ -192,12 +192,13 @@ define accounts::user(
         }
       }
 
-      user { $username:
-        ensure    => present,
-        uid       => $uid,
-        shell     => $shell,
-        allowdupe => $allowdupe,
-      }
+      ensure_resource( 'user', $username, {
+          ensure    => present,
+          uid       => $uid,
+          shell     => $shell,
+          allowdupe => $allowdupe,
+        }
+      )
 
       # Set password if available
       if $pwhash != '' {
