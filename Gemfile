@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 group :test do
-  gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 5.0']
+  gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 6.0']
   gem "rspec"
   gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
@@ -11,28 +11,9 @@ group :test do
   gem 'deep_merge'
   gem 'hiera'
   gem 'librarian-puppet' , '>=2.0'
-  if RUBY_VERSION < "2.0.0"
-    gem 'json', '< 2.0' # newer versions requires at least ruby 2.0
-    gem 'json_pure', '< 2.0.0'
-    gem 'fog-google', '< 0.1.1'
-    gem 'google-api-client', '< 0.9'
-    gem 'rubocop','~> 0.33.0'
-    gem 'public_suffix', '< 1.5.0'
-    gem 'metadata-json-lint', '< 1.2.0'
-  else
-    gem 'metadata-json-lint'
-    gem 'rubocop'
-  end
-  if RUBY_VERSION < "2.1.0"
-    gem 'nokogiri', '< 1.7.0'
-    gem 'rake', '< 11.0'
-  else
-    gem 'rake'
-  end
-  # newer versions require ruby 2.2
-  if RUBY_VERSION < "2.2.0"
-    gem 'listen', '~> 3.0.0'
-  end
+  gem 'metadata-json-lint'
+  gem 'rubocop'
+  gem 'rake'
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
   gem "puppet-lint-trailing_comma-check"
@@ -51,12 +32,7 @@ end
 
 group :system_tests do
   gem 'pry'
-  # beaker-rspec will require beaker gem
-  if RUBY_VERSION >= '2.2.5'
-    gem 'beaker'
-  else
-    gem 'beaker', '< 3'
-  end
+  gem 'beaker'
   gem 'beaker-rspec'
   gem 'serverspec'
   gem 'beaker-hostgenerator'
