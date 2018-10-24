@@ -34,6 +34,7 @@ group :system_tests do
   gem 'pry'
   gem 'beaker'
   gem 'beaker-rspec'
+  gem 'beaker-docker'
   gem 'serverspec'
   gem 'beaker-hostgenerator'
   gem 'beaker-puppet_install_helper'
