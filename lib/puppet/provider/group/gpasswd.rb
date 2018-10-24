@@ -50,10 +50,6 @@ Puppet::Type.type(:group).provide :gpasswd, :parent => Puppet::Type::Group::Prov
     getinfo(true) if @objectinfo.nil?
     retval = @objectinfo.mem
 
-    if !@resource[:auth_membership] && (@resource[:members] - @objectinfo.mem).empty?
-      retval = @resource[:members]
-    end
-
     retval.sort
   end
 
