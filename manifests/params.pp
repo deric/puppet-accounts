@@ -1,3 +1,6 @@
+#
+# OS specific configuration
+#
 class accounts::params {
 
   case $::osfamily {

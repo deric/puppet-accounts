@@ -16,6 +16,11 @@ RSpec.configure do |c|
   c.module_path = File.join(fixture_path, 'modules')
   c.manifest_dir = File.join(fixture_path, 'manifests')
   c.template_dir = File.join(fixture_path, 'templates')
+
+  c.before(:each) do
+    # Stub assert_private function from stdlib to not fail within this test
+    Puppet::Parser::Functions.newfunction(:assert_private) { |_| }
+  end
 end
 
 at_exit { RSpec::Puppet::Coverage.report! }

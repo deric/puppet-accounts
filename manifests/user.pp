@@ -1,6 +1,3 @@
-# ==============================
-# SHOULD NOT BE CALLED DIRECTLY!
-# ==============================
 # Always include main class definition:
 #
 #  class{ '::accounts': }
@@ -75,6 +72,8 @@ define accounts::user(
   $ssh_dir_owner = undef,
   $ssh_dir_group = undef,
 ) {
+
+  assert_private()
 
   validate_re($ensure, [ '^absent$', '^present$' ],
     'The $ensure parameter must be \'absent\' or \'present\'')
@@ -193,12 +192,13 @@ define accounts::user(
         }
       }
 
-      user { $username:
-        ensure    => present,
-        uid       => $uid,
-        shell     => $shell,
-        allowdupe => $allowdupe,
-      }
+      ensure_resource( 'user', $username, {
+          ensure    => present,
+          uid       => $uid,
+          shell     => $shell,
+          allowdupe => $allowdupe,
+        }
+      )
 
       # Set password if available
       if $pwhash != '' {

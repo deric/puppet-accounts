@@ -1,24 +1,16 @@
 # Puppet accounts management
 #
 class accounts(
-  $manage_users  = hiera('accounts::manage_users', true),
-  $manage_groups = hiera('accounts::manage_groups', true),
-  $users         = {},
-  $groups        = {},
-  $user_defaults = hiera_hash('accounts::user_defaults', {}),
-  $options       = hiera_hash('accounts::config', {}),
+  Boolean $manage_users  = true,
+  Boolean $manage_groups = true,
+  Hash $users         = {},
+  Hash $groups        = {},
+  Hash $user_defaults = lookup('accounts::user_defaults', Hash, {'strategy' => 'deep'}, {}),
+  Hash $options       = lookup('accounts::config', Hash, {'strategy' => 'deep'}, {}),
 ) inherits ::accounts::params {
-  # validations are not necessary on Puppet 4
-  if versioncmp($::puppetversion, '4.0.0') < 0 {
-    validate_bool($manage_users)
-    validate_bool($manage_groups)
-    validate_hash($users)
-    validate_hash($groups)
-    validate_hash($user_defaults)
-  }
 
-  $users_h  = hiera_hash('accounts::users', {})
-  $groups_h = hiera_hash('accounts::groups', {})
+  $users_h  = lookup('accounts::users', Hash, {'strategy' => 'deep'}, {})
+  $groups_h = lookup('accounts::groups', Hash, {'strategy' => 'deep'}, {})
 
   $_users = merge($users, $users_h)
   anchor { 'accounts::users_created': }

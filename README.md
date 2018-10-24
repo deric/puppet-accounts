@@ -6,6 +6,11 @@ Downloads](http://img.shields.io/puppetforge/dt/deric/accounts.svg)](https://for
 
 This is puppet module for managing user accounts, groups and setting ssh keys.
 
+Version compatibility:
+
+  * `deric-acounts >= 2.0` - Puppet 4.x, Puppet 5.x
+  * `deric-acounts < 2.0` - Puppet 3.x, Puppet 4.x
+
 Origin: https://github.com/deric/puppet-accounts
 
 Basic usage:

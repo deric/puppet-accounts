@@ -1,6 +1,3 @@
-# ==============================
-# SHOULD NOT BE CALLED DIRECTLY!
-# ==============================
 # Always include main class definition:
 #
 #  class{ '::accounts': }
@@ -19,15 +16,16 @@
 # Definition of a Linux/Unix group
 #
 define accounts::group (
-  $groupname       = $title,
-  $ensure          = 'present',
-  $members         = [],
-  $gid             = undef,
-  $auth_membership = true,
+  String $groupname = $title,
+  Enum['present', 'absent'] $ensure = 'present',
+  Array[String] $members = [],
+  Boolean $auth_membership = true,
+  # TODO: validate gid
+  $gid = undef,
+  String $provider = 'gpasswd',
 ) {
 
-  validate_re($ensure, [ '^absent$', '^present$' ],
-    'The $ensure parameter must be \'absent\' or \'present\'')
+  assert_private()
 
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {
@@ -35,5 +33,6 @@ define accounts::group (
     'gid'             => $gid,
     'members'         => sort(unique($members)),
     'auth_membership' => $auth_membership,
+    'provider'        => $provider,
   })
 }

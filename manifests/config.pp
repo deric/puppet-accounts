@@ -1,9 +1,9 @@
-# Private class. Do not include directly this class.
-#
 # Global accounts configuration
 class accounts::config(
-  $options = {}
+  Hash $options = {}
 ) {
+
+  assert_private()
 
   if has_key($options, 'umask') {
     $umask = $options['umask']
