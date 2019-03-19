@@ -122,9 +122,14 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
   describe "#gid=" do
     it "should add -o when allowdupe is enabled and the gid is being modified" do
       resource[:allowdupe] = :true
-      provider.expects(:execute).with(['/usr/sbin/groupmod', '-g', 150, '-o', 'mygroup'],
-        { :failonfail => true, :combine => true, :custom_environment => {} }
-      )
+      if Gem::Version.new(Puppet.version) >= Gem::Version.new('5.0.0')
+        provider.expects(:execute).with(['/usr/sbin/groupmod', '-g', 150, '-o', 'mygroup'],
+          { :failonfail => true, :combine => true, :custom_environment => {} }
+        )
+      else
+        provider.expects(:execute).with(['/usr/sbin/groupmod', '-g', 150, '-o', 'mygroup'])
+      end
+
       provider.gid = 150
     end
   end
