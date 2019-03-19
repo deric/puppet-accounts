@@ -308,7 +308,7 @@ When defining adding a user to multiple groups, we have to ensure, that all the 
     users => { 'john' => {
       'shell'   => '/bin/bash',
       'groups'  => ['users', 'puppet'],
-      'ssh_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }
+      'ssh_keys' => { 'johns_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }}
     }}
   }
 ```

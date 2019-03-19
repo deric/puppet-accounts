@@ -551,7 +551,7 @@ describe 'accounts', :type => :class do
     }) }
   end
 
-  context 'users accoutns' do
+  context 'users accounts' do
     let(:facts) do
       {
       :osfamily      => 'Debian',
@@ -589,17 +589,19 @@ describe 'accounts', :type => :class do
         {
         :users => {'foogbar' => {} },
         :manage_users => false,
+        :manage_groups => false,
+        :use_lookup => false,
       }
       end
-      it_behaves_like 'not_having_user_account', 'foo'
+      it_behaves_like 'not_having_user_account', 'foogbar'
     end
 
-    describe 'multiple users with the same key comment' do
+    describe 'multiple users with defined name' do
       let(:params) do
         {
         :users => {
-          'tom' => {'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}},
-          'jerry' => {'pwhash' => 'xxxxxxx','ssh_key' => {'comment' => 'id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}},
+          'tom' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'tom' => {'name' => 'tom_id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}}},
+          'jerry' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'jerry' => {'name' => 'jerry_id_rsa','type' => 'ssh-rsa','key' => 'xxxxxxx'}}},
         },
       }
       end
@@ -611,8 +613,8 @@ describe 'accounts', :type => :class do
       let(:params) do
         {
         :users => {
-          'tom' => {'pwhash' => 'xxxxxxx','ssh_key' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}},
-          'jerry' => {'pwhash' => 'xxxxxxx','ssh_key' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}},
+          'tom' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'tom' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}}},
+          'jerry' => {'pwhash' => 'xxxxxxx','ssh_keys' => {'jerry' => {'type' => 'ssh-rsa','key' => 'xxxxxxx'}}},
         },
       }
       end

@@ -20,7 +20,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
             'john' => {
               'shell'   => '/bin/bash',
               'groups'  => ['users', 'engineers'],
-              'ssh_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }
+              'ssh_keys' => { 'johns_key' => {'type' => 'ssh-rsa', 'key' => 'public_ssh_key_xxx' }}
             }
           }
         }

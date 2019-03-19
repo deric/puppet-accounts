@@ -45,7 +45,6 @@ define accounts::user(
   # lint:endignore
   $groups = [],
   $ssh_key_source = undef,
-  $ssh_key = '',
   $ssh_keys = {},
   $purge_ssh_keys = false,
   $shell ='/bin/bash',
@@ -261,7 +260,6 @@ define accounts::user(
         }
 
         accounts::authorized_keys { $username:
-          ssh_key              => $ssh_key, # DEPRECATED
           ssh_keys             => $ssh_keys,
           ssh_key_source       => $ssh_key_source,
           authorized_keys_file => $authorized_keys_file,

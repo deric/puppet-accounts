@@ -9,10 +9,20 @@ describe 'accounts::authorized_keys', :type => :define do
       :puppetversion => '3.5.1',
     }
   end
-  let(:user) { 'john' }
-  let(:group) { 'john' }
-  let(:title) { 'john' }
+  let(:user) { 'joe' }
+  let(:group) { 'joe' }
+  let(:title) { 'joe' }
   let(:file) { "/home/#{user}/.ssh/authorized_keys" }
+
+  # normally home directory is created by user class
+  let :pre_condition do
+    "file {'/home/#{user}':
+       ensure => directory,
+       owner  => #{user},
+       group  => #{group},
+       mode   => '0755',
+    }"
+  end
 
   let(:params) do
     {

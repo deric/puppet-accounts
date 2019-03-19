@@ -7,10 +7,16 @@ class accounts(
   Hash $groups        = {},
   Hash $user_defaults = lookup('accounts::user_defaults', Hash, {'strategy' => 'deep'}, {}),
   Hash $options       = lookup('accounts::config', Hash, {'strategy' => 'deep'}, {}),
+  Boolean $use_lookup = true,
 ) inherits ::accounts::params {
 
-  $users_h  = lookup('accounts::users', Hash, {'strategy' => 'deep'}, {})
-  $groups_h = lookup('accounts::groups', Hash, {'strategy' => 'deep'}, {})
+  if $use_lookup {
+    $users_h  = lookup('accounts::users', Hash, {'strategy' => 'deep'}, {})
+    $groups_h = lookup('accounts::groups', Hash, {'strategy' => 'deep'}, {})
+  } else {
+    $users_h  = {}
+    $groups_h = {}
+  }
 
   $_users = merge($users, $users_h)
   anchor { 'accounts::users_created': }
