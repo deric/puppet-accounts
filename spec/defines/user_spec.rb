@@ -158,7 +158,7 @@ describe 'accounts::user', :type => :define do
     it do
       expect do
         is_expected.to compile
-      end.to raise_error(RSpec::Expectations::ExpectationNotMetError, /parameter must be 'absent' or 'present'/)
+      end.to raise_error(RSpec::Expectations::ExpectationNotMetError, /expects a match for Enum/)
     end
   end
 

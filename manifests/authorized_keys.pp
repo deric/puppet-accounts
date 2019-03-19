@@ -20,8 +20,8 @@
 #  * [ssh_dir_group] .ssh dir group and authorized_keys file as well
 #
 define accounts::authorized_keys(
-  Hash $ssh_keys = {},
   Stdlib::Absolutepath $home_dir,
+  Hash $ssh_keys = {},
   Variant[String, Integer] $gid = $title,
   Variant[String, Integer] $ssh_dir_owner = $title,
   Variant[String, Integer] $ssh_dir_group = $title,

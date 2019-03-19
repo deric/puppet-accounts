@@ -24,7 +24,7 @@
 #  * [manage_group] - Whether primary group with the same name as
 #                    the account name should be created
 #  * [primary_group] - name of user's primary group, if empty account name
-#                    wikk be used.
+#                    will be used.
 #  * [pwhash] - password hash for the user
 #  * [password] - (optional) cleartext password, will be hashed (mutually exclusive with `pwhash`!)
 #  * [salt] - (optional, default random/fact based) salt for hashing the `password`
@@ -35,54 +35,45 @@
 #  * [manage_ssh_dir] Whether `.ssh` directory should be managed by this module (default: `true`)
 #
 define accounts::user(
-  $uid = undef,
-  $gid = undef,
-  $primary_group = undef,
-  $comment = undef,
   # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
-  $username = "${title}",
   # lint:endignore
-  $groups = [],
-  $ssh_key_source = undef,
-  $ssh_keys = {},
-  $purge_ssh_keys = false,
-  $shell ='/bin/bash',
-  $pwhash = '',
-  $password = undef,
-  $salt = undef,
-  $hash = 'SHA-512',
-  $managehome = true,
-  $hushlogin = false,
-  $manage_group = true, # create a group with '$primary_group' name
-  $manageumask = false,
-  $umask = '0022',
-  $home = undef,
-  $ensure = present,
-  $recurse_permissions = false,
-  $authorized_keys_file = undef,
-  $force_removal = true,
-  $populate_home = false,
-  $home_directory_contents = 'puppet:///modules/accounts',
-  $password_max_age = undef,
-  $allowdupe = false,
-  $home_permissions = '0700',
-  $manage_ssh_dir = true,
-  $ssh_dir_owner = undef,
-  $ssh_dir_group = undef,
+  String $username = "${title}",
+  Enum['present', 'absent'] $ensure = 'present',
+  Optional[Variant[String, Integer]] $uid = undef,
+  Optional[Variant[String, Integer]] $gid = undef,
+  Optional[Variant[String, Integer]] $primary_group = undef,
+  Optional[String] $comment = undef,
+  Array $groups = [],
+  Optional[Stdlib::Absolutepath] $ssh_key_source = undef,
+  Hash $ssh_keys = {},
+  Boolean $purge_ssh_keys = false,
+  String $shell ='/bin/bash',
+  String $pwhash = '',
+  Optional[String] $password = undef,
+  Optional[String] $salt = undef,
+  String $hash = 'SHA-512',
+  Boolean $managehome = true,
+  Boolean $hushlogin = false,
+  Boolean $manage_group = true, # create a group with '$primary_group' name
+  Boolean $manageumask = false,
+  String $umask = '0022',
+  Optional[Stdlib::Absolutepath] $home = undef,
+  Boolean $recurse_permissions = false,
+  Optional[Stdlib::Absolutepath] $authorized_keys_file = undef,
+  Boolean $force_removal = true,
+  Boolean $populate_home = false,
+  String $home_directory_contents = 'puppet:///modules/accounts',
+  Optional[Integer] $password_max_age = undef,
+  Boolean $allowdupe = false,
+  String $home_permissions = '0700',
+  Boolean $manage_ssh_dir = true,
+  Optional[Variant[String, Integer]] $ssh_dir_owner = undef,
+  Optional[Variant[String, Integer]] $ssh_dir_group = undef,
 ) {
 
   assert_private()
 
-  validate_re($ensure, [ '^absent$', '^present$' ],
-    'The $ensure parameter must be \'absent\' or \'present\'')
-  validate_hash($ssh_keys)
-  validate_bool($managehome)
-  if ! is_array($purge_ssh_keys) {
-    validate_bool($purge_ssh_keys)
-  }
-
-  validate_string($password)
   if $pwhash != '' and $password {
     fail("You cannot set both \$pwhash and \$password for ${username}.")
   }
