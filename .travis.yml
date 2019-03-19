@@ -32,26 +32,26 @@ matrix:
     #  services: docker
     #  sudo: required
     - rvm: 2.3.3
-      dist: trusty
+      dist: xenial
       env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-4.10
       script: bundle exec rake acceptance
       services: docker
       sudo: required
     - rvm: 2.3.3
-      dist: trusty
+      dist: xenial
       env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-4.8
       script: bundle exec rake acceptance
       services: docker
       sudo: required
     - rvm: 2.3.3
-      dist: trusty
+      dist: xenial
       # includes puppet provisioning (will included latest puppet version)
       env: PUPPET_install=yes RAKE_ENV=ci PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=ubuntu-14.04
       script: bundle exec rake acceptance
       services: docker
       sudo: required
     - rvm: 2.3.3
-      dist: trusty
+      dist: xenial
       env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=sles13-3.8
       script: bundle exec rake acceptance
       services: docker
@@ -59,5 +59,3 @@ matrix:
   allow_failures:
     - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=sles13-3.8
     - env: PUPPET_VERSION="~> 5.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
-    - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-4.10
-    - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian8-4.8
