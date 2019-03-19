@@ -20,17 +20,17 @@
 #  * [ssh_dir_group] .ssh dir group and authorized_keys file as well
 #
 define accounts::authorized_keys(
-  $ssh_keys,
-  $home_dir,
-  $purge_ssh_keys,
-  $gid = $title,
-  $ssh_dir_owner = $title,
-  $ssh_dir_group = $title,
-  $ssh_key_source = undef,
-  $username = $title,
-  $authorized_keys_file = undef,
-  $ensure = 'present',
-  $manage_ssh_dir = true,
+  Hash $ssh_keys = {},
+  Stdlib::Absolutepath $home_dir,
+  Boolean $purge_ssh_keys,
+  Variant[String, Integer] $gid = $title,
+  Variant[String, Integer] $ssh_dir_owner = $title,
+  Variant[String, Integer] $ssh_dir_group = $title,
+  Optional[Stdlib::Absolutepath] $ssh_key_source = undef,
+  String $username = $title,
+  Optional[String] $authorized_keys_file = undef,
+  Enum['present', 'absent'] $ensure = 'present',
+  Boolean $manage_ssh_dir = true,
   ){
 
   assert_private()
