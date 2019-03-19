@@ -37,8 +37,8 @@
 define accounts::user(
   # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
-  # lint:endignore
   String $username = "${title}",
+  # lint:endignore
   Enum['present', 'absent'] $ensure = 'present',
   Optional[Variant[String, Integer]] $uid = undef,
   Optional[Variant[String, Integer]] $gid = undef,
@@ -127,6 +127,9 @@ define accounts::user(
   }
 
   User<| title == $username |> {
+    # Actuall primary group assignment is done later
+    # intentionally omitting primary group in order to avoid dependency cycles
+    # see https://github.com/deric/puppet-accounts/issues/39
     #gid       => $real_gid,
     comment    => $comment,
     managehome => $managehome,
