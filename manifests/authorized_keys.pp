@@ -22,7 +22,6 @@
 define accounts::authorized_keys(
   Hash $ssh_keys = {},
   Stdlib::Absolutepath $home_dir,
-  Boolean $purge_ssh_keys,
   Variant[String, Integer] $gid = $title,
   Variant[String, Integer] $ssh_dir_owner = $title,
   Variant[String, Integer] $ssh_dir_group = $title,
@@ -67,27 +66,16 @@ define accounts::authorized_keys(
     require => Anchor["accounts::ssh_dir_created_${title}"],
   }
 
-  # prior to Puppet 3.6 `purge_ssh_keys` is not supported
-  # `purge_ssh_keys` is defined on User resource
-  if versioncmp($::puppetversion, '3.6.0') < 0 {
-    if $purge_ssh_keys {
-      File<| title == $auth_key_file |> {
-        content => template("${module_name}/authorized_keys.erb"),
-      }
-    } else {
-      notify{"${username} purge keys is false ": }
+  if ($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
+    # manage authorized keys from template
+    File<| title == $auth_key_file |> {
+      content => template("${module_name}/authorized_keys.erb"),
     }
-  } else {
-    if ($ssh_dir_owner != $title or $ssh_dir_group != $gid) {
-      # manage authorized keys from template
-      File<| title == $auth_key_file |> {
-        content => template("${module_name}/authorized_keys.erb"),
-      }
-    } elsif !empty($ssh_keys) {
-      # ssh_authorized_key does not support changing key owner
-      create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
-    }
+  } elsif !empty($ssh_keys) {
+    # ssh_authorized_key does not support changing key owner
+    create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
   }
+
   if $ssh_key_source {
     File<| title == $auth_key_file |> {
       source  => $ssh_key_source,

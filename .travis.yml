@@ -70,4 +70,3 @@ matrix:
       sudo: required
   allow_failures:
     - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=sles13-3.8
-    - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-6.3

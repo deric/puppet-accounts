@@ -183,19 +183,13 @@ define accounts::user(
       }
     }
     'present': {
-      # prior to Puppet 3.6 `purge_ssh_keys` is not supported
-      if versioncmp($::puppetversion, '3.6.0') >= 0 {
-        User<| title == $username |> {
-          purge_ssh_keys   => $purge_ssh_keys,
-          password_max_age => $password_max_age,
-        }
-      }
-
       user { $username:
-        ensure    => present,
-        uid       => $uid,
-        shell     => $shell,
-        allowdupe => $allowdupe,
+        ensure           => present,
+        uid              => $uid,
+        shell            => $shell,
+        allowdupe        => $allowdupe,
+        purge_ssh_keys   => $purge_ssh_keys,
+        password_max_age => $password_max_age,
       }
 
       # Set password if available
@@ -264,7 +258,6 @@ define accounts::user(
           ssh_key_source       => $ssh_key_source,
           authorized_keys_file => $authorized_keys_file,
           home_dir             => $home_dir,
-          purge_ssh_keys       => $purge_ssh_keys,
           manage_ssh_dir       => $manage_ssh_dir,
           ssh_dir_owner        => $_ssh_dir_owner,
           ssh_dir_group        => $_ssh_dir_group,
