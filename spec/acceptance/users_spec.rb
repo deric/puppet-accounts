@@ -12,12 +12,12 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
         class {'::accounts':
           users => {
             'dalp' => {
-              'uid' => '1005',
+              'uid' => '1035',
               'comment' => 'dalp user',
               'groups' => ['users']
             },
             'deployer' => {
-              'uid' => '1010',
+              'uid' => '1020',
             }
           }
         }
@@ -46,7 +46,7 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe user('dalp') do
       it { is_expected.to exist }
-      it { is_expected.to have_uid 1005 }
+      it { is_expected.to have_uid 1035 }
     end
 
     describe group('dalp') do
@@ -62,13 +62,13 @@ describe 'accounts defintion', :unless => UNSUPPORTED_PLATFORMS.include?(fact('o
 
     describe user('deployer') do
       it { is_expected.to exist }
-      it { is_expected.to have_uid 1010 }
+      it { is_expected.to have_uid 1020 }
     end
 
     # primary group id
     describe command('id -g deployer') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match /1010/ }
+      its(:stdout) { is_expected.to match /1020/ }
     end
 
     describe command('getent group deployer') do
