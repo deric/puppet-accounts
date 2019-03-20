@@ -1,4 +1,8 @@
 ---
+lookup_options:
+  "^accounts::(.*)":
+    merge:
+      strategy: deep
 accounts::users:
   myuser:
     uid: 1000

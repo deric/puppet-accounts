@@ -1,10 +1,11 @@
 ---
-:backends:
-  - yaml
-:hierarchy:
-  - '%{::clientcert}'
-  - test
-  - default
-:yaml:
-  :datadir: './spec/fixtures/hiera'
-:merge_behavior: deep
+version: 5
+defaults:
+  datadir: '.'         # This path is relative to hiera.yaml's directory.
+  data_hash: yaml_data  # Use the built-in YAML backend.
+
+hierarchy:
+  - name: "test"
+    path: "test.yaml"
+  - name: "default"
+    path: "default.yaml"

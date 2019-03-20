@@ -284,7 +284,7 @@ $ facter -y > my_node.yml
 
 ### Without Hiera
 
-Using Hiera is optional, you can configure accounts directly from Puppet code:
+Using Hiera is optional (though prefered option), you can configure accounts directly from Puppet code:
 
 
 ```puppet
