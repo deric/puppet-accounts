@@ -35,8 +35,9 @@ RSpec.configure do |c|
       on host, "ln -s #{hiera_config} /etc/puppet/hiera.yaml", { :acceptable_exit_codes => [0] }
       on host, "ln -s #{HIERA_PATH}/hieradata /etc/puppetlabs/puppet/hieradata", { :acceptable_exit_codes => [0] }
       scp_to host, File.expand_path('./spec/acceptance/hieradata'), HIERA_PATH
-      on host, "/opt/puppetlabs/bin/puppet --version"
-      on host, "/opt/puppetlabs/bin/puppet module list"
+      # assume puppet is on $PATH
+      on host, "puppet --version"
+      on host, "puppet module list"
     end
     puppet_module_install(:source => proj_root, :module_name => 'accounts')
   end

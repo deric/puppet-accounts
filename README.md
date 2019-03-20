@@ -322,6 +322,8 @@ This modules heavily relies on Hiera functionality, thus it's recommended to use
 
 ## Hiera configuration
 
+Puppet 4.9 comes with Hiera 5 support. For earlier versions see Hiera 3 section.
+
 ### Hiera 5
 
 When migrating from Hiera 3 see the [official guide](https://puppet.com/docs/puppet/5.0/hiera_migrate_v3_yaml.html):
