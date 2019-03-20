@@ -6,3 +6,4 @@
  * `hiera` function replaced by `lookup`
  * [BC] removed `ssh_key` parameter from class `user` (use `ssh_keys` instead)
  * added acceptance tests for Debian
+ * tested on Hiera 5 (Hiera 3 supported, but not included in test suites)
