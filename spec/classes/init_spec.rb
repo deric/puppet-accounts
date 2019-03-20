@@ -191,41 +191,19 @@ describe 'accounts', :type => :class do
         'mode'    => '0755'
       }) }
 
-      if Gem::Version.new(Puppet.version) >= Gem::Version.new('3.6.0')
-        it {
-          is_expected.to contain_ssh_authorized_key('root_key1').with(
-            'type' => 'ssh-rsa',
-            'key' => 'AAA_key1'
-          )
-        }
+      it {
+        is_expected.to contain_ssh_authorized_key('root_key1').with(
+          'type' => 'ssh-rsa',
+          'key' => 'AAA_key1'
+        )
+      }
 
-        it {
-          is_expected.to contain_ssh_authorized_key('root_key2').with(
-            'type' => 'ssh-rsa',
-            'key' => 'AAA_key2'
-          )
-        }
-      else
-        it {
-          is_expected.to contain_file("/root/.ssh/authorized_keys")
-            .with({
-            'ensure'  => 'present',
-            'owner'   => 'root',
-            'group'   => '0',
-            'mode'    => '0600'
-          })
-        }
-
-        it {
-          is_expected.to contain_file("/root/.ssh/authorized_keys")
-            .with_content(/ssh-rsa AAA_key1 root_key1_ssh-rsa/)
-        }
-
-        it {
-          is_expected.to contain_file("/root/.ssh/authorized_keys")
-            .with_content(/ssh-rsa AAA_key2 root_key2_ssh-rsa/)
-        }
-      end
+      it {
+        is_expected.to contain_ssh_authorized_key('root_key2').with(
+          'type' => 'ssh-rsa',
+          'key' => 'AAA_key2'
+        )
+      }
     end
 
     context 'superman account' do
@@ -272,6 +250,23 @@ describe 'accounts', :type => :class do
       it {
         is_expected.to contain_user('deadpool').with(
           'ensure' => 'absent'
+        )
+      }
+    end
+
+    context 'batman account' do
+      it {
+        is_expected.to contain_user('batman').with(
+          'ensure'  => 'present',
+          'comment' => 'Bruce Wayne'
+        )
+      }
+
+      it {
+        is_expected.to contain_ssh_authorized_key('bat_key').with(
+          'type' => 'ssh-dss',
+          'key'  => 'AAABBBatman',
+          'user' => 'batman',
         )
       }
     end
