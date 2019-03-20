@@ -27,7 +27,7 @@ EOS
 
         let(:pp) do
 <<-EOS
-  hiera_include('classes')
+lookup('classes', {merge => unique}).include
 EOS
     end
 
@@ -93,7 +93,7 @@ EOS
 
         let(:pp) do
 <<-EOS
-  hiera_include('classes')
+lookup('classes', {merge => unique}).include
 EOS
     end
 

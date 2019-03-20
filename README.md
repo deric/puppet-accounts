@@ -320,7 +320,46 @@ This modules heavily relies on Hiera functionality, thus it's recommended to use
   * `3.x` work out-of-the-box
   * `4.x` other backends than Hiera might work
 
-## Installation
+## Hiera configuration
+
+### Hiera 5
+
+When migrating from Hiera 3 see the [official guide](https://puppet.com/docs/puppet/5.0/hiera_migrate_v3_yaml.html):
+
+`hiera.yaml` has slightly different syntax:
+
+```yaml
+---
+version: 5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: hieradata         # This path is relative to hiera.yaml's directory.
+  data_hash: yaml_data  # Use the built-in YAML backend.
+
+hierarchy:
+  - name: "Common"
+    path: "common.yaml"
+
+```
+Supported [merge strategies](https://puppet.com/docs/puppet/5.0/hiera_merging.html) are:
+
+* `first` A first-found lookup doesn’t merge anything; it returns the first value found, and ignores the rest (default).
+* `unique` A unique merge (sometimes called “array merge”) combines any number of array and scalar (string/number/boolean) values to return a merged, flattened array with all duplicate values removed.
+* `hash` A hash merge combines the keys and values of any number of hashes to return a merged hash.
+* `deep` Like a hash merge, a deep merge combines the keys and values of any number of hashes to return a merged hash. But if the same key exists in multiple source hashes, Hiera recursively merges them.
+
+
+Using `lookup_options` you can define rules to use strategy that suits your needs.
+```yaml
+---
+lookup_options:
+  "^accounts::(.*)":
+    merge:
+      strategy: deep
+      # sort_merged_arrays: false
+      # merge_hash_arrays: false
+```
+
+### Hiera 3
 
 For more complex hierarchies (defined in multiple files) `deep_merge` gem is needed, see [Hiera docs](https://docs.puppetlabs.com/hiera/3.0/lookup_types.html#deep-merging-in-hiera).
 
@@ -380,7 +419,7 @@ BEAKER_set=centos7-3.8 bundle exec rake acceptance
 For examining system state set Beaker's ENV variable `BEAKER_destroy=no`:
 
 ```
-BEAKER_destroy=no BEAKER_set=debian8-3.8 bundle exec rake acceptance
+BEAKER_destroy=no BEAKER_set=debian9-6.3 bundle exec rake acceptance
 ```
 and after finishing tests connect to container:
 ```

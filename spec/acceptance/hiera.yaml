@@ -1,9 +1,11 @@
 ---
-:backends:
-  - yaml
-:hierarchy:
-  - default
-  - common
-:yaml:
-  :datadir: '/etc/puppetlabs/code/environments/production/hieradata'
-:merge_behavior: deep
+version: 5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: hieradata         # This path is relative to hiera.yaml's directory.
+  data_hash: yaml_data  # Use the built-in YAML backend.
+
+hierarchy:
+  - name: "Common"
+    path: "common.yaml"
+  - name: "Defaults"
+    path: "default.yaml"

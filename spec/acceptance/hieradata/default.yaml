@@ -1,6 +1,11 @@
 ---
 classes:
   - '::accounts'
+lookup_options:
+  "^accounts::(.*)":
+    merge:
+      strategy: deep
+      # merge_hash_arrays: true
 accounts::users:
   george:
     ssh_keys:

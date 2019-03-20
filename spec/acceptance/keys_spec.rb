@@ -87,7 +87,7 @@ EOS
 
         let(:pp) do
 <<-EOS
-  hiera_include('classes')
+  lookup('classes', {merge => unique}).include
 EOS
     end
 
@@ -142,7 +142,7 @@ EOS
   context 'provide custom ssh options' do
     let(:pp) do
 <<-EOS
-  hiera_include('classes')
+  lookup('classes', {merge => unique}).include
 EOS
     end
 
