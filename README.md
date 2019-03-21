@@ -8,6 +8,11 @@ This is puppet module for managing user accounts, groups and setting ssh keys.
 
 Version compatibility:
 
+| `deric-accounts`  | Puppet 3.x    | Puppet 4.x   | Puppet 5.x | Puppet 6.x |
+| ----------------- | ------------- |--------------| -----------|------------|
+| `1.5.x`           | :heavy_check_mark: | :heavy_check_mark: | :question: | :x:  |
+| `2.0.x`           | :question:  | :heavy_check_mark: |  :heavy_check_mark: | :x:  |
+
   * `deric-acounts >= 2.0` - Puppet 4.x, Puppet 5.x
   * `deric-acounts < 2.0` - Puppet 3.x, Puppet 4.x
 
