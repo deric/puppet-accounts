@@ -4,7 +4,7 @@
 #
 # or with pure YAML declaration, site.pp:
 #
-#  hiera_include('classes')
+#  lookup('classes', {merge => unique}).include
 #
 # hiera configuration e.g. default.yaml:
 #   classes:
@@ -37,37 +37,37 @@
 define accounts::user(
   # intentionally, workaround for: https://tickets.puppetlabs.com/browse/PUP-4332
   # lint:ignore:only_variable_string  # see https://github.com/deric/puppet-accounts/pull/11 for more details
-  String $username = "${title}",
+  String                             $username = "${title}",
   # lint:endignore
-  Enum['present', 'absent'] $ensure = 'present',
+  Enum['present', 'absent']          $ensure = 'present',
   Optional[Variant[String, Integer]] $uid = undef,
   Optional[Variant[String, Integer]] $gid = undef,
   Optional[Variant[String, Integer]] $primary_group = undef,
-  Optional[String] $comment = undef,
-  Array $groups = [],
-  Optional[Stdlib::Absolutepath] $ssh_key_source = undef,
-  Hash $ssh_keys = {},
-  Boolean $purge_ssh_keys = false,
-  String $shell ='/bin/bash',
-  String $pwhash = '',
-  Optional[String] $password = undef,
-  Optional[String] $salt = undef,
-  String $hash = 'SHA-512',
-  Boolean $managehome = true,
-  Boolean $hushlogin = false,
-  Boolean $manage_group = true, # create a group with '$primary_group' name
-  Boolean $manageumask = false,
-  String $umask = '0022',
-  Optional[Stdlib::Absolutepath] $home = undef,
-  Boolean $recurse_permissions = false,
-  Optional[Stdlib::Absolutepath] $authorized_keys_file = undef,
-  Boolean $force_removal = true,
-  Boolean $populate_home = false,
-  String $home_directory_contents = 'puppet:///modules/accounts',
-  Optional[Integer] $password_max_age = undef,
-  Boolean $allowdupe = false,
-  String $home_permissions = '0700',
-  Boolean $manage_ssh_dir = true,
+  Optional[String]                   $comment = undef,
+  Array                              $groups = [],
+  Optional[Stdlib::Absolutepath]     $ssh_key_source = undef,
+  Hash                               $ssh_keys = {},
+  Boolean                            $purge_ssh_keys = false,
+  String                             $shell ='/bin/bash',
+  String                             $pwhash = '',
+  Optional[String]                   $password = undef,
+  Optional[String]                   $salt = undef,
+  String                             $hash = 'SHA-512',
+  Boolean                            $managehome = true,
+  Boolean                            $hushlogin = false,
+  Boolean                            $manage_group = true, # create a group with '$primary_group' name
+  Boolean                            $manageumask = false,
+  String                             $umask = '0022',
+  Optional[Stdlib::Absolutepath]     $home = undef,
+  Boolean                            $recurse_permissions = false,
+  Optional[Stdlib::Absolutepath]     $authorized_keys_file = undef,
+  Boolean                            $force_removal = true,
+  Boolean                            $populate_home = false,
+  String                             $home_directory_contents = 'puppet:///modules/accounts',
+  Optional[Integer]                  $password_max_age = undef,
+  Boolean                            $allowdupe = false,
+  String                             $home_permissions = '0700',
+  Boolean                            $manage_ssh_dir = true,
   Optional[Variant[String, Integer]] $ssh_dir_owner = undef,
   Optional[Variant[String, Integer]] $ssh_dir_group = undef,
 ) {

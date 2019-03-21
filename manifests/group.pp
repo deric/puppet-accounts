@@ -1,10 +1,14 @@
+# == Define accounts::group
+#
+# A definition of a Linux/Unix group (and optionally its members).
+#
 # Always include main class definition:
 #
 #  class{ '::accounts': }
 #
 # or with pure YAML declaration, site.pp:
 #
-#  hiera_include('classes')
+#  lookup('classes', {merge => unique}).include
 #
 # hiera configuration e.g. default.yaml:
 #   classes:
@@ -13,16 +17,13 @@
 #     myuser:
 #       groups: ['users']
 #
-# Definition of a Linux/Unix group
-#
 define accounts::group (
-  String $groupname = $title,
-  Enum['present', 'absent'] $ensure = 'present',
-  Array[String] $members = [],
-  Boolean $auth_membership = true,
-  # TODO: validate gid
-  $gid = undef,
-  String $provider = 'gpasswd',
+  String                             $groupname = $title,
+  Enum['present', 'absent']          $ensure = 'present',
+  Array[String]                      $members = [],
+  Boolean                            $auth_membership = true,
+  Optional[Variant[String, Integer]] $gid = undef,
+  String                             $provider = 'gpasswd',
 ) {
 
   assert_private()
