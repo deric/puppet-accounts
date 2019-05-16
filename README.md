@@ -26,7 +26,7 @@ class {'::accounts':}
 
 or with pure YAML declaration make sure to use the `hiera_include` function e.g. in `site.pp` (see [Hiera docs for details](https://docs.puppet.com/hiera/3.2/complete_example.html#using-hierainclude)):
 ```puppet
-hiera_include('classes')
+lookup('classes', {merge => unique}).include
 ```
 and all other definition can be in YAML hierarchy:
 ```yaml
