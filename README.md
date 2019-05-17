@@ -420,7 +420,7 @@ $ bundle exec rake spec
 
 Fastest way is to run tests on prepared Docker images:
 ```
-BEAKER_set=debian8-3.8 bundle exec rake acceptance
+BEAKER_set=debian9-5.5 bundle exec rake acceptance
 BEAKER_set=centos7-3.8 bundle exec rake acceptance
 ```
 For examining system state set Beaker's ENV variable `BEAKER_destroy=no`:
