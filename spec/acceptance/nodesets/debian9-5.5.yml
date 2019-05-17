@@ -2,7 +2,7 @@ HOSTS:
   debian-9-x64:
     platform: debian-9-amd64
     hypervisor : docker
-    image: deric/stretch-puppet:5.5.10
+    image: deric/stretch-puppet:5.5.14
     docker_preserve_image: false
     roles:
       - agent
