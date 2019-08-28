@@ -159,6 +159,34 @@ accounts::users:
           - 'command="/path/to/script.sh arg1 $SSH_ORIGINAL_COMMAND"'
 ```
 
+### SSH key groups
+
+Alternatively to specify the ssh keys for every user, they can be specified in groups in a seperate structure. Those groups can then be included for individual users.
+
+```yaml
+accounts::ssh_key_groups:
+  mykey_group1:
+    mykey1:
+      type: 'ssh-rsa'
+      key: 'AAAA....'
+    mykey2:
+      type: 'ssh-rsa'
+      key: 'AAAA....'
+  mykey_group2:
+    mykey3:
+      type: 'ssh-rsa'
+      key: 'AAAA....'
+
+accounts::users:
+  foo:
+    ssh_key_groups: ['mykey_group1', 'mykey_group2']
+    ssh_keys:
+      'mykey4':
+        type: 'ssh-rsa'
+        key: 'AAAA....'
+```
+
+
 ### Password Management
 
 You can either provide an already hashed password or you can let the module take
