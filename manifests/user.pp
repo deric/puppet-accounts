@@ -19,6 +19,7 @@
 #
 #  * [allowdupe] - Whether to allow duplicate UIDs. Defaults to false.
 #  * [comment] - A description of the user. Generally the user's full name.
+#  * [destroy_home_on_remove] rm -rf on `$home` directory will be executed upon removal (default: `false`)
 #  * [uid] - Force User ID (in Linux)
 #  * [gid] - Force Group ID
 #  * [manage_group] - Whether primary group with the same name as
@@ -62,6 +63,7 @@ define accounts::user(
   Boolean                            $recurse_permissions = false,
   Optional[Stdlib::Absolutepath]     $authorized_keys_file = undef,
   Boolean                            $force_removal = true,
+  Boolean                            $destroy_home_on_remove = false,
   Boolean                            $populate_home = false,
   String                             $home_directory_contents = 'puppet:///modules/accounts',
   Optional[Integer]                  $password_max_age = undef,
@@ -138,7 +140,7 @@ define accounts::user(
 
   case $ensure {
     'absent': {
-      if $managehome == true {
+      if $managehome == true and $destroy_home_on_remove == true {
         exec { "rm -rf ${home_dir}":
           path   => [ '/bin', '/usr/bin' ],
           onlyif => "test -d ${home_dir}",

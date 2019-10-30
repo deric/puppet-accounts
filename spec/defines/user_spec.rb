@@ -178,11 +178,42 @@ describe 'accounts::user', :type => :define do
       )
     }
 
+    it { is_expected.not_to contain_exec('rm -rf /home/mickey')}
     it { is_expected.to contain_exec('killproc mickey')}
     it { is_expected.to contain_anchor('accounts::user::remove_mickey')}
 
     it {
       is_expected.to contain_group('mickey').with(
+        'ensure' => 'absent'
+      )
+    }
+  end
+
+
+  context 'destroy home dir with user\'s account' do
+    let(:title) { 'trudy' }
+
+    let(:params) do
+      {
+        managehome: true,
+        manage_group: true,
+        ensure: 'absent',
+        destroy_home_on_remove: true,
+      }
+    end
+
+    it {
+      is_expected.to contain_user('trudy').with(
+        'ensure' => 'absent'
+      )
+    }
+
+    it { is_expected.to contain_exec('rm -rf /home/trudy')}
+    it { is_expected.to contain_exec('killproc trudy')}
+    it { is_expected.to contain_anchor('accounts::user::remove_trudy')}
+
+    it {
+      is_expected.to contain_group('trudy').with(
         'ensure' => 'absent'
       )
     }
