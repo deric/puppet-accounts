@@ -23,7 +23,9 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
       provider.expects(:execute).with('/bin/true',
         :custom_environment => {},
         :failonfail => true,
-        :combine => true)
+        :combine => true,
+        :sensitive => false)
+
       provider.expects(:execute).with('/usr/sbin/groupadd -g 555 -o mygroup', {:custom_environment => {}})
       provider.create
     end
@@ -34,7 +36,8 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
         provider.expects(:execute).with('/bin/true',
           :custom_environment => {},
           :failonfail => true,
-          :combine => true)
+          :combine => true,
+          :sensitive => false)
         provider.expects(:execute).with('/usr/sbin/groupadd -r mygroup', {:custom_environment => {}})
         provider.create
       end
@@ -46,7 +49,8 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
         provider.expects(:execute).with('/bin/true',
           :custom_environment => {},
           :failonfail => true,
-          :combine => true)
+          :combine => true,
+          :sensitive => false)
         provider.expects(:execute).with('/usr/sbin/groupadd mygroup', {:custom_environment => {}})
         provider.create
       end
@@ -57,7 +61,8 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
         provider.expects(:execute).with('/bin/true',
           :custom_environment => {},
           :failonfail => true,
-          :combine => true)
+          :combine => true,
+          :sensitive => false)
         provider.expects(:execute).with('/usr/sbin/groupadd mygroup', {:custom_environment => {}})
         resource[:members] = ['test_one','test_two','test_three']
         resource[:members].each do |member|
@@ -124,7 +129,7 @@ describe Puppet::Type.type(:group).provider(:gpasswd) do
       resource[:allowdupe] = :true
       if Gem::Version.new(Puppet.version) >= Gem::Version.new('5.0.0')
         provider.expects(:execute).with(['/usr/sbin/groupmod', '-g', 150, '-o', 'mygroup'],
-          { :failonfail => true, :combine => true, :custom_environment => {} }
+          { :failonfail => true, :combine => true, :custom_environment => {}, :sensitive => false }
         )
       else
         provider.expects(:execute).with(['/usr/sbin/groupmod', '-g', 150, '-o', 'mygroup'])
