@@ -26,8 +26,6 @@ define accounts::group (
   String                             $provider = 'gpasswd',
 ) {
 
-  assert_private()
-
   # avoid problems when group declared elsewhere
   ensure_resource('group', $groupname, {
     'ensure'          => $ensure,

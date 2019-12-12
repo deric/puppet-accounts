@@ -3,8 +3,6 @@ class accounts::config(
   Hash $options = {}
 ) {
 
-  assert_private()
-
   if has_key($options, 'umask') {
     $umask = $options['umask']
     augeas {'Set umask':

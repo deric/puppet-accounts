@@ -74,8 +74,6 @@ define accounts::user(
   Optional[Variant[String, Integer]] $ssh_dir_group = undef,
 ) {
 
-  assert_private()
-
   if $pwhash != '' and $password {
     fail("You cannot set both \$pwhash and \$password for ${username}.")
   }
