@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 group :test do
-  gem "puppet", ENV['PUPPET_VERSION'] || ['> 3.3.0','< 6.0']
+  gem "puppet", ENV['PUPPET_VERSION'] || ['> 4.10.0','< 7.0']
   gem "rspec"
   gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
@@ -28,6 +28,7 @@ group :development do
   gem "travis-lint"
   gem 'puppet-blacksmith', git: 'https://github.com/deric/puppet-blacksmith', branch: 'tag-order'
   gem "guard-rake"
+  gem 'pdk', '> 1.0'
 end
 
 group :system_tests do
@@ -38,5 +39,6 @@ group :system_tests do
   gem 'serverspec'
   gem 'beaker-hostgenerator'
   gem 'beaker-puppet_install_helper'
+  gem 'beaker-module_install_helper'
   gem 'master_manipulator'
 end

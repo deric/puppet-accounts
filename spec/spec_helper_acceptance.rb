@@ -3,6 +3,7 @@
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
+require 'beaker/module_install_helper'
 
 UNSUPPORTED_PLATFORMS = ['windows','AIX','Solaris'].freeze
 
@@ -16,15 +17,12 @@ RSpec.configure do |c|
 
   # Configure all nodes in nodeset
   c.before :suite do
-    #install_puppet
+    # Install modules and dependencies from spec/fixtures/modules
+
     hosts.each do |host|
       if ['RedHat'].include?(fact('osfamily'))
         on host, 'yum install -y tar'
       end
-      #on host, 'gem install bundler'
-      #on host, 'cd /etc/puppet && bundle install --without development'
-      on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      # on host, puppet('module', 'install', 'deric-gpasswd'), { :acceptable_exit_codes => [0,1] }
       #binding.pry
       on host, "mkdir -p /etc/puppetlabs/puppet /etc/puppet/modules", { :acceptable_exit_codes => [0] }
       on host, "mkdir -p #{HIERA_PATH}", { :acceptable_exit_codes => [0] }
@@ -35,8 +33,11 @@ RSpec.configure do |c|
       scp_to host, File.expand_path('./spec/acceptance/hieradata'), HIERA_PATH
       # assume puppet is on $PATH
       on host, "puppet --version"
+
+      install_module_dependencies
+      install_module_on(host)
+
       on host, "puppet module list"
     end
-    puppet_module_install(:source => proj_root, :module_name => 'accounts')
   end
 end
