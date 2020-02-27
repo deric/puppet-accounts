@@ -12,6 +12,7 @@ Version compatibility:
 | ----------------- | ------------- |--------------| -----------|------------|
 | `1.5.x`           | :heavy_check_mark: | :heavy_check_mark: | :question: | :x:  |
 | `2.0.x`           | :question:  | :heavy_check_mark: |  :heavy_check_mark: | :x:  |
+| `2.1.x`           | :question: | :question: | :heavy_check_mark: | :heavy_check_mark: |
 
   * `deric-acounts >= 2.0` - Puppet 4.x, Puppet 5.x
   * `deric-acounts < 2.0` - Puppet 3.x, Puppet 4.x

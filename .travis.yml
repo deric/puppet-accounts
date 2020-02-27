@@ -23,6 +23,7 @@ rvm:
 env:
   - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
   - PUPPET_VERSION="~> 5.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
+  - PUPPET_VERSION="~> 6.0" STRICT_VARIABLES=yes PARALLEL_TEST_PROCESSORS=4
 matrix:
   include:
     #- rvm: 2.3.3
@@ -63,4 +64,4 @@ matrix:
       sudo: required
   allow_failures:
     - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=sles13-3.8
-    - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-6.3
+    - env: RAKE_ENV=ci BEAKER_debug=true BEAKER_set=debian9-4.10
