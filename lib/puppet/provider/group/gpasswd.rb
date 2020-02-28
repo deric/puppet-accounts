@@ -14,13 +14,19 @@ Puppet::Type.type(:group).provide :gpasswd, :parent => Puppet::Type::Group::Prov
   has_feature :manages_members unless %w{HP-UX Solaris}.include? Facter.value(:operatingsystem)
   has_feature :libuser if Puppet.features.libuser?
 
+  # workaround for PUP-6542: https://github.com/puppetlabs/puppet/pull/7111
+  def is_new_format?
+    defined?(Puppet::Property::List) &&
+      @resource.parameter('members').class.ancestors.include?(Puppet::Property::List)
+  end
+
   def addcmd
     # This pulls in the main group add command should the group need
     # to be added from scratch.
     cmd = Array(super.map{|x| x = "#{x}"}.shelljoin)
 
-    if @resource[:members]
-      cmd += @resource[:members].map{ |x|
+    if @resource.parameter('members')
+      cmd += @resource.property('members').shouldorig.map{ |x|
         [ command(:addmember),'-a',x,@resource[:name] ].shelljoin
       }
     end
@@ -47,28 +53,55 @@ Puppet::Type.type(:group).provide :gpasswd, :parent => Puppet::Type::Group::Prov
   end
 
   def members
-    getinfo(true) if @objectinfo.nil?
-    retval = @objectinfo.mem
+    members_to_set = @resource.parameter('members').shouldorig
 
-    retval.sort
+    @current_members = []
+    begin
+      current_members = Puppet::Etc.send('getgrnam', name)
+      if current_members
+        @current_members = current_members.mem
+      end
+    rescue ArgumentError
+      # Noop
+    end
+
+    retval = @current_members
+
+    if !@resource[:auth_membership] && (members_to_set - @current_members).empty?
+      retval = members_to_set
+    end
+
+    retval = retval.sort
+
+    # Puppet 5.5.7 breaking change workaround
+    if is_new_format?
+      return retval.join(',')
+    else
+      return retval
+    end
   end
 
   def members_insync?(is, should)
     Array(is).uniq.sort == Array(should).uniq.sort
   end
 
-  def members=(members)
+  def members=(to_set)
     cmd = []
-    to_be_added = members.dup
+    if is_new_format?
+      to_be_added = to_set.split(',')
+    else
+      to_be_added = to_set.dup
+    end
+
     if @resource[:auth_membership]
-      to_be_removed = @objectinfo.mem - to_be_added
-      to_be_added = to_be_added - @objectinfo.mem
+      to_be_removed = @current_members - to_be_added
+      to_be_added = to_be_added - @current_members
 
       !to_be_removed.empty? && cmd += to_be_removed.map { |x|
         [ command(:addmember),'-d',x,@resource[:name] ].shelljoin
       }
     else
-      to_be_added = to_be_added | @objectinfo.mem
+      to_be_added = to_be_added | @current_members
     end
 
     !to_be_added.empty? && cmd += to_be_added.map { |x|

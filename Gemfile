@@ -3,6 +3,7 @@ source "https://rubygems.org"
 group :test do
   gem "puppet", ENV['PUPPET_VERSION'] || ['> 4.10.0','< 7.0']
   gem "rspec"
+  gem 'rspec-mocks'
   gem 'rspec-puppet'
   gem "puppetlabs_spec_helper"
   gem 'rspec-puppet-facts'

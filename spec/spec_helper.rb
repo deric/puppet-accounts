@@ -1,12 +1,20 @@
 # frozen_string_literal: true
 
 require 'puppet'
-require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec'
+require 'rspec/its'
 require 'rspec-puppet-facts'
 
 include RspecPuppetFacts
 Puppet::Util::Log.level = :debug
 Puppet::Util::Log.newdestination(:console)
+
+# migrate from mocha to rspec-mocks
+# see https://github.com/puppetlabs/puppetlabs_spec_helper#mock_with
+RSpec.configure do |c|
+  c.mock_with :rspec
+end
+require 'puppetlabs_spec_helper/module_spec_helper'
 
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 RSpec.configure do |c|
