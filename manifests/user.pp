@@ -48,6 +48,7 @@ define accounts::user(
   Array                              $groups = [],
   Optional[Stdlib::Absolutepath]     $ssh_key_source = undef,
   Hash                               $ssh_keys = {},
+  Array                              $ssh_key_groups = [],
   Boolean                            $purge_ssh_keys = false,
   String                             $shell ='/bin/bash',
   String                             $pwhash = '',
@@ -247,8 +248,16 @@ define accounts::user(
           }
         }
 
+        $mapped_ssh_keys = $ssh_key_groups.reduce({}) |$memo, $key_group| {
+          if ($key_group in $accounts::ssh_key_groups) {
+            $memo + $accounts::ssh_key_groups[$key_group]
+          } else {
+            fail("Accounts:user ${username}: ssh_key_group ${key_group} does not exist!")
+          }
+        }
+
         accounts::authorized_keys { $username:
-          ssh_keys             => $ssh_keys,
+          ssh_keys             => $mapped_ssh_keys + $ssh_keys,
           ssh_key_source       => $ssh_key_source,
           authorized_keys_file => $authorized_keys_file,
           home_dir             => $home_dir,

@@ -1,13 +1,14 @@
 # Puppet accounts management
 #
 class accounts(
-  Boolean $manage_users  = true,
-  Boolean $manage_groups = true,
-  Hash    $users         = {},
-  Hash    $groups        = {},
-  Hash    $user_defaults = {},
-  Hash    $options       = {},
-  Boolean $use_lookup    = true,
+  Boolean $manage_users   = true,
+  Boolean $manage_groups  = true,
+  Hash    $users          = {},
+  Hash    $groups         = {},
+  Hash    $user_defaults  = {},
+  Hash    $options        = {},
+  Hash    $ssh_key_groups = {},
+  Boolean $use_lookup     = true,
 ) inherits ::accounts::params {
 
   # currently used mainly in tests to turn-off hiera backends

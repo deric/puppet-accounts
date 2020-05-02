@@ -672,4 +672,70 @@ describe 'accounts', :type => :class do
 
     it_behaves_like 'having_user_account', 'foo'
   end
+
+  context 'ssh_key_groups are defined' do
+    let(:ssh_key_groups) do
+      {
+        'key_group1' =>  {
+          'user1@example.com' => { 'type' => 'ssh-rsa', 'key' => 'user1-key' },
+        },
+        'key_group2' => {
+          'user2@example.com' => { 'type' => 'ssh-rsa', 'key' => 'user2-key' },
+          'user3@example.com' => { 'type' => 'ssh-rsa', 'key' => 'user3-key' },
+        },
+      }
+    end
+
+    describe 'user includes only one ssh key group' do
+      let(:params) do
+        {
+          'ssh_key_groups' => ssh_key_groups,
+          'users' => { 'testuser' => {
+            'managehome' => true,
+            'ssh_key_groups' => ['key_group1']
+          }}
+        }
+      end
+
+      it { is_expected.to contain_ssh_authorized_key('user1@example.com') }
+      it { is_expected.to_not contain_ssh_authorized_key('user2@example.com') }
+      it { is_expected.to_not contain_ssh_authorized_key('user3@example.com') }
+    end
+
+    describe 'user includes multiple ssh key groups' do
+      let(:params) do
+        {
+          'ssh_key_groups' => ssh_key_groups,
+          'users' => { 'testuser' => {
+            'managehome' => true,
+            'ssh_key_groups' => ['key_group1', 'key_group2']
+          }}
+        }
+      end
+
+      it { is_expected.to contain_ssh_authorized_key('user1@example.com') }
+      it { is_expected.to contain_ssh_authorized_key('user2@example.com') }
+      it { is_expected.to contain_ssh_authorized_key('user3@example.com') }
+    end
+
+    describe 'user includes an ssh key group and an individual ssh key' do
+      let(:params) do
+        {
+          'ssh_key_groups' => ssh_key_groups,
+          'users' => { 'testuser' => {
+            'managehome' => true,
+            'ssh_key_groups' => ['key_group1'],
+            'ssh_keys' => {
+              'user4@example.com' => { 'type' => 'ssh-rsa', 'key' => 'user4-key' }
+            }
+          }}
+        }
+      end
+
+      it { is_expected.to contain_ssh_authorized_key('user1@example.com') }
+      it { is_expected.to_not contain_ssh_authorized_key('user2@example.com') }
+      it { is_expected.to_not contain_ssh_authorized_key('user3@example.com') }
+      it { is_expected.to contain_ssh_authorized_key('user4@example.com') }
+    end
+  end
 end
